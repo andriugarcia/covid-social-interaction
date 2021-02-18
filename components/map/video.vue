@@ -1,5 +1,5 @@
 <template lang="pug">
-  #videoMap
+  v-layout#videoMap(align-center, style="height: 100%")
     video.rounded-lg(:class="{'videoGrid': grid, 'videoPost': !expanded && !grid, 'videoPostExpanded': expanded}", autoplay, :muted="muted", loop)
       source(src="https://storage.googleapis.com/web-dev-assets/video-and-source-tags/chrome.webm", type="video/webm")
       source(src="https://storage.googleapis.com/web-dev-assets/video-and-source-tags/chrome.mp4", type="video/mp4")

@@ -8,7 +8,7 @@
         span(v-else) Format Not Found
         bottom-avatar.bottomalign(v-if="!grid", :src="content.author.profilePicture")
     v-dialog.rounded-lg(v-model="expanded", width="fit-content", persistent)
-      v-card.rounded-lg(style="position: relative;")
+      v-card.rounded-lg(style="position: absolute; top: 24px; bottom: 82px; right: 0px; left: 0px;", color="black")
         v-layout.pa-4(style="position: absolute; top: 0; left: 0; right: 0;")
           v-avatar
             v-img(:src="content.author.profilePicture")

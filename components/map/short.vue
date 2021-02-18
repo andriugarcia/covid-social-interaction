@@ -1,5 +1,5 @@
 <template lang="pug">
-  #shortMap
+  #shortMap.rounded-lg(style="background-color: white; height: 100%;")
     p.pb-4.font-weight-light.shortExpanded(v-if="expanded") {{content.text}}
     p.pb-4.font-weight-light.short(v-else, :class="{'shortGrid': grid, 'short': !grid}") {{content.text | truncate}}
 </template>
@@ -44,12 +44,14 @@ export default {
 
 .shortExpanded {
   display: block;
-  width: auto;
-  height: auto;
-  max-height: 100vh;
-  min-height: 60vh;
-  max-width: 400px;
-  min-width: 480px;
+  width: 100%;
+  height: 100%;
+
+  /* max-height: 100vh;
+  min-height: 60vh; */
+
+  /* max-width: 400px;
+  min-width: 480px; */
   padding: 32px;
   padding-top: 82px;
   font-size: 1.2em;

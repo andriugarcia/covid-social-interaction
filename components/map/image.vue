@@ -1,5 +1,5 @@
 <template lang="pug">
-  #imageMap
+  v-layout#imageMap(align-center, style="height: 100%")
     img.rounded-lg(:class="{'imageGrid': grid, 'imagePost': !expanded && !grid, 'imagePostExpanded': expanded}", :src="content.src")
 </template>
 
@@ -33,9 +33,10 @@ export default {
 
 .imagePostExpanded {
   display: block;
-  max-width: 100vw;
-  max-height: 80vh;
-  width: auto;
+
+  /* max-width: 100vw; */
+  max-height: 100%;
+  width: 100%;
   height: auto;
 }
 </style>
