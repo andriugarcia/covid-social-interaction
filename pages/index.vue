@@ -1,0 +1,14 @@
+<template lang="pug">
+  .container
+</template>
+
+<script>
+export default {}
+</script>
+
+<style>
+* {
+  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+</style>
