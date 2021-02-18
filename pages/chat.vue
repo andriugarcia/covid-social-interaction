@@ -2,7 +2,7 @@
   #contacts
     v-card.rounded-lg(flat, color="text", dark)
       v-layout.pa-2(justify-space-between)
-        v-btn(icon, small, @click="$emit('back')")
+        v-btn(icon, small, @click="$router.go(-1)")
           v-icon fas fa-arrow-left
         v-btn.text-capitalize(outlined, rounded) Nuevo Grupo
       v-text-field.mx-2.mt-4(solo, color="background", dense, placeholder="Buscar", append-icon="fas fa-search")

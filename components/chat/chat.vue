@@ -1,13 +1,13 @@
 <template lang="pug">
-  #chat(style="width: 100% height: 100%")
-    v-toolbar(flat, style="position: sticky top: 0 left: 0 right: 0 z-index: 10")
+  #chat(style="width: 100%; height: 100%;")
+    v-toolbar(flat, style="position: sticky; top: 0; left: 0; right: 0; z-index: 10;")
       v-icon.mr-4(color="primary") fas fa-street-view
       div
         .font-weight-bold Close to you
         span 30 personas cerca
     v-card.mb-12.pb-12(flat, color="white")
       v-layout.my-2(v-for="(message, i) in chat", :key="i", align-end, :justify-end="message.username == 'me'")
-        div(v-if="message.username != 'me'", style="width: 60px")
+        div(v-if="message.username != 'me'", style="width: 60px;")
           v-avatar(v-if="(i + 1) >= chat.length || chat[i + 1].username != message.username")
             v-img(:src="message.profilePicture")
         v-card.ml-4.rounded-lg(flat, :color="message.username == 'me' ? 'secondary' :'background'") 
@@ -18,11 +18,11 @@
           v-layout.px-2(v-else-if="message.type == 'audio'")
             v-btn(fab, dark, small)
               v-icon(small) fas fa-play
-            v-slider.ml-2.mt-1(v-model="value", step="100", style="width: 200px")
+            v-slider.ml-2.mt-1(v-model="value", step="100", style="width: 200px;")
           v-layout.mb-2(justify-space-between, align-end)
             span.mx-2(v-if="message.type == 'audio'") 0:30
             p.mb-0.mx-2.mt-2(v-else) {{message.text}}
-            .mx-2.font-weight-bold(style="font-size: .8em") {{ message.sendedAt | toHour }},
+            .mx-2.font-weight-bold(style="font-size: .8em;") {{ message.sendedAt | toHour }},
       //- v-layout.my-2(v-for="(message, i) in chat", :key="i", align-end, :justify-end="message.username == 'me'")
         div(v-if="message.username != 'me'", style="width: 60px")
           v-avatar(v-if="(i + 1) >= chat.length || chat[i + 1].username != message.username")
@@ -33,7 +33,7 @@
               .font-weight-bold(v-if="message.username != 'me' && ((i - 1) < 0 || chat[i - 1].username != message.username)") {{message.username}}
               p.mb-0 {{message.text}}
             .ml-2.font-weight-bold(style="font-size: .8em") {{ message.sendedAt | toHour }},
-    v-layout(style="position: absolute bottom: 0 left: 0 right: 0")
+    v-layout(style="position: absolute bottom: 0 left: 0 right: 0;")
       v-text-field(v-model="messageInput", rounded, solo, outlined, @keydown.enter="send", placeholder="Escribe un mensaje", color="primary", prepend-inner-icon="fas fa-smile", append-icon="mdi-send")
         template(#append)
           v-layout

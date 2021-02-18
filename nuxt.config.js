@@ -31,9 +31,6 @@ export default {
         src: 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js',
       },
       {
-        src: 'https://cdn.jsdelivr.net/npm/vue@latest/dist/vue.min.js',
-      },
-      {
         src:
           'https://cdn.jsdelivr.net/npm/vue-mapbox@latest/dist/vue-mapbox.min.js',
         type: 'text/javascript',
@@ -49,7 +46,7 @@ export default {
   },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  // components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
@@ -60,7 +57,7 @@ export default {
     '@nuxtjs/vuetify',
   ],
 
-  plugins: ['~/plugins/fontawesome.js'],
+  // plugins: ['~/plugins/fontawesome.js'],
 
   vuetify: {
     defaultAssets: {
@@ -105,13 +102,13 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
 
-  storybook: {
-    // Options
-    decorators: [
-      // VApp decorator for Vuetify
-      `<v-app id='vuetify-storybook-decorator'><div><story/></div></v-app>`,
-    ],
-  },
+  // storybook: {
+  //   // Options
+  //   decorators: [
+  //     // VApp decorator for Vuetify
+  //     `<v-app id='vuetify-storybook-decorator'><div><story/></div></v-app>`,
+  //   ],
+  // },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {

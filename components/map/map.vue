@@ -2,13 +2,13 @@
   #map
     MglMap(:accessToken="accessToken" :mapStyle="mapStyle", logoPosition="bottom-left", 
           :maxZoom="16", :dragRotate="false", :center.sync="center", @load="onLoad", @moveend="onMove", @update:center="updateCenter"
-          :zoom="14", :pitch="30", style="position: fixed top: 0 left: 0 right: 0 bottom: 0", @click="mapClick")
-      MglMarker(:coordinates="userPosition")
+          :zoom="14", :pitch="30", style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;", @click="mapClick")
+      MglMarker(:coordinates="[userPosition.lng, userPosition.lat]")
         template(slot="marker")
           .cursor
-      MglMarker(v-for="(post, i) in posts" :key="i" :coordinates="{lat: post._source.coordinates.lat, lng: post._source.coordinates.lon}" :offset="[0, -10]" anchor="bottom")
+      MglMarker(v-for="(post, i) in posts" :key="post._id" :coordinates="[post._source.coordinates.lon, post._source.coordinates.lat]" :offset="[0, -10]" anchor="bottom")
         template(slot="marker")
-          ;
+          post(:type="post._source.type", :content="post._source")
 </template>
 
 <script>
@@ -29,11 +29,17 @@ export default {
     },
     mapPosition: {
       type: Object,
-      default: () => ({}),
+      default: () => ({
+        lng: 0,
+        lat: 0,
+      }),
     },
     userPosition: {
       type: Object,
-      default: () => ({}),
+      default: () => ({
+        lng: 0,
+        lat: 0,
+      }),
     },
   },
 
@@ -107,6 +113,7 @@ export default {
       get() {
         return this.mapPosition
       },
+      set() {},
     },
     posts() {
       return this.$store.state.post.posts
