@@ -9,7 +9,9 @@
     //- v-avatar(size="40", color="white", style="position: absolute top: 8px right: 8px")
     //-   v-img(src="https://picsum.photos/200")
     v-layout(column, style="position: absolute; bottom: 32px; right: 12px;")
-      v-btn(fab)
+      v-btn(fab, outlined, color="primary", @click="$store.commit('setLogin', true)")
+        v-icon far fa-user
+      //- v-btn(fab, color="primary")
         v-avatar
           v-img(src="https://picsum.photos/200")
       v-badge.mt-2(overlap, top, left)

@@ -9,17 +9,22 @@
         bottom-avatar.bottomalign(v-if="!grid", :src="content.author.profilePicture")
     v-dialog.rounded-lg(v-model="expanded", width="fit-content", persistent)
       v-card.rounded-lg(style="position: absolute; top: 24px; bottom: 82px; right: 0px; left: 0px;", color="black")
-        v-layout.pa-4(style="position: absolute; top: 0; left: 0; right: 0;")
-          v-avatar
-            v-img(:src="content.author.profilePicture")
+        v-layout.pa-4(style="position: absolute; top: 0; left: 0; right: 0;", align-center)
+          v-btn(fab, color="primary")
+            v-avatar(color="white")
+              v-img(:src="content.author.profilePicture")
           .ml-2(:class="{'white--text': type != 'short'}")
             .font-weight-bold {{content.author.username}}
-            span {{content.createdAt | toDate }}
+            v-layout
+              v-chip.mr-2(small, color="purple darken-2", dark)
+                v-icon(small) fas fa-glass-cheers
+                .ml-2.font-weight-bold Fiesta
+              span {{content.createdAt | toDate }}
         image-map(v-if="expanded && type == 'image'", expanded, :content="content")
         short-map(v-else-if="expanded && type == 'short'", :content="content", expanded)
         video-map(v-else-if="expanded && type == 'video'", expanded, :content="content")
         v-layout.px-2(style="position: absolute; bottom: -20px; left: 0; right: 0;")
-          v-text-field.mr-3(rounded, :dark="type != 'short'", outlined, placeholder="Escribe un mensaje", color="primary", prepend-inner-icon="far fa-smile", append-icon="far fa-paper-plane")
+          v-text-field.mr-3(rounded, :dark="type != 'short'", outlined, placeholder="Escribe un mensaje", color="primary", prepend-inner-icon="fas fa-camera", append-icon="fas fa-microphone")
           v-btn.mt-3.mr-3(icon, :dark="type != 'short'")
             v-icon fas fa-share-alt
       v-layout(justify-center, style="position: fixed; bottom: 12px; left: 0; right: 0;")

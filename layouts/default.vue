@@ -2,13 +2,31 @@
   v-app
     v-slide-x-reverse-transition
       nuxt(keep-alive)
+    v-bottom-sheet(v-model="bottomSheetOpened")
+      login
 </template>
 
 <script>
 export default {
+  components: {
+    login: () => import('../components/login/login.vue'),
+  },
   data: () => ({
     centre: [0, 0],
   }),
+  computed: {
+    loginOpened() {
+      return this.$store.state.loginOpened
+    },
+    bottomSheetOpened: {
+      get() {
+        return this.loginOpened
+      },
+      set() {
+        this.$store.commit('disableAllWindows')
+      },
+    },
+  },
   mounted() {
     navigator.geolocation.watchPosition(function (position) {
       this.centre[0] = position.coords.latitude
@@ -19,7 +37,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=Cabin:wght@300400500700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cabin&family=Cabin:wght@200;400;500;600;700&display=swap');
 $body-font-family: 'Cabin';
 
 .v-application {

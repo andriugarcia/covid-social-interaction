@@ -45,6 +45,13 @@ export default {
     MAPBOX_TOKEN: process.env.MAPBOX_TOKEN,
   },
 
+  vue: {
+    config: {
+      productionTip: false,
+      devtools: true,
+    },
+  },
+
   // Auto import components: https://go.nuxtjs.dev/config-components
   // components: true,
 
