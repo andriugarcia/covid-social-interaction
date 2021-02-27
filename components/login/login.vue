@@ -36,10 +36,14 @@ export default {
   }),
   methods: {
     async login() {
-      await this.$store.dispatch('auth/login', this.loginData)
+      if (await this.$store.dispatch('auth/login', this.loginData)) {
+        this.$store.commit('setLogin', false)
+      }
     },
     async signup() {
-      await this.$store.dispatch('auth/signup', this.loginData)
+      if (await this.$store.dispatch('auth/signup', this.signupData)) {
+        this.$store.commit('setLogin', false)
+      }
     },
   },
 }

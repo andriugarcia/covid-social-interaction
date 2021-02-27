@@ -28,6 +28,7 @@ export default {
     },
   },
   mounted() {
+    this.$store.dispatch('auth/checkLogged')
     navigator.geolocation.watchPosition(function (position) {
       this.centre[0] = position.coords.latitude
       this.centre[1] = position.coords.longitude

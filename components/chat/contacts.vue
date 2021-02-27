@@ -1,10 +1,10 @@
 <template lang="pug">
   #contacts
-    v-card(flat, color="text", tile, dark)
+    v-card(flat, color="text", dark, tile, style="border-radius: 0 0 24px 24px")
       v-layout.pa-2(justify-space-between)
-        v-btn(icon, small, @click="$router.go(-1)")
+        v-btn(icon, small, @click="$emit('back')")
           v-icon fas fa-arrow-left
-        v-btn.text-capitalize(outlined, rounded) Nuevo Grupo
+        v-btn.text-capitalize(outlined, small, rounded) Nuevo Grupo
       v-text-field.mx-2.mt-4(solo, color="background", dense, placeholder="Buscar", append-icon="fas fa-search")
     v-card(flat, color="yellow")
       v-tabs(fixed-tabs)

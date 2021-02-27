@@ -14,8 +14,8 @@
         v-chip.font-weight-bold(:color="`${item.color}`", pill, dark, small)
           v-icon(small) fas fa-glass-cheers
           span.ml-1.font-weight-bold {{ item.text }}
-    v-textarea(auto-grow, :rows="1", label="Descripción")
-    v-file-input(accept="image/png, image/jpeg, image/bmp", placeholder="Imagen de Portada", prepend-icon="", append-icon="fas fa-image")
+    //- v-textarea(auto-grow, :rows="1", label="Descripción")
+    //- v-file-input(accept="image/png, image/jpeg, image/bmp", placeholder="Imagen de Portada", prepend-icon="", append-icon="fas fa-image")
     v-dialog(v-model="locationSelectorOpened", fullscreen, hide-overlay, transition="dialog-bottom-transition")
       template(v-slot:activator="{on, attrs}")
         v-text-field(label="Ubicación", :value="location != null ? location.lng.toFixed(4) + '. ' + location.lng.toFixed(4) : ''", v-on="on", readonly, append-icon="fas fa-map-marker-alt")

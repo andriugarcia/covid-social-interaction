@@ -32,7 +32,8 @@
     "mapbox-gl": "^2.0.1",
     "nuxt": "^2.14.12",
     "socket.io-client": "^3.1.1",
-    "vue-mapbox": "^0.4.1"
+    "vue-mapbox": "^0.4.1",
+    "vue-web-cam": "^1.9.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",

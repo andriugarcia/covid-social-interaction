@@ -9,17 +9,17 @@
     //- v-avatar(size="40", color="white", style="position: absolute top: 8px right: 8px")
     //-   v-img(src="https://picsum.photos/200")
     v-layout(column, style="position: absolute; bottom: 32px; right: 12px;")
-      v-btn(fab, outlined, color="primary", @click="$store.commit('setLogin', true)")
+      v-btn(v-if="authenticated", fab, color="primary")
+        v-avatar(color="white")
+          v-img(:src="user.profilePicture")
+      v-btn(v-else, fab, outlined, color="primary", @click="$store.commit('setLogin', true)")
         v-icon far fa-user
-      //- v-btn(fab, color="primary")
-        v-avatar
-          v-img(src="https://picsum.photos/200")
       v-badge.mt-2(overlap, top, left)
         template(#badge) 
           strong 3
         v-btn(fab, color="primary", dark, @click="$router.push({ path: '/chat' })")
           v-icon far fa-comment-dots
-      v-btn.mt-2(fab, @click="$router.push({path: '/editor'})")
+      v-btn.mt-2(fab, :disabled="!authenticated", @click="$router.push({path: '/editor'})")
         v-icon.primary--text(small) far fa-edit
     v-layout(column, align-center, v-touch="{up: () => activitiesOpened = true}", 
     style="position: absolute; bottom: 32px; left: 80px; right: 80px;")
@@ -142,13 +142,22 @@ export default {
     }
   },
 
+  computed: {
+    user() {
+      return this.$store.state.auth.user
+    },
+    authenticated() {
+      return this.$store.getters['auth/authenticated']
+    },
+  },
+
   methods: {
     updateCentre(coordinates) {
       this.mapPosition = coordinates
       this.opened = ''
     },
 
-    markersUpdate(_) {},
+    markersUpdate() {},
 
     async morePosts(coordinates) {
       const { hits } = await this.$store.dispatch(

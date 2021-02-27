@@ -5,12 +5,6 @@ export const state = () => ({
 })
 
 export const mutations = {
-  checkLogged() {
-    const token = localStorage.getItem('token')
-    if (token) {
-      axios.defaults.headers.common.authorization = 'Bearer ' + token
-    }
-  },
   setUser(state, user) {
     state.user = user
   },
@@ -23,6 +17,14 @@ export const getters = {
 }
 
 export const actions = {
+  async checkLogged({ dispatch }) {
+    const token = localStorage.getItem('token')
+    if (token) {
+      axios.defaults.headers.common.authorization = 'Bearer ' + token
+      return await dispatch('getMe')
+    }
+    return false
+  },
   async login({ dispatch }, body) {
     try {
       const { data: token } = await axios.post(
@@ -31,9 +33,9 @@ export const actions = {
       )
       axios.defaults.headers.common.authorization = 'Bearer ' + token
       localStorage.setItem('token', token)
-
       return await dispatch('getMe')
     } catch (err) {
+      console.error(err)
       return false
     }
   },
@@ -47,9 +49,9 @@ export const actions = {
 
       axios.defaults.headers.common.authorization = 'Bearer ' + token
       localStorage.setItem('token', token)
-
       return await dispatch('getMe')
     } catch (err) {
+      console.error(err)
       return false
     }
   },
@@ -62,6 +64,7 @@ export const actions = {
       commit('setUser', user)
       return true
     } catch (err) {
+      console.error(err)
       return false
     }
   },
