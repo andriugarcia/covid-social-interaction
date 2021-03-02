@@ -3,10 +3,10 @@
     v-layout.px-2
       v-btn(fab, dark, color="primary", small, @click="play")
         v-icon(small) {{ playing ? 'fas fa-pause' : 'fas fa-play'}}
-      v-slider.ml-2.mt-1(v-if="audio", step="1", min="0", :max="audio.duration", style="width: 200px;")
+      v-slider.ml-2.mt-1(v-if="audio", v-model="counter", step="0.1", min="0", :max="audio.duration", style="width: 200px;")
     v-layout.mb-2(v-if="audio", justify-end, align-end)
       span.ml-2 {{counter | getMinutes}}:{{counter | getSeconds}}
-      span.mr-2 / {{Math.floor(audio.duration) | getMinutes}}:{{Math.floor(audio.duration) | getSeconds}}
+      span.mr-2(v-if="duration == 0") / {{Math.floor(duration) | getMinutes}}:{{Math.floor(duration) | getSeconds}}
 </template>
 
 <script>
@@ -25,29 +25,37 @@ export default {
       type: String,
       default: '',
     },
+    autoplay: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       audio: null,
       playing: false,
       counter: 0,
+      duration: 0,
       interval: null,
     }
   },
-  computed: {
-    // timeTrack: {
-    //   get() {
-    //     return this.counter
-    //   },
-    //   set(value) {
-    //     this.counter = value
-    //     // this.audio.currentTime = value
-    //   },
-    // }
+  watch: {
+    counter(value) {
+      if (isFinite(value)) {
+        this.audio.currentTime = value
+      }
+    },
   },
   mounted() {
     this.audio = new Audio(this.src)
-    this.audio.load()
+    // this.audio.load()
+    this.audio.addEventListener('durationchange', () => {
+      if (isFinite(this.audio.duration)) {
+        this.duration = this.audio.duration
+      }
+    })
+
+    if (this.autoplay) this.play()
   },
   methods: {
     play() {

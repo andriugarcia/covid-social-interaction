@@ -92,3 +92,5 @@ sw.*
 # Storybook
 .nuxt-storybook
 storybook-static
+
+gcloudkey.json

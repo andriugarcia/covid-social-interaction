@@ -31,3 +31,16 @@
         v-list-item-action
           v-chip(color="primary") 15
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      chats: [],
+    }
+  },
+  async mounted() {
+    this.chats = await this.$store.dispatch('chat/getChats')
+  },
+}
+</script>

@@ -3,7 +3,7 @@
     MglMap(:accessToken="accessToken" :mapStyle="mapStyle", logoPosition="bottom-left", 
             :maxZoom="16", :dragRotate="false", :center.sync="centre"
             :zoom="14", :pitch="30", style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;")
-    v-layout(style="position: absolute; top: 0; left: 0; right: 0;")
+    v-layout.pa-4(style="position: absolute; top: 0; left: 0; right: 0;")
       v-btn.mt-3(icon, @click="$emit('back')") 
         v-icon fas fa-arrow-left
       v-dialog(v-model="searchOpened", fullscreen, hide-overlay, transition="dialog-bottom-transition")
@@ -15,7 +15,8 @@
       v-card.pa-2.rounded-lg
         div {{ centre.lng.toFixed(4) }}, {{ centre.lat.toFixed(4) }}
       .triangle
-    v-btn(block, rounded, color="primary", @click="select", style="position: absolute; left: 0; right: 0; bottom: 32px;") Seleccionar
+    .pa-4(style="position: absolute; left: 0; right: 0; bottom: 12px;")
+      v-btn(block, rounded, color="primary", @click="select") Seleccionar Aquí
 </template>
 
 <script>
@@ -41,6 +42,7 @@ export default {
       mapStyle: 'mapbox://styles/mapbox/light-v9',
       centre: Object.assign({}, this.initialPosition),
       searchOpened: false,
+      currentPosition: true,
     }
   },
 

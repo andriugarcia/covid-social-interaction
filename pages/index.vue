@@ -1,6 +1,6 @@
 <template lang="pug">
   #Home
-    Map(:markers="markers", :mapPosition="mapPosition", :userPosition.sync="userPosition", @onMove="markersUpdate", @click="morePosts")
+    Map(:mapPosition="mapPosition", :userPosition.sync="userPosition", @onMove="markersUpdate", @click="morePosts")
     v-layout.pa-4(style="position: absolute; top: 0px; right: 0; left: 0;", justify-space-between)
       v-btn(icon, @click="opened = 'search'")
         v-icon.primary-text fas fa-search
@@ -80,65 +80,6 @@ export default {
       activitiesOpened: false,
       placeOpened: false,
       fullPosts: [],
-      userPosition: { lng: -3.68984, lat: 40.4086 },
-      mapPosition: { lng: -3.68984, lat: 40.4086 },
-      markers: [
-        {
-          type: 'video',
-          lng: 37.197208,
-          lat: -3.612036,
-        },
-        {
-          type: 'video',
-          lng: 37.173195,
-          lat: -3.608211,
-        },
-        {
-          type: 'video',
-          lng: 37.174195,
-          lat: -3.607211,
-        },
-        {
-          type: 'video',
-          lng: 37.172195,
-          lat: -3.609211,
-        },
-        {
-          type: 'video',
-          lng: 37.176195,
-          lat: -3.61211,
-        },
-        {
-          type: 'video',
-          lng: 37.182195,
-          lat: -3.61211,
-        },
-        {
-          type: 'image',
-          lng: 37.192208,
-          lat: -3.615036,
-        },
-        {
-          type: 'image',
-          lng: 37.179195,
-          lat: -3.601211,
-        },
-        {
-          type: 'video',
-          lng: 37.172826,
-          lat: -3.590358,
-        },
-        {
-          type: 'video',
-          lng: 37.1604472,
-          lat: -3.592097,
-        },
-        {
-          type: 'short',
-          lng: 37.1734472,
-          lat: -3.595097,
-        },
-      ],
     }
   },
 
@@ -148,6 +89,22 @@ export default {
     },
     authenticated() {
       return this.$store.getters['auth/authenticated']
+    },
+    userPosition: {
+      get() {
+        return this.$store.state.map.userPosition
+      },
+      set(value) {
+        this.$store.commit('map/setUserPosition', value)
+      },
+    },
+    mapPosition: {
+      get() {
+        return this.$store.state.map.mapPosition
+      },
+      set(value) {
+        this.$store.commit('map/setMapPosition', value)
+      },
     },
   },
 

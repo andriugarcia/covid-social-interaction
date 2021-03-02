@@ -56,12 +56,13 @@ export const actions = {
     }
   },
 
-  async getMe({ commit }) {
+  async getMe({ commit, dispatch }) {
     try {
       const { data: user } = await axios.get(
         `${process.env.SOCKET_URL}/user/me`
       )
       commit('setUser', user)
+      dispatch('chat/getChats', {}, { root: true })
       return true
     } catch (err) {
       console.error(err)

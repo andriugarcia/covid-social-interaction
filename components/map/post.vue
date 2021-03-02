@@ -5,6 +5,7 @@
         image-map(v-if="type == 'image'", :content="content", :grid="grid")
         short-map(v-else-if="type == 'short'", :content="content", :grid="grid")
         video-map(v-else-if="type == 'video'", muted, :content="content", :grid="grid")
+        audio-map(v-else-if="type == 'audio'", :content="content", :grid="grid")
         span(v-else) Format Not Found
         bottom-avatar.bottomalign(v-if="!grid", :src="content.author.profilePicture")
     v-dialog.rounded-lg(v-model="expanded", width="fit-content", persistent)
@@ -17,7 +18,7 @@
           v-btn(fab, color="primary")
             v-avatar(color="white")
               v-img(:src="user.profilePicture")
-          .ml-2(:class="{'white--text': type != 'short'}")
+          .ml-2(:class="{'white--text': (type != 'short' && type != 'audio')}")
             .font-weight-bold {{content.author.username}}
             v-layout
               v-chip.mr-2(small, color="purple darken-2", dark)
@@ -27,6 +28,7 @@
         image-map(v-if="expanded && type == 'image'", expanded, :content="content")
         short-map(v-else-if="expanded && type == 'short'", :content="content", expanded)
         video-map(v-else-if="expanded && type == 'video'", expanded, :content="content")
+        audio-map(v-else-if="expanded && type == 'audio'", expanded, :content="content")
         v-layout.px-2(style="position: absolute; bottom: -20px; left: 0; right: 0;")
           v-text-field.mr-3(rounded, :dark="type != 'short'", outlined, placeholder="Escribe un mensaje", color="primary", prepend-inner-icon="fas fa-camera", append-icon="fas fa-microphone")
           v-btn.mt-3.mr-3(icon, :dark="type != 'short'")
@@ -41,6 +43,7 @@ export default {
     imageMap: () => import('./image.vue'),
     shortMap: () => import('./short.vue'),
     videoMap: () => import('./video.vue'),
+    audioMap: () => import('./audio.vue'),
   },
 
   filters: {

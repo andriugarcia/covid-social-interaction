@@ -1,5 +1,5 @@
 <template lang="pug">
-  #search
+  #search.pa-4
     v-layout
       v-btn.mt-3(v-if="!$vuetify.breakpoint.mdAndUp", icon)
         v-icon.black--text fas fa-arrow-left

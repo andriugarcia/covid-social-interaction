@@ -29,10 +29,33 @@ export default {
   },
   mounted() {
     this.$store.dispatch('auth/checkLogged')
+    const self = this
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        console.log('GETTING POSITION', position)
+        self.updatePosition(position)
+      },
+      (error) => {
+        console.error(error)
+      },
+      { timeout: 10000 }
+    )
     navigator.geolocation.watchPosition(function (position) {
-      this.centre[0] = position.coords.latitude
-      this.centre[1] = position.coords.longitude
+      self.updatePosition(position, true)
     })
+  },
+  methods: {
+    updatePosition(position, onlyUser = false) {
+      const coordinates = {
+        lng: position.coords.longitude,
+        lat: position.coords.latitude,
+      }
+
+      if (!onlyUser) {
+        this.$store.commit('map/setMapPosition', coordinates)
+      }
+      this.$store.commit('map/setUserPosition', coordinates)
+    },
   },
 }
 </script>

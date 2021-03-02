@@ -23,10 +23,6 @@ export default {
   },
 
   props: {
-    markers: {
-      type: Array,
-      default: () => [],
-    },
     mapPosition: {
       type: Object,
       default: () => ({
@@ -48,63 +44,6 @@ export default {
       accessToken: process.env.MAPBOX_TOKEN, // your access token. Needed if you using Mapbox maps
       mapStyle: 'mapbox://styles/mapbox/light-v9',
       bounds: {},
-      // markers: [
-      //   {
-      //     type: 'video',
-      //     lng: 37.19720886619288,
-      //     lat: -3.612036640743373
-      //   },
-      //   {
-      //     type: 'video',
-      //     lng: 37.17319576390279,
-      //     lat: -3.6082110224474726
-      //   },
-      //   {
-      //     type: 'video',
-      //     lng: 37.17419576390279,
-      //     lat: -3.6072110224474726
-      //   },
-      //   {
-      //     type: 'video',
-      //     lng: 37.17219576390279,
-      //     lat: -3.6092110224474726
-      //   },
-      //   {
-      //     type: 'video',
-      //     lng: 37.17619576390279,
-      //     lat: -3.612110224474726
-      //   },
-      //   {
-      //     type: 'video',
-      //     lng: 37.18219576390279,
-      //     lat: -3.612110224474726
-      //   },
-      //   {
-      //     type: 'image',
-      //     lng: 37.19220886619288,
-      //     lat: -3.615036640743373
-      //   },
-      //   {
-      //     type: 'image',
-      //     lng: 37.17919576390279,
-      //     lat: -3.6012110224474726
-      //   },
-      //   {
-      //     type: 'video',
-      //     lng: 37.17282627192832,
-      //     lat: -3.5903581370666027
-      //   },
-      //   {
-      //     type: 'video',
-      //     lng: 37.160447246678544,
-      //     lat: -3.59209705447383
-      //   },
-      //   {
-      //     type: 'short',
-      //     lng: 37.173447246678544,
-      //     lat: -3.59509705447383
-      //   },
-      // ]
     }
   },
 
