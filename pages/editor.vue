@@ -9,8 +9,16 @@
     v-layout.pt-4
       v-avatar.mr-2.mt-2.elevation-5(size="40")
         v-img(:src="user.profilePicture")
-      v-textarea(placeholder="Escribe tu post", v-model="post.text", auto-grow, rows="1")
-    v-card.pa-2.rounded-xl(v-if="post.type == 'audio'", outlined)
+      v-textarea(placeholder="Escribe tu post", counter="120", v-model="post.text", auto-grow, rows="1")
+    v-card.pa-2.rounded-xl.mt-2(v-if="post.type == 'group'", outlined)
+      v-layout(align-center)
+        v-avatar
+          v-img(:src="group.cover")
+        span.ml-2 {{ group.title }}
+        v-spacer
+        v-btn(icon, @click="removeGroup")
+          v-icon fas fa-times-circle
+    v-card.pa-2.rounded-xl.mt-2(v-if="post.type == 'audio'", outlined)
       v-progress-circular(v-if="uploading", indeterminate, color="primary")
       audio-player(v-else, :src="post.src")
     v-card.pa-1.rounded-xl(v-if="post.type == 'image'", flat, color="primary", style="position: relative;")
@@ -38,7 +46,9 @@
           //- v-btn.mx-1(icon)
           //-   v-icon.text--text fas fa-image
           v-btn.mx-1(icon)
-            v-icon.text--text fas fa-link
+            v-icon.text--text fas fa-flag
+          v-btn.mx-1(icon, @click="groupToggle = true")
+            v-icon.text--text fas fa-user-friends
         v-spacer
         v-btn(rounded, flat, color="primary", dark, @click="publish")
           .mr-2.text-capitalize Publicar
@@ -46,13 +56,14 @@
     v-bottom-sheet(v-model="permanentOpened")
       v-card.pa-4.rounded-lg
         v-subheader POST PERMANENTE
-        p El post no desaparecerá del mapa siendo visible mientras permanezca activo
+        p.mt-2 El post no desaparecerá del mapa siendo visible mientras permanezca activo
         v-text-field(type="number", suffix="€/mes", autofocus, v-model="bidValue")
         span Audiencia mensual estimada: <b>1000 visualizaciones</b>
-        v-btn.mt-2(block, color="yellow darken-2", rounded) ACTIVAR
+        v-btn.mt-4(block, color="primary", rounded) ACTIVAR
     v-dialog(v-model="cameraToggle", fullscreen)
       camera(v-if="cameraToggle", @back="cameraToggle = false", @update="imageUpdated")
-    
+    v-dialog(v-model="groupToggle", fullscreen)
+      group-select(@back="groupToggle = false", @selected="selectGroup")
 </template>
 
 <script>
@@ -60,6 +71,7 @@ import audioInput from '@/components/editor/audioInput'
 export default {
   components: {
     locationSelect: () => import('../components/map/locationSelect'),
+    groupSelect: () => import('../components/editor/groupSelect'),
     camera: () => import('../components/editor/camera'),
     audioPlayer: () => import('../components/chat/audioPlayer'),
     audioInput,
@@ -80,6 +92,8 @@ export default {
       permanentOpened: false,
       bidValue: 1,
       cameraToggle: false,
+      groupToggle: false,
+      group: {},
     }
   },
 
@@ -126,8 +140,10 @@ export default {
       this.post.type = 'text'
       this.post.src = null
     },
-    publish() {
-      this.$store.dispatch('post/createPost', this.post)
+    async publish() {
+      if (await this.$store.dispatch('post/createPost', this.post)) {
+        this.$router.replace({ path: '/' })
+      }
     },
     previewImage(image) {
       const reader = new FileReader()
@@ -137,6 +153,16 @@ export default {
         self.post.src = e.target.result
       }
       reader.readAsDataURL(image)
+    },
+    selectGroup(group) {
+      this.post.type = 'group'
+      this.post.src = group.chatid
+      this.group = group
+    },
+    removeGroup() {
+      this.post.type = 'short'
+      this.post.src = ''
+      this.group = {}
     },
   },
 }

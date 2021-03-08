@@ -1,7 +1,7 @@
 <template lang="pug">
   #audioInput.d-flex(:class="{'flex-row-reverse': left}")
     v-btn(:icon="!dark || recording", :fab="dark && !recording", :dark="dark && !recording", :color="(dark && !recording) ? 'primary' : ''", @click="record")
-      v-icon(:class="{ 'red--text': recording }", :large="recording") {{ recording ? 'fas fa-stop-circle' : 'fas fa-microphone'}}
+      v-icon(:class="{ 'red--text': recording, 'text--text': !dark }", :large="recording") {{ recording ? 'fas fa-stop-circle' : 'fas fa-microphone'}}
     v-chip.font-weight-bold.mx-1(v-if="recording", dark, color="red") {{counter | getMinutes}}:{{counter | getSeconds}}
 </template>
 

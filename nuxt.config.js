@@ -52,9 +52,9 @@ export default {
     },
   },
 
-  server: {
-    host: '0.0.0.0',
-  },
+  // server: {
+  //   host: '0.0.0.0',
+  // },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   // components: true,

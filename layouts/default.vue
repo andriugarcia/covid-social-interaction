@@ -1,9 +1,9 @@
 <template lang="pug">
   v-app
-    v-slide-x-reverse-transition
-      nuxt(keep-alive)
+    nuxt
     v-bottom-sheet(v-model="bottomSheetOpened")
       login
+    v-snackbar(v-model="postCreated", :timeout="1500", centered, bottom, color="primary", elevation="16") Publicado correctamente
 </template>
 
 <script>
@@ -26,13 +26,20 @@ export default {
         this.$store.commit('disableAllWindows')
       },
     },
+    postCreated: {
+      get() {
+        return this.$store.state.postCreated
+      },
+      set(value) {
+        this.$store.commit('setPostCreated', value)
+      },
+    },
   },
   mounted() {
     this.$store.dispatch('auth/checkLogged')
     const self = this
     navigator.geolocation.getCurrentPosition(
       function (position) {
-        console.log('GETTING POSITION', position)
         self.updatePosition(position)
       },
       (error) => {

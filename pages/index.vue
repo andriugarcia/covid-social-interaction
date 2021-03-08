@@ -14,9 +14,7 @@
           v-img(:src="user.profilePicture")
       v-btn(v-else, fab, outlined, color="primary", @click="$store.commit('setLogin', true)")
         v-icon far fa-user
-      v-badge.mt-2(overlap, top, left)
-        template(#badge) 
-          strong 3
+      v-badge.mt-2(overlap, top, left, :value="total", :content="total")
         v-btn(fab, color="primary", dark, @click="$router.push({ path: '/chat' })")
           v-icon far fa-comment-dots
       v-btn.mt-2(fab, :disabled="!authenticated", @click="$router.push({path: '/editor'})")
@@ -32,9 +30,8 @@
       v-card.px-4.pt-3(style="border-radius: 24px 24px 0 0;")
         v-layout(justify-center)
           v-subheader POSTS EN ESTA ZONA
-        v-layout(wrap, style="overflow-y: scroll; height: 80vh;")
-          v-flex.pa-2(v-for="(post, i) in fullPosts", :key="i", xs6, md4, lg3, xl2)
-            post(:type="post._source.type", :content="post._source", grid)
+        .masonry.pa-2(style="overflow-y: scroll; height: 80vh;")
+          post.mb-2(v-for="(post, i) in fullPosts", :key="i", :type="post._source.type", :content="post._source", grid)
     v-bottom-sheet(v-model="activitiesOpened")
       v-card.px-4.pt-3(style="border-radius: 24px 24px 0 0;")
         v-layout(justify-center)
@@ -98,6 +95,9 @@ export default {
         this.$store.commit('map/setUserPosition', value)
       },
     },
+    total() {
+      return this.$store.getters['chat/total']
+    },
     mapPosition: {
       get() {
         return this.$store.state.map.mapPosition
@@ -127,3 +127,10 @@ export default {
   },
 }
 </script>
+
+<style>
+.masonry {
+  column-count: 2;
+  column-gap: 1em;
+}
+</style>

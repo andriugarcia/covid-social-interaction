@@ -8,7 +8,7 @@
           .cursor
       MglMarker(v-for="(post, i) in posts" :key="post._id" :coordinates="[post._source.coordinates.lon, post._source.coordinates.lat]" :offset="[0, -10]" anchor="bottom")
         template(slot="marker")
-          post(:type="post._source.type", :content="post._source")
+          post(:type="post._source.type", :content="{...post._source, id: post._id}")
 </template>
 
 <script>

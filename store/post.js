@@ -23,6 +23,16 @@ export const actions = {
     }
   },
 
+  async getPost({ _ }, src) {
+    try {
+      const { data } = await axios.get(`${process.env.SOCKET_URL}/post/${src}`)
+      return data
+    } catch (err) {
+      console.error(err)
+      return []
+    }
+  },
+
   async getPostsByPoint(_, coordinates) {
     const { data } = await axios.get(
       `${process.env.SOCKET_URL}/posts/point?lat=${coordinates.lat}&lng=${coordinates.lng}`
@@ -30,9 +40,23 @@ export const actions = {
     return data
   },
 
-  async createPost(_, post) {
+  async createPost({ commit }, post) {
     try {
       await axios.post(`${process.env.SOCKET_URL}/posts`, post)
+      commit('setPostCreated', true, { root: true })
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+
+  async share({ commit }, post) {
+    try {
+      await axios.post(
+        `${process.env.SOCKET_URL}/posts/share/${post.post}`,
+        post.targets
+      )
       return true
     } catch (err) {
       console.error(err)

@@ -1,4 +1,6 @@
 import axios from 'axios'
+import io from 'socket.io-client'
+const socket = io(process.env.SOCKET_URL)
 
 export const state = () => ({
   user: {},
@@ -63,6 +65,14 @@ export const actions = {
       )
       commit('setUser', user)
       dispatch('chat/getChats', {}, { root: true })
+
+      socket.emit('join', {
+        email: user.email,
+      })
+
+      socket.on('chatnotification', (message) => {
+        commit('chat/chatNotification', message, { root: true })
+      })
       return true
     } catch (err) {
       console.error(err)

@@ -1,14 +1,14 @@
 <template lang="pug">
-  #shortMap.rounded-lg(style="background-color: white; height: 100%;")
-    v-layout.pb-4.font-weight-light.shortExpanded(v-if="expanded", column, justify-center, align-center) 
+  #audioMap.rounded-lg(style="background-color: white; height: 100%;")
+    v-layout.pb-4.font-weight-light.audioExpanded(v-if="expanded", column, justify-center, align-center) 
       v-avatar(:size="200", color="primary")
         v-img(:src="content.author.profilePicture")
       audio-player.mt-6(:src="content.src", autoplay)
       //- span {{content.text}}
-    v-layout.pb-4.short(v-else, column, align-center, :class="{'shortGrid': grid, 'short': !grid}")
-      v-avatar(color="primary", large)
-        v-icon fas fa-play
-      span 00:15
+    v-layout.pb-4.audio(v-else, column, justify-center, align-center, :class="{'audioGrid': grid, 'audio': !grid}")
+      v-avatar(color="primary", large, style="display: block")
+        v-icon.white--text fas fa-play
+      //- span.font-weight-light {{content.text | truncate}}
 </template>
 
 <script>
@@ -35,7 +35,7 @@ export default {
 </script>
 
 <style scoped>
-.shortGrid {
+.audioGrid {
   display: block;
   width: 1000px;
   height: auto;
@@ -43,16 +43,16 @@ export default {
   font-size: 1.2em;
 }
 
-.short {
-  font-size: 1.2em;
+.audio {
+  font-size: 0.8em;
   display: block;
   width: 80px;
-  min-height: 20px;
+  min-height: 80px;
   height: auto;
   padding: 8px;
 }
 
-.shortExpanded {
+.audioExpanded {
   display: block;
   width: 100%;
   height: 100%;
