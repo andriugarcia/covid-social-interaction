@@ -52,10 +52,10 @@
 </template>
 
 <script>
-import AvatarGroup from '../avatar-group'
+import AvatarGroup from '@/components/avatar-group'
 export default {
   components: {
-    locationSelect: () => import('../map/locationSelect'),
+    locationSelect: () => import('@/components/map/locationSelect'),
     AvatarGroup,
   },
   data: () => ({

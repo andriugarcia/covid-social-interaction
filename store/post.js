@@ -14,7 +14,7 @@ export const actions = {
   async getPosts({ commit }, bbox) {
     try {
       const { data } = await axios.get(
-        `${process.env.SOCKET_URL}/posts?nwlat=${bbox._ne.lat}&nwlng=${bbox._sw.lng}&selat=${bbox._sw.lat}&selng=${bbox._ne.lng}`
+        `${process.env.SOCKET_URL}/posts?xmin=${bbox._sw.lng}&ymin=${bbox._sw.lat}&xmax=${bbox._ne.lng}&ymax=${bbox._ne.lat}`
       )
       commit('setPosts', data)
     } catch (err) {
@@ -51,7 +51,7 @@ export const actions = {
     }
   },
 
-  async share({ commit }, post) {
+  async share(_, post) {
     try {
       await axios.post(
         `${process.env.SOCKET_URL}/posts/share/${post.post}`,

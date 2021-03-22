@@ -1,7 +1,7 @@
 <template lang="pug">
   #search.pa-4
     v-layout
-      v-btn.mt-3(v-if="!$vuetify.breakpoint.mdAndUp", icon)
+      v-btn.mt-3(v-if="!$vuetify.breakpoint.mdAndUp", icon, @click="$emit('back')")
         v-icon.black--text fas fa-arrow-left
       v-text-field.ml-2(outlined, rounded, v-model="searchText", @keydown.enter="select(0)", append-icon="fas fa-search", placeholder="Buscar sitio", autofocus)
     v-card(flat)

@@ -8,7 +8,7 @@
         audio-map(v-else-if="type == 'audio'", :content="content", :grid="grid")
         group-map(v-else-if="type == 'group'", :content="content", :grid="grid")
         span(v-else) Format Not Found
-        bottom-avatar.bottomalign(v-if="!grid", :src="content.author.profilePicture")
+        bottom-avatar.bottomalign(v-if="!grid", :src="content.profile_picture")
     v-dialog.rounded-lg(v-model="expanded", width="fit-content", persistent)
       v-layout(justify-center, style="position: fixed; bottom: 12px; left: 0; right: 0;")
         v-card.rounded-pill(style="height: 150px; width: 60px;", color="yellow", @click="expanded = false")
@@ -16,26 +16,26 @@
             v-icon.black--text.mb-4 fas fa-times
       v-card.rounded-lg(style="position: absolute; top: 24px; bottom: 82px; right: 0px; left: 0px;", color="black")
         v-layout.pa-4(style="position: absolute; top: 0; left: 0; right: 0;", align-center)
-          v-btn(fab, color="primary", @click="$router.push({ path: `/${content.author.username}` })")
+          v-btn(fab, color="primary", @click="$router.push({ path: `/${content.username}` })")
             v-avatar(color="white")
-              v-img(:src="content.author.profilePicture")
+              v-img(:src="content.profile_picture")
           .ml-2(:class="{'white--text': (type != 'short' && type != 'audio')}")
-            .font-weight-bold {{content.author.username}}
+            .font-weight-bold {{content.username}}
             v-layout
               v-chip.mr-2(small, color="purple darken-2", dark)
                 v-icon(small) fas fa-glass-cheers
                 .ml-2.font-weight-bold Fiesta
-              span {{content.createdAt | toDate }}
+              span {{content.created_at | toDate }}
           v-spacer
           v-chip(:color="type != 'short' && type != 'audio' ? 'white' : 'primary'")
-            span 15
+            span {{ content.opened }}
             v-icon.ml-1(small) fas fa-eye
         image-map(v-if="expanded && type == 'image'", expanded, :content="content")
         short-map(v-else-if="expanded && type == 'short'", :content="content", expanded)
         video-map(v-else-if="expanded && type == 'video'", expanded, :content="content")
         audio-map(v-else-if="expanded && type == 'audio'", expanded, :content="content")
         .px-2(style="position: absolute; bottom: -20px; left: 0; right: 0;")
-          v-layout.px-2(v-if="!authenticated || content.author.email != user._id")
+          v-layout.px-2(v-if="!authenticated || content.email != user.profile_id")
             v-text-field.mr-3(v-model="message.text", rounded, @keydown.enter="replyMessage", :dark="type != 'short' && type != 'audio'", outlined, placeholder="Escribe un mensaje", color="primary")
               template(#append)
                 v-icon(v-if="!!message.text", @click="replyMessage") far fa-paper-plane
@@ -45,7 +45,7 @@
             span Hacer Permanente
             v-icon.ml-2 far fa-snowflake
     v-bottom-sheet(v-model="shareDialog")
-      share(:post="content.id")
+      share(:post="content.post_id")
 </template>
 
 <script>
@@ -63,7 +63,7 @@ export default {
 
   filters: {
     toDate(value) {
-      const date = new Date(value * 1)
+      const date = new Date(value)
       return `${date.getUTCDate()}-${
         date.getMonth() + 1
       }-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
@@ -88,9 +88,10 @@ export default {
     shareDialog: false,
     message: {
       userId: '',
-      src: '',
+      src: null,
+      post_ref: '',
       text: '',
-      type: 'reply',
+      type: 'post',
     },
   }),
 
@@ -116,12 +117,13 @@ export default {
       this.expanded = !this.expanded
     },
     async replyMessage() {
-      this.message.userId = this.content.author.email
-      this.message.src = this.content.id
+      this.message.userId = this.content.profile_id
+      this.message.post_ref = this.content.post_id
       await this.$store.dispatch('chat/createMessage', this.message)
       this.$store.commit('setPostCreated', true)
       this.message.userId = ''
-      this.message.src = ''
+      this.message.post_ref = ''
+      this.message.text = ''
     },
   },
 }

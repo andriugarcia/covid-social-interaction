@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     async sendMessage() {
-      this.message.chatId = this.chat.chatid
+      this.message.chatId = this.chat.chat_id
 
       await this.$store.dispatch('chat/createMessage', this.message)
       this.removeImage()

@@ -1,23 +1,17 @@
 <template lang="pug">
   #editor.pa-4
-    v-layout(justify-space-between, align-center)
+    v-layout(align-center)
       v-btn(icon, @click="$router.go(-1)")
         v-icon.text--text fas fa-arrow-left
-      v-btn.text-capitalize(outlined, rounded, small, color="text", @click="permanentOpened = true") 
-        span.text--text Hacer permanente
-        v-icon.text--text.ml-2(small) far fa-snowflake
+      .ml-2.overline.text--text.font-weight-bold POSTEAR
+      v-spacer
+      v-btn.text-capitalize(rounded, depressed, small, dark, color="text", @click="permanentOpened = true") 
+        span Hacer permanente
+        v-icon.ml-2(small) far fa-snowflake
     v-layout.pt-4
-      v-avatar.mr-2.mt-2.elevation-5(size="40")
-        v-img(:src="user.profilePicture")
+      v-avatar.mr-2.mt-2(size="48", style="border: 3px solid #F0134D;")
+        v-img(:src="user.profile_picture")
       v-textarea(placeholder="Escribe tu post", counter="120", v-model="post.text", auto-grow, rows="1")
-    v-card.pa-2.rounded-xl.mt-2(v-if="post.type == 'group'", outlined)
-      v-layout(align-center)
-        v-avatar
-          v-img(:src="group.cover")
-        span.ml-2 {{ group.title }}
-        v-spacer
-        v-btn(icon, @click="removeGroup")
-          v-icon fas fa-times-circle
     v-card.pa-2.rounded-xl.mt-2(v-if="post.type == 'audio'", outlined)
       v-progress-circular(v-if="uploading", indeterminate, color="primary")
       audio-player(v-else, :src="post.src")
@@ -62,8 +56,6 @@
         v-btn.mt-4(block, color="primary", rounded) ACTIVAR
     v-dialog(v-model="cameraToggle", fullscreen)
       camera(v-if="cameraToggle", @back="cameraToggle = false", @update="imageUpdated")
-    v-dialog(v-model="groupToggle", fullscreen)
-      group-select(@back="groupToggle = false", @selected="selectGroup")
 </template>
 
 <script>
@@ -83,7 +75,7 @@ export default {
       uploading: false,
       post: {
         type: 'short',
-        coordinates: { lat: 40.40860001, lon: -3.689840001 },
+        coordinates: { lat: 40.40860001, lng: -3.689840001 },
         createdAt: Date.now().toString(),
         text: '',
         src: '',
@@ -92,8 +84,6 @@ export default {
       permanentOpened: false,
       bidValue: 1,
       cameraToggle: false,
-      groupToggle: false,
-      group: {},
     }
   },
 
@@ -107,12 +97,9 @@ export default {
   },
 
   methods: {
-    updateLocation({ lat, lng }) {
+    updateLocation(coordinates) {
       this.currentPosition = false
-      this.post.coordinates = {
-        lat,
-        lon: lng,
-      }
+      this.post.coordinates = coordinates
     },
     async imageUpdated(image) {
       this.uploading = true
@@ -153,16 +140,6 @@ export default {
         self.post.src = e.target.result
       }
       reader.readAsDataURL(image)
-    },
-    selectGroup(group) {
-      this.post.type = 'group'
-      this.post.src = group.chatid
-      this.group = group
-    },
-    removeGroup() {
-      this.post.type = 'short'
-      this.post.src = ''
-      this.group = {}
     },
   },
 }

@@ -1,20 +1,22 @@
 <template lang="pug">
   #contacts(style="height: 100%")
-    v-card(flat, color="text", tile, dark)
-      v-layout.pa-2(justify-space-between)
+    v-card(flat, color="primary", tile, dark)
+      v-toolbar(color="primary", extended)
         v-btn(icon, small, @click="$router.go(-1)")
           v-icon fas fa-arrow-left
-        v-btn.text-capitalize(outlined, rounded, small, @click="newGroup = true") Nuevo Grupo
-      v-text-field.mx-2.mt-4(solo, color="background", dense, placeholder="Buscar", append-icon="fas fa-search")
-    v-card(flat, color="yellow")
-      v-tabs(fixed-tabs)
-        v-tab 
-          v-chip.text-capitalize(color="primary") 
-            div Chats
-            v-chip.ml-2(small) {{ total }}
-        v-tab.text-capitalize 
-          span Cerca de ti
-          v-chip.ml-2(small) 15
+        v-toolbar-title Actividad
+        v-spacer
+        v-btn(icon)
+          v-icon fas fa-search
+        template(#extension)
+          v-tabs(fixed-tabs)
+            v-tab 
+              v-chip.text-capitalize(color="white", light) 
+                div Chats
+                v-chip.ml-2(small, color="primary") {{ total }}
+            v-tab.text-capitalize 
+              span Cerca de ti
+              v-chip.ml-2(small) 15
     v-list
       v-list-item
         v-list-item-avatar
@@ -25,11 +27,17 @@
           v-chip(color="primary") 15
       v-list-item(v-for="(chat, i) in chats", :key="i", @click="openChat(chat)")
         v-list-item-avatar
-          v-img(:src="chat.cover || chat.user.profilePicture")
+          v-img(:src="chat.chat.cover || getMember(chat).profile_picture")
         v-list-item-content
-          v-list-item-title.font-weight-bold {{ chat.title || chat.user.username }}
+          v-list-item-title.font-weight-bold {{ chat.chat.title || getMember(chat).username }}
         v-list-item-action
           v-chip(v-if="chat.unread != 0", color="primary") {{ chat.unread }}
+    v-speed-dial(v-model="dial", absolute, bottom, right)
+      template(#activator)
+        v-btn(fab, color="primary", dark)
+          v-icon {{ dial ? 'fas fa-times' : 'fas fa-pen'}}
+      v-btn(fab, @click="newGroup = true")
+        v-icon fas fa-user-friends
     v-dialog(v-model="newGroup", fullscreen, hide-overlay, transition="dialog-bottom-transition")
       create-group
 </template>
@@ -41,6 +49,7 @@ export default {
   },
   data() {
     return {
+      dial: false,
       newGroup: false,
     }
   },
@@ -53,11 +62,21 @@ export default {
     },
   },
   methods: {
-    openChat(chat) {
-      if (typeof chat.type !== 'undefined' && chat.type === 'group') {
-        this.$router.push({ path: `/group/${chat.chatid}` })
+    getMember({ chat }) {
+      if (
+        chat.member[0].profile.profile_id !==
+        this.$store.state.auth.user.profile_id
+      ) {
+        return chat.member[0].profile
       } else {
-        this.$router.push({ path: `/chat/${chat.user.username}` })
+        return chat.member[1].profile
+      }
+    },
+    openChat({ chat }) {
+      if (typeof chat.type !== 'undefined' && chat.type === 'group') {
+        this.$router.push({ path: `/group/${chat.chat_id}` })
+      } else {
+        this.$router.push({ path: `/chat/${chat.chat_id}` })
       }
     },
   },

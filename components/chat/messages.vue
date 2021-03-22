@@ -3,17 +3,17 @@
     v-layout.my-2(v-for="(message, i) in messages", :key="i", align-end, :justify-end="isMe(message.author)")
       div(v-if="!isMe(message.author)", style="width: 60px;")
         v-avatar(v-if="(i + 1) >= messages.length || messages[i + 1].author != message.author", color="primary")
-          v-img(:src="getMember(message.author).profilePicture")
+          v-img(:src="message.profile.profile_picture")
       v-card.pa-4.rounded-xl(flat, :color="isMe(message.author) ? 'secondary' :'background'", style="min-width: 200px") 
         v-layout(v-if="!isMe(message.author) && ((i - 1) < 0 || messages[i - 1].author != message.author)", justify-space-between, align-center)
-          .font-weight-bold.text-capitalize {{ getMember(message.author).username }}
+          .font-weight-bold.text-capitalize {{ message.profile.username }}
           //- .font-italic 500m
         img.ma-1.rounded-xl.mb-4.imageMessage(v-if="message.type == 'image'", :src="message.src", style="width: 100%")
         post(v-if="message.type == 'reply'", :src="message.src")
         audio-player(v-if="message.type == 'audio'", :src="message.src")
         p {{message.text}}
         v-layout(justify-end, align-end)
-          .mx-2.font-weight-bold(style="font-size: .8em;") {{ message.createdat | toHour }}
+          .mx-2.font-weight-bold(style="font-size: .8em;") {{ message.created_at | toHour }}
 </template>
 
 <script>
@@ -63,14 +63,7 @@ export default {
   },
   methods: {
     isMe(userId) {
-      return this.$store.state.auth.user._id === userId
-    },
-    getMember(id) {
-      if (typeof this.chat.type !== 'undefined' && this.chat.type === 'group') {
-        return this.chat.members[id]
-      } else {
-        return this.chat
-      }
+      return this.$store.state.auth.user.profile_id === userId
     },
     async handleScroll() {
       if (
@@ -82,7 +75,7 @@ export default {
         const bottomScroll =
           this.$refs.chat.scrollHeight - this.$refs.chat.scrollTop
         await this.$store.dispatch('chat/getMessages', {
-          chatId: this.chat.chatid,
+          chatId: this.chat.chat_id,
         })
         setTimeout(() => {
           this.$refs.chat.scrollTop =

@@ -6,9 +6,9 @@
       MglMarker(:coordinates="[userPosition.lng, userPosition.lat]")
         template(slot="marker")
           .cursor
-      MglMarker(v-for="(post, i) in posts" :key="post._id" :coordinates="[post._source.coordinates.lon, post._source.coordinates.lat]" :offset="[0, -10]" anchor="bottom")
+      MglMarker(v-for="(post, i) in posts" :key="post._id" :coordinates="[post.coordinates.lat, post.coordinates.lng]" :offset="[0, -10]" anchor="bottom")
         template(slot="marker")
-          post(:type="post._source.type", :content="{...post._source, id: post._id}")
+          post(:type="post.type", :content="{...post, id: post.post_id}")
 </template>
 
 <script>
@@ -86,7 +86,7 @@ export default {
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background-color: #4383e9;
+  background-color: #f0134d;
   border: 3px solid white;
   -moz-box-shadow: 0 0 10px #ccc;
   -webkit-box-shadow: 0 0 10px #ccc;

@@ -9,13 +9,13 @@
       v-layout(wrap)
         v-chip.pl-1.pr-2(v-for="(participant, i) in people", :key="i", v-if="!!participant.selected", @click="participant.selected = false; count--", color="primary", dark)
           v-avatar(color="white")
-            v-img(:src="participant.profilePicture")
+            v-img(:src="participant.profile_picture")
           span.ml-1 {{ participant.username }}
           v-icon.ml-2(small, color="white") fas fa-times-circle
       v-list
         v-list-item(v-for="(participant, i) in people", :key="i", @click="selectParticipant(i)")
           v-list-item-avatar(color="primary")
-            v-img(:src="participant.profilePicture")
+            v-img(:src="participant.profile_picture")
           v-list-item-content
             v-list-item-title {{ participant.username }}
           v-list-item-action
@@ -38,7 +38,7 @@
       v-list
         v-list-item(v-for="(participant, i) in members", :key="i")
           v-list-item-avatar(color="primary")
-            v-img(:src="participant.profilePicture")
+            v-img(:src="participant.profile_picture")
           v-list-item-content
             v-list-item-title {{ participant.username }}
     v-btn(v-if="step == 1", fab, large, dark, fixed, right, bottom, color="primary", :disabled="count == 0", @click="nextStep")
@@ -96,7 +96,7 @@ export default {
       this.$store.dispatch('chat/createGroup', {
         ...this.group,
         username: this.$store.state.auth.user.username,
-        members: this.members.map((user) => user.email),
+        members: this.members.map((user) => user.profile_id),
       })
     },
   },

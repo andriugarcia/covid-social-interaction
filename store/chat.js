@@ -58,13 +58,13 @@ export const actions = {
       return false
     }
   },
-  async getChat({ commit }, username) {
+  async getChat({ commit }, chatId) {
     try {
       const { data } = await axios.get(
-        `${process.env.SOCKET_URL}/chat/user/${username}`
+        `${process.env.SOCKET_URL}/chat/user/${chatId}`
       )
 
-      const { messages, ...chat } = data
+      const { messages, chat } = data
       commit('setMessages', messages)
       commit('setChat', chat)
     } catch (err) {
@@ -107,7 +107,7 @@ export const actions = {
     if (state.allMessagesLoaded) return
     try {
       const { data } = await axios.get(
-        `${process.env.SOCKET_URL}/chat/messages/${chatId}?offset=${state.offset}`
+        `${process.env.SOCKET_URL}/chat/messages/${chatId}?cursor=${state.messages[0].message_id}`
       )
       commit('setMessages', data)
     } catch (err) {
@@ -119,8 +119,8 @@ export const actions = {
       await axios.post(`${process.env.SOCKET_URL}/chat/send`, message)
       commit('pushMessage', {
         ...message,
-        author: rootState.auth.user._id,
-        createdat: Date.now(),
+        author: rootState.auth.user.profile_id,
+        created_at: Date.now(),
       })
       return true
     } catch (err) {

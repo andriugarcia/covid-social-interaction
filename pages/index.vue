@@ -1,17 +1,44 @@
 <template lang="pug">
   #Home
     Map(:mapPosition="mapPosition", :userPosition.sync="userPosition", @onMove="markersUpdate", @click="morePosts")
-    v-layout.pa-4(style="position: absolute; top: 0px; right: 0; left: 0;", justify-space-between)
-      v-btn(icon, @click="opened = 'search'")
-        v-icon.primary-text fas fa-search
-      v-btn(icon)
-        v-icon.primary-text fas fa-sync-alt
-    //- v-avatar(size="40", color="white", style="position: absolute top: 8px right: 8px")
-    //-   v-img(src="https://picsum.photos/200")
-    v-layout(column, style="position: absolute; bottom: 32px; right: 12px;")
+    v-layout.pa-4(style="position: absolute; top: 0px; right: 0; left: 0;", align-center)
+      img(src="@/assets/olimaps-logo.png", style="width: 36px; height: 36px;")
+      img(src="@/assets/olimaps-logo-light.png", style="height: 30px")
+      v-spacer
       v-btn(v-if="authenticated", fab, color="primary")
         v-avatar(color="white")
-          v-img(:src="user.profilePicture")
+          v-img(:src="user.profile_picture")
+      v-btn(v-else, depressed, rounded, color="primary", @click="$store.commit('setLogin', true)")
+        v-icon.mr-2(small) fas fa-user
+        span.text-capitalize Crear Cuenta
+
+    .pb-6(style="position: absolute; bottom: 0; left: 0; right: 0;")
+      portals.pl-2
+      v-sheet.mx-2.mt-2.elevation-5.rounded-xl
+        v-layout(justify-space-around, align-center)
+          v-card.my-1.px-2.rounded-lg.text-center(flat, @click="$router.push({path: '/events'})")
+            v-icon.pa-1(color="black", style="display: block") fas fa-flag
+            span.font-weight-bold(style="font-size: .7em") EVENTOS
+          v-card.my-1.px-2.rounded-lg.text-center(flat, @click="opened = 'search'")
+            v-icon.pa-1(color="black", style="display: block") fas fa-search
+            span.font-weight-bold(style="font-size: .7em") BUSCAR
+          v-btn(fab, depressed, color="primary", @click="$router.push({path: '/editor'})")
+            v-icon fas fa-plus
+          v-card.my-1.px-2.rounded-lg.text-center(flat, @click="opened = 'notifications'")
+            v-badge(overlap, color="primary", :content="3")
+              v-icon.pa-1(color="black", style="display: block") fas fa-bell
+              span.font-weight-bold(style="font-size: .7em") ACTIVIDAD
+          v-card.my-1.px-2.rounded-lg.text-center(flat, @click="$router.push({ path: '/chat' })")
+            v-badge(overlap, color="primary", :value="total", :content="total")
+              v-icon.pa-1(color="black", style="display: block") fas fa-comment-dots
+              span.font-weight-bold(style="font-size: .7em") CHAT
+    //- v-avatar(size="40", color="white", style="position: absolute top: 8px right: 8px")
+    //-   v-img(src="https://picsum.photos/200")
+    
+    //- v-layout(column, style="position: absolute; bottom: 32px; right: 12px;")
+      v-btn(v-if="authenticated", fab, color="primary")
+        v-avatar(color="white")
+          v-img(:src="user.profile_picture")
       v-btn(v-else, fab, outlined, color="primary", @click="$store.commit('setLogin', true)")
         v-icon far fa-user
       v-badge.mt-2(overlap, top, left, :value="total", :content="total")
@@ -19,19 +46,20 @@
           v-icon far fa-comment-dots
       v-btn.mt-2(fab, :disabled="!authenticated", @click="$router.push({path: '/editor'})")
         v-icon.primary--text(small) far fa-edit
-    v-layout(column, align-center, v-touch="{up: () => activitiesOpened = true}", 
-    style="position: absolute; bottom: 32px; left: 80px; right: 80px;")
+    //- v-layout(column, align-center, v-touch="{up: () => activitiesOpened = true}", 
+    //- style="position: absolute; bottom: 32px; left: 80px; right: 80px;")
       v-icon.primary--text(small, @click="activitiesOpened = true") fas fa-chevron-up
       .font-weight-bold.primary--text(@click="activitiesOpened = true") Ver Actividades
     v-dialog(:value="opened", fullscreen, hide-overlay, transition="dialog-bottom-transition")
       v-card
+        notifications(v-if="opened == 'notifications'", @back="opened = ''")
         search(v-if="opened == 'search'", @back="opened = ''", @updated="updateCentre", :centre="userPosition")
     v-bottom-sheet(v-model="placeOpened")
       v-card.px-4.pt-3(style="border-radius: 24px 24px 0 0;")
         v-layout(justify-center)
           v-subheader POSTS EN ESTA ZONA
         .masonry.pa-2(style="overflow-y: scroll; height: 80vh;")
-          post.mb-2(v-for="(post, i) in fullPosts", :key="i", :type="post._source.type", :content="post._source", grid)
+          post.mb-2(v-for="(post, i) in fullPosts", :key="i", :type="post.type", :content="post", grid)
     v-bottom-sheet(v-model="activitiesOpened")
       v-card.px-4.pt-3(style="border-radius: 24px 24px 0 0;")
         v-layout(justify-center)
@@ -62,6 +90,8 @@ import Search from '../components/search/search'
 import AvatarGroup from '../components/avatar-group'
 import Postbar from '../components/home/postbar'
 import Post from '../components/map/post'
+import Portals from '../components/map/portals'
+import Notifications from '../layouts/notifications'
 export default {
   components: {
     Map,
@@ -69,6 +99,8 @@ export default {
     Search,
     AvatarGroup,
     Post,
+    Portals,
+    Notifications,
   },
 
   data() {

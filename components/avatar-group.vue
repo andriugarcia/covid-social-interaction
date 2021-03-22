@@ -1,9 +1,10 @@
 <template lang="pug">
   #avatar-group
-    v-avatar.avatar.rounded-circle(size="32", v-for="(avatar, i) in avatars", :key="i")
-      v-img(v-if="i <= limit", :src="avatar")
-      v-overlay(absolute="absolute", :value="i == 0 && avatars.length > limit")
-        .font-weight-bold(style="font-size: 0.8em") {{avatars.length | upLimit}}
+    v-layout(align-center, justify-end)
+      v-avatar.avatar.rounded-circle(size="32", v-for="(avatar, i) in avatars", :key="i")
+        v-img(v-if="i <= limit", :src="avatar")
+      v-chip.ml-1(color="primary lighten-5") 
+        .black--text {{ avatars.length | upLimit }}
 </template>
 
 <script>
