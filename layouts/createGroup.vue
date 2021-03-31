@@ -27,6 +27,13 @@
         v-text-field(placeholder="Nombre del grupo", autofocus, v-model="group.title")
       .overline DESCRIPCIÓN
       v-textarea(placeholder="Descripción del grupo", autogrow, :rows="1", v-model="group.description")
+      .overline UBICACIÓN (opcional)
+      p La Ubicación hará visible el grupo a las personas que estén cerca
+      v-dialog(v-model="locationSelectorOpened", fullscreen, hide-overlay, transition="dialog-bottom-transition")
+        template(v-slot:activator="{on, attrs}")
+          v-text-field(label="Ubicación", :value="group.coordinates != null ? group.coordinates.lat.toFixed(4) + '. ' + group.coordinates.lng.toFixed(4) : ''", v-on="on", readonly, append-icon="fas fa-map-marker-alt")
+        v-card
+          location-select(:initialPosition="{lng: -3.612036640743373, lat: 37.17319576390279}", @updated="updateLocation", @back="locationSelectorOpened = false")
       .overline CANAL
       v-checkbox(label="Es un canal")
       v-layout(justify-start)
@@ -52,6 +59,7 @@ import avatarInput from '@/components/avatar-input'
 export default {
   components: {
     avatarInput,
+    locationSelect: () => import('@/components/map/locationSelect'),
   },
   data() {
     return {
@@ -59,11 +67,13 @@ export default {
       people: [],
       count: 0,
       members: [],
+      locationSelectorOpened: false,
       group: {
         type: 'group',
         title: '',
         description: '',
         cover: '',
+        coordinates: null,
       },
     }
   },
@@ -88,6 +98,9 @@ export default {
     nextStep() {
       this.members = this.people.filter((user) => user.selected)
       this.step++
+    },
+    updateLocation(coordinates) {
+      this.group.coordinates = coordinates
     },
     updateCover(src) {
       this.group.cover = src

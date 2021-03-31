@@ -5,9 +5,14 @@
       img(src="@/assets/olimaps-logo.png", style="width: 36px; height: 36px;")
       img(src="@/assets/olimaps-logo-light.png", style="height: 30px")
       v-spacer
-      v-btn(v-if="authenticated", fab, color="primary")
-        v-avatar(color="white")
-          v-img(:src="user.profile_picture")
+      v-menu(v-if="authenticated", rounded, offset-y)
+        template(v-slot:activator="{on}")
+          v-btn(fab, color="primary", v-on="on")
+            v-avatar(color="white")
+              v-img(:src="user.profile_picture")
+        v-card
+          v-list
+            v-list-item Cerrar Sesión
       v-btn(v-else, depressed, rounded, color="primary", @click="$store.commit('setLogin', true)")
         v-icon.mr-2(small) fas fa-user
         span.text-capitalize Crear Cuenta
@@ -54,13 +59,22 @@
       v-card
         notifications(v-if="opened == 'notifications'", @back="opened = ''")
         search(v-if="opened == 'search'", @back="opened = ''", @updated="updateCentre", :centre="userPosition")
-    v-bottom-sheet(v-model="placeOpened")
+    v-dialog(v-model="placeOpened", fullscreen, hide-overlay, transition="dialog-bottom-transition")
       v-card.px-4.pt-3(style="border-radius: 24px 24px 0 0;")
-        v-layout(justify-center)
-          v-subheader POSTS EN ESTA ZONA
+        v-toolbar
+          v-btn(icon, color="primary", @click="placeOpened = false")
+            v-icon fas fa-times
+          v-toolbar-title.font-weight-black.primary--text En esta zona
+        v-tabs(fixed-tabs)
+          v-tab
+            v-icon.mr-1(small) fas fa-map-pin
+            div Posts
+          v-tab
+            v-icon.mr-1(small) fas fa-flag
+            div Eventos
         .masonry.pa-2(style="overflow-y: scroll; height: 80vh;")
-          post.mb-2(v-for="(post, i) in fullPosts", :key="i", :type="post.type", :content="post", grid)
-    v-bottom-sheet(v-model="activitiesOpened")
+          //- post.mb-2(v-for="(post, i) in fullPosts", :key="i", :type="post.type", :content="post", grid)
+    //- v-bottom-sheet(v-model="activitiesOpened")
       v-card.px-4.pt-3(style="border-radius: 24px 24px 0 0;")
         v-layout(justify-center)
           v-subheader ACTIVIDADES
@@ -148,12 +162,12 @@ export default {
 
     markersUpdate() {},
 
-    async morePosts(coordinates) {
-      const { hits } = await this.$store.dispatch(
-        'post/getPostsByPoint',
-        coordinates
-      )
-      this.fullPosts = hits.hits
+    morePosts(coordinates) {
+      // const { hits } = await this.$store.dispatch(
+      //   'post/getPostsByPoint',
+      //   coordinates
+      // )
+      // this.fullPosts = hits.hits
       this.placeOpened = true
     },
   },

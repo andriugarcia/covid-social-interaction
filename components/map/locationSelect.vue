@@ -63,3 +63,14 @@ export default {
   },
 }
 </script>
+
+<style>
+.triangle {
+  width: 0;
+  height: 0;
+  border-bottom: 0 solid black;
+  border-top: 9px solid black;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+}
+</style>

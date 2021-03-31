@@ -6,9 +6,9 @@
       MglMarker(:coordinates="[userPosition.lng, userPosition.lat]")
         template(slot="marker")
           .cursor
-      MglMarker(v-for="(post, i) in posts" :key="post._id" :coordinates="[post.coordinates.lat, post.coordinates.lng]" :offset="[0, -10]" anchor="bottom")
+      MglMarker(v-for="(post, i) in posts" :key="post.post_id || post.chat_id" :coordinates="[post.coordinates.lat, post.coordinates.lng]" :offset="[0, -10]" anchor="bottom")
         template(slot="marker")
-          post(:type="post.type", :content="{...post, id: post.post_id}")
+          post(:type="post.type", :content="post")
 </template>
 
 <script>

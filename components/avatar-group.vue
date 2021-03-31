@@ -3,7 +3,7 @@
     v-layout(align-center, justify-end)
       v-avatar.avatar.rounded-circle(size="32", v-for="(avatar, i) in avatars", :key="i")
         v-img(v-if="i <= limit", :src="avatar")
-      v-chip.ml-1(color="primary lighten-5") 
+      v-chip.ml-n2(color="primary lighten-5") 
         .black--text {{ avatars.length | upLimit }}
 </template>
 

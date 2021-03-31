@@ -30,6 +30,7 @@
     "aws-sdk": "^2.853.0",
     "axios": "^0.21.1",
     "core-js": "^3.8.3",
+    "dayjs": "^1.10.4",
     "fs": "0.0.1-security",
     "mapbox-gl": "^2.0.1",
     "multer": "^1.4.2",

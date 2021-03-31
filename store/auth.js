@@ -30,7 +30,7 @@ export const actions = {
   async login({ dispatch }, body) {
     try {
       const { data: token } = await axios.post(
-        `${process.env.SOCKET_URL}/login`,
+        `${process.env.SERVER_URL}/login`,
         body
       )
       axios.defaults.headers.common.authorization = 'Bearer ' + token
@@ -45,7 +45,7 @@ export const actions = {
   async signup({ dispatch }, body) {
     try {
       const { data: token } = await axios.post(
-        `${process.env.SOCKET_URL}/signup`,
+        `${process.env.SERVER_URL}/signup`,
         body
       )
 
@@ -58,16 +58,18 @@ export const actions = {
     }
   },
 
-  async getMe({ commit, dispatch }) {
+  async getMe({ rootState, commit, dispatch }) {
     try {
       const { data: user } = await axios.get(
-        `${process.env.SOCKET_URL}/user/me`
+        `${process.env.SERVER_URL}/user/me`
       )
       commit('setUser', user)
       dispatch('chat/getChats', {}, { root: true })
+      dispatch('chat/getCloseChats', rootState.map.userPosition, { root: true })
 
+      console.log(user)
       socket.emit('join', {
-        email: user.email,
+        profile_id: user.profile_id,
       })
 
       socket.on('chatnotification', (message) => {

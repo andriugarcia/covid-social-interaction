@@ -2,6 +2,7 @@ import axios from 'axios'
 
 export const state = () => ({
   chats: [],
+  closeChats: [],
   chat: {},
   messages: [],
   offset: 0,
@@ -12,11 +13,17 @@ export const getters = {
   total(state) {
     return state.chats.reduce((a, b) => a + (b.unread || 0), 0)
   },
+  totalClose(state) {
+    return state.closeChats.length
+  },
 }
 
 export const mutations = {
   setChats(state, chats) {
     state.chats = chats
+  },
+  setCloseChats(state, chats) {
+    state.closeChats = chats
   },
   setChat(state, chat) {
     state.chat = chat
@@ -36,11 +43,12 @@ export const mutations = {
     state.allMessagesLoaded = false
   },
   chatNotification(state, notificationMessage) {
-    if (state.chat.chatid === notificationMessage.chatId) {
+    if (state.chat.chat_id === notificationMessage.channel) {
+      console.log('PUSH')
       state.messages.push(notificationMessage)
     } else {
       const index = state.chats.findIndex(
-        (chat) => chat.chatId === notificationMessage.chatId
+        (chat) => chat.chat_id === notificationMessage.channel
       )
       if (index !== -1) state.chats[index].unread += 1
     }
@@ -50,8 +58,20 @@ export const mutations = {
 export const actions = {
   async getChats({ commit }) {
     try {
-      const { data } = await axios.get(`${process.env.SOCKET_URL}/chats`)
+      const { data } = await axios.get(`${process.env.SERVER_URL}/chats`)
       commit('setChats', data)
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async getCloseChats({ commit }, coordinates) {
+    try {
+      const { data } = await axios.get(
+        `${process.env.SERVER_URL}/chats/close?lat=${coordinates.lat}&lng=${coordinates.lng}`
+      )
+      commit('setCloseChats', data)
       return true
     } catch (err) {
       console.error(err)
@@ -61,7 +81,7 @@ export const actions = {
   async getChat({ commit }, chatId) {
     try {
       const { data } = await axios.get(
-        `${process.env.SOCKET_URL}/chat/user/${chatId}`
+        `${process.env.SERVER_URL}/chat/user/${chatId}`
       )
 
       const { messages, chat } = data
@@ -74,7 +94,7 @@ export const actions = {
   async getGroup({ commit }, groupId) {
     try {
       const { data } = await axios.get(
-        `${process.env.SOCKET_URL}/group/${groupId}`
+        `${process.env.SERVER_URL}/group/${groupId}`
       )
 
       const { messages, ...chat } = data
@@ -87,7 +107,7 @@ export const actions = {
   async getGroupForMap(_, groupId) {
     try {
       const { data } = await axios.get(
-        `${process.env.SOCKET_URL}/group/${groupId}`
+        `${process.env.SERVER_URL}/group/${groupId}`
       )
       return data
     } catch (err) {
@@ -97,7 +117,15 @@ export const actions = {
   },
   async getGroups(_) {
     try {
-      const { data } = await axios.get(`${process.env.SOCKET_URL}/groups`)
+      const { data } = await axios.get(`${process.env.SERVER_URL}/groups`)
+      return data
+    } catch (err) {
+      console.error(err)
+    }
+  },
+  async getGroupsAdmin(_) {
+    try {
+      const { data } = await axios.get(`${process.env.SERVER_URL}/groups/admin`)
       return data
     } catch (err) {
       console.error(err)
@@ -107,7 +135,7 @@ export const actions = {
     if (state.allMessagesLoaded) return
     try {
       const { data } = await axios.get(
-        `${process.env.SOCKET_URL}/chat/messages/${chatId}?cursor=${state.messages[0].message_id}`
+        `${process.env.SERVER_URL}/chat/messages/${chatId}?cursor=${state.messages[0].message_id}`
       )
       commit('setMessages', data)
     } catch (err) {
@@ -116,7 +144,7 @@ export const actions = {
   },
   async createMessage({ rootState, commit }, message) {
     try {
-      await axios.post(`${process.env.SOCKET_URL}/chat/send`, message)
+      await axios.post(`${process.env.SERVER_URL}/chat/send`, message)
       commit('pushMessage', {
         ...message,
         author: rootState.auth.user.profile_id,
@@ -130,7 +158,16 @@ export const actions = {
   },
   async createGroup(_, group) {
     try {
-      await axios.post(`${process.env.SOCKET_URL}/group/new`, group)
+      await axios.post(`${process.env.SERVER_URL}/group/new`, group)
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async joinChat(_, chatId) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/groups/join/${chatId}`)
       return true
     } catch (err) {
       console.error(err)

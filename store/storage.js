@@ -2,12 +2,10 @@ import axios from 'axios'
 
 export const actions = {
   async uploadFile(_, file) {
-    console.log(file)
     const formData = new FormData()
     formData.append('profileImage', file, file.name || 'photo.jpeg')
-    console.log(formData.get('profileImage'))
     const { data } = await axios.post(
-      `${process.env.SOCKET_URL}/uploadImage`,
+      `${process.env.SERVER_URL}/uploadImage`,
       formData,
       {
         headers: {
@@ -17,16 +15,13 @@ export const actions = {
         },
       }
     )
-    console.log(data)
     return data
   },
   async uploadAudio(_, file) {
-    console.log(file)
     const formData = new FormData()
     formData.append('audio', file, 'audio.webm')
-    console.log(formData.get('audio'))
     const { data } = await axios.post(
-      `${process.env.SOCKET_URL}/uploadAudio`,
+      `${process.env.SERVER_URL}/uploadAudio`,
       formData,
       {
         headers: {
@@ -36,7 +31,6 @@ export const actions = {
         },
       }
     )
-    console.log(data)
     return data
   },
 }

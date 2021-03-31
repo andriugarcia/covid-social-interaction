@@ -14,7 +14,7 @@ export const actions = {
   async getPosts({ commit }, bbox) {
     try {
       const { data } = await axios.get(
-        `${process.env.SOCKET_URL}/posts?xmin=${bbox._sw.lng}&ymin=${bbox._sw.lat}&xmax=${bbox._ne.lng}&ymax=${bbox._ne.lat}`
+        `${process.env.SERVER_URL}/posts?xmin=${bbox._sw.lng}&ymin=${bbox._sw.lat}&xmax=${bbox._ne.lng}&ymax=${bbox._ne.lat}`
       )
       commit('setPosts', data)
     } catch (err) {
@@ -25,7 +25,7 @@ export const actions = {
 
   async getPost({ _ }, src) {
     try {
-      const { data } = await axios.get(`${process.env.SOCKET_URL}/post/${src}`)
+      const { data } = await axios.get(`${process.env.SERVER_URL}/post/${src}`)
       return data
     } catch (err) {
       console.error(err)
@@ -35,14 +35,14 @@ export const actions = {
 
   async getPostsByPoint(_, coordinates) {
     const { data } = await axios.get(
-      `${process.env.SOCKET_URL}/posts/point?lat=${coordinates.lat}&lng=${coordinates.lng}`
+      `${process.env.SERVER_URL}/posts/point?lat=${coordinates.lat}&lng=${coordinates.lng}`
     )
     return data
   },
 
   async createPost({ commit }, post) {
     try {
-      await axios.post(`${process.env.SOCKET_URL}/posts`, post)
+      await axios.post(`${process.env.SERVER_URL}/posts`, post)
       commit('setPostCreated', true, { root: true })
       return true
     } catch (err) {
@@ -54,7 +54,7 @@ export const actions = {
   async share(_, post) {
     try {
       await axios.post(
-        `${process.env.SOCKET_URL}/posts/share/${post.post}`,
+        `${process.env.SERVER_URL}/posts/share/${post.post}`,
         post.targets
       )
       return true

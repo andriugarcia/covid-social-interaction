@@ -46,17 +46,12 @@
 </template>
 
 <script>
+import date from '@/mixins/date'
 import io from 'socket.io-client'
 const socket = io(process.env.SOCKET_URL)
 
 export default {
-  filters: {
-    toHour(value) {
-      const date = new Date(value)
-      return date.getHours() + ':' + date.getMinutes()
-    },
-  },
-
+  mixins: [date],
   data: () => ({
     messageInput: '',
     coordinates: [0, 0],

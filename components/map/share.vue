@@ -18,8 +18,8 @@
     v-list.pb-12(color="primary")
       v-list-item(v-for="(member, i) in people", :key="i", @click="selectMember(member)")
         v-list-item-avatar(color="white")
-          v-img(:src="member.cover || member.user.profilePicture")
-        v-list-item-title {{ member.title || member.user.username }}
+          v-img(:src="member.chat.cover || getMember(member).profile_picture")
+        v-list-item-title {{ member.chat.title || getMember(member).username }}
         v-list-item-action
           v-checkbox(:value="member.selected", small, color="white", outlined)
     .pa-4(style="position: absolute; left: 0; right: 0; bottom: 0;")
@@ -46,6 +46,16 @@ export default {
     }
   },
   methods: {
+    getMember({ chat }) {
+      if (
+        chat.member[0].profile.profile_id !==
+        this.$store.state.auth.user.profile_id
+      ) {
+        return chat.member[0].profile
+      } else {
+        return chat.member[1].profile
+      }
+    },
     selectMember(member) {
       if (member.selected) {
         this.selectedList = this.selectedList.filter((e) => e !== member.chatid)

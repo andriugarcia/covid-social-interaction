@@ -4,7 +4,7 @@ export const actions = {
   async getUser(_, username) {
     try {
       const { data } = await axios.get(
-        `${process.env.SOCKET_URL}/users/${username}`
+        `${process.env.SERVER_URL}/users/${username}`
       )
       return data
     } catch (err) {
@@ -14,7 +14,7 @@ export const actions = {
   },
   async getPeople(_) {
     try {
-      const { data } = await axios.get(`${process.env.SOCKET_URL}/people`)
+      const { data } = await axios.get(`${process.env.SERVER_URL}/people`)
       return data
     } catch (err) {
       console.error(err)

@@ -39,6 +39,7 @@ export default {
   },
 
   env: {
+    SERVER_URL: process.env.SERVER_URL,
     SOCKET_URL: process.env.SOCKET_URL,
     ELASTIC_URL: process.env.ELASTIC_URL,
     ELASTICSEARCH: process.env.ELASTICSEARCH,

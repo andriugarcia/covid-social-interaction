@@ -9,7 +9,7 @@
           .font-weight-bold.text-capitalize {{ message.profile.username }}
           //- .font-italic 500m
         img.ma-1.rounded-xl.mb-4.imageMessage(v-if="message.type == 'image'", :src="message.src", style="width: 100%")
-        post(v-if="message.type == 'reply'", :src="message.src")
+        post(v-if="message.type == 'post'", :content="message.post")
         audio-player(v-if="message.type == 'audio'", :src="message.src")
         p {{message.text}}
         v-layout(justify-end, align-end)
@@ -20,6 +20,7 @@
 import audioPlayer from '@/components/chat/audioPlayer'
 import camera from '@/components/editor/camera'
 import post from '@/components/chat/post'
+import date from '@/mixins/date'
 
 export default {
   components: {
@@ -27,17 +28,7 @@ export default {
     camera,
     post,
   },
-  filters: {
-    toHour(value) {
-      const date = new Date(value)
-      return (
-        date.getHours() +
-        ':' +
-        (date.getMinutes() < 10 ? '0' : '') +
-        date.getMinutes()
-      )
-    },
-  },
+  mixins: [date],
   data() {
     return {
       loadingMessages: false,

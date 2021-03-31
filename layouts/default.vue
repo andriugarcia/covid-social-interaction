@@ -11,6 +11,9 @@ export default {
   components: {
     login: () => import('../components/login/login.vue'),
   },
+  async middleware({ store }) {
+    await store.dispatch('auth/checkLogged')
+  },
   data: () => ({
     centre: [0, 0],
   }),
@@ -36,7 +39,6 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('auth/checkLogged')
     const self = this
     navigator.geolocation.getCurrentPosition(
       function (position) {
@@ -68,8 +70,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=Cabin&family=Cabin:wght@200;400;500;600;700&display=swap');
-$body-font-family: 'Cabin';
+@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;1,500&family=Rubik:wght@300;400;500;700;800&display=swap');
+$body-font-family: 'Rubik';
 
 .v-application {
   font-family: $body-font-family, sans-serif !important;

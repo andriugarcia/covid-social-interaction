@@ -5,7 +5,7 @@
         v-icon.text--text fas fa-arrow-left
       .ml-2.overline.text--text.font-weight-bold POSTEAR
       v-spacer
-      v-btn.text-capitalize(rounded, depressed, small, dark, color="text", @click="permanentOpened = true") 
+      //- v-btn.text-capitalize(rounded, depressed, small, dark, color="text", @click="permanentOpened = true") 
         span Hacer permanente
         v-icon.ml-2(small) far fa-snowflake
     v-layout.pt-4
@@ -39,10 +39,6 @@
             v-icon.text--text fas fa-camera
           //- v-btn.mx-1(icon)
           //-   v-icon.text--text fas fa-image
-          v-btn.mx-1(icon)
-            v-icon.text--text fas fa-flag
-          v-btn.mx-1(icon, @click="groupToggle = true")
-            v-icon.text--text fas fa-user-friends
         v-spacer
         v-btn(rounded, flat, color="primary", dark, @click="publish")
           .mr-2.text-capitalize Publicar

@@ -1,50 +1,101 @@
 <template lang="pug">
   #createActivity
-    v-layout
-      v-btn(icon)
+    v-toolbar(color="primary", dark, style="position: fixed; top: 0; width: 100%; z-index: 20")
+      v-btn(icon, @click="$router.go(-1)")
         v-icon fas fa-arrow-left
-      v-subheader NUEVA ACTIVIDAD
-    v-text-field(label="Titulo")
-    v-combobox(v-model="model", :filter="filter", :hide-no-data="!search", :items="items", :search-input.sync="search", hide-selected, label="Categoría", small-chips)
-      template(v-slot:selection="{ attrs, item, parent, selected }")
-        v-chip(v-if="item === Object(item)", dark, pill, v-bind="attrs", :color="`${item.color}`", :input-value="selected", small)
-          v-icon(small) fas fa-glass-cheers
-          span.ml-1.font-weight-bold {{ item.text }}
-      template(v-slot:item="{ index, item }")
-        v-chip.font-weight-bold(:color="`${item.color}`", pill, dark, small)
-          v-icon(small) fas fa-glass-cheers
-          span.ml-1.font-weight-bold {{ item.text }}
-    //- v-textarea(auto-grow, :rows="1", label="Descripción")
-    //- v-file-input(accept="image/png, image/jpeg, image/bmp", placeholder="Imagen de Portada", prepend-icon="", append-icon="fas fa-image")
-    v-dialog(v-model="locationSelectorOpened", fullscreen, hide-overlay, transition="dialog-bottom-transition")
-      template(v-slot:activator="{on, attrs}")
-        v-text-field(label="Ubicación", :value="location != null ? location.lng.toFixed(4) + '. ' + location.lng.toFixed(4) : ''", v-on="on", readonly, append-icon="fas fa-map-marker-alt")
-      v-card
-        location-select(:initialPosition="{lng: -3.612036640743373, lat: 37.17319576390279}", @updated="updateLocation", @back="locationSelectorOpened = false")
-    v-menu(ref="menu", v-model="menuDay", :close-on-content-click="false", :return-value.sync="date", transition="scale-transition", offset-y, min-width="auto")
-      template(v-slot:activator="{on, attrs}")
-        v-text-field(v-model="date", label="Fecha", v-on="on", v-bind="attrs", append-icon="far fa-calendar")
-      v-date-picker(v-model="date", no-title, :min="min")
-    v-menu(ref="menu", v-model="menuTime", :close-on-content-click="false", :nudge-right="40", :return-value.sync="time", transition="scale-transition", offset-y, max-width="290px", min-width="290px")
-      template(v-slot:activator="{on, attrs}")
-        v-text-field(v-model="time", label="Hora", append-icon="far fa-clock", readonly, v-bind="attrs", v-on="on")
-      v-time-picker(v-model="time", full-width, format="24hr", @click:minute="$refs.menu.save(time)")
-    .title Añadir Grupo
-    p Al añadir un grupo los asistentes al evento podrán hablar entre ellos y conocerse
-    v-list
-      v-list-item(@click="")
-        v-list-item-avatar
-          v-icon fas fa-plus-circle
-        v-list-item-content
-          v-list-item-title Crear grupo nuevo
-      v-list-item(v-for="i in 5", :key="i", @click="")
-        v-list-item-avatar
-          v-img(src="https://picsum.photos/200")
-        v-list-item-content
-          v-list-item-title Group name
-        v-list-item-action
-          avatar-group(:avatars="['https://picsum.photos/200', 'https://picsum.photos/201', 'https://picsum.photos/202', 'https://picsum.photos/203', 'https://picsum.photos/204', 'https://picsum.photos/205', 'https://picsum.photos/206']", :limit="6")
-    v-layout.mt-6(justify-center)
+      v-toolbar-title Nuevo Evento
+    v-layout.pa-6.mt-12(justify-center)
+      v-flex(xs3)
+        v-card.py-2.mx-1.text-center.rounded-xl(:color="step == 1 ? 'primary': '#ffffff'", :dark="step == 1", flat, style="width: 120px")
+          .font-weight-black(style="display: block") 1
+          .font-weight-bold QUE
+      v-flex(xs3)
+        v-card.py-2.mx-1.text-center.rounded-xl(:color="step == 2 ? 'primary': '#ffffff'", :dark="step == 2", flat, style="width: 120px")
+          .font-weight-black(style="display: block") 2
+          .font-weight-bold QUIEN
+      v-flex(xs3)
+        v-card.py-2.mx-1.text-center.rounded-xl(:color="step == 3 ? 'primary': '#ffffff'", :dark="step == 3", flat, style="width: 120px")
+          .font-weight-black(style="display: block") 3
+          .font-weight-bold DONDE
+      v-flex(xs3)
+        v-card.py-2.mx-1.text-center.rounded-xl(:color="step == 4 ? 'primary': '#ffffff'", :dark="step == 4", flat, style="width: 120px")
+          .font-weight-black(style="display: block") 4
+          .font-weight-bold CUANDO
+    .px-4(v-if="step == 1")
+      .overline.font-weight-black IMAGEN DE PORTADA
+      avatar-input(@update="updateCover", large)
+      .overline.font-weight-black.mt-2 TITULO
+      v-text-field(label="Titulo", v-model="event.title")
+      .overline.font-weight-black DESCRIPCION
+      v-textarea(label="Descripción", v-model="event.description")
+      .overline.font-weight-black CATEGORIA
+      v-combobox(v-model="event.category", :items="items", item-text="name", item-value="key", hide-selected, placeholder="Categoría", small-chips)
+        template(v-slot:selection="{ attrs, item, parent, selected }")
+          v-chip(v-if="item === Object(item)", dark, pill, v-bind="attrs", :color="`${item.color}`", :input-value="selected", small)
+            v-icon(small) {{ item.icon }}
+            span.ml-1.font-weight-bold {{ item.name }}
+        template(v-slot:item="{ index, item }")
+          v-chip.font-weight-bold(:color="`${item.color}`", pill, dark, small)
+            v-icon(small) {{ item.icon }}
+            span.ml-1.font-weight-bold {{ item.name }}
+    .px-4(v-if="step == 2")
+      .overline.font-weight-black ASIGNAR GRUPO
+      v-layout.my-2(v-if="group", align-center)
+        v-avatar(color="primary")
+          v-img(:src="group.chat.cover")
+        span.ml-2 {{ group.chat.title }}
+        v-spacer
+        v-btn(small, depressed, color="grey lighten-4", @click="selectGroupDialog = true") CAMBIAR
+      v-btn.my-2(v-else, color="grey lighten-4", @click="selectGroupDialog = true", depressed, block) Añadir Grupo
+      v-dialog(v-model="selectGroupDialog", fullscreen, hide-overlay, transition="dialog-bottom-transition")
+        group-select(@back="selectGroupDialog = false", @selected="updateGroup")
+      v-alert.mb-12(text, color="primary") Asignar un grupo al evento permitirá que los asistentes al evento puedan acceder al grupo y conocer al resto de asistentes.
+      .overline.font-weight-black INVITAR USUARIOS
+      v-text-field.rounded-lg(dense, filled, placeholder="Buscar", prepend-inner-icon="fas fa-search")
+      v-list
+        v-list-item(v-for="(person, i) in people", :key="i", @click="selectMember(person)")
+          v-list-item-avatar(color="white")
+            v-img(:src="person.profile_picture")
+          v-list-item-title {{ person.username }}
+          v-list-item-action
+            v-checkbox(:value="person.selected", small, color="white", outlined)
+      //- v-textarea(auto-grow, :rows="1", label="Descripción")
+      //- v-file-input(accept="image/png, image/jpeg, image/bmp", placeholder="Imagen de Portada", prepend-icon="", append-icon="fas fa-image")
+    .px-4(v-if="step == 3")
+      .overline.font-weight-black UBICACIÓN
+      v-text-field(label="Ubicación", @click="locationSelectorOpened = true", :value="event.coordinates != null ? event.coordinates.lat.toFixed(4) + '. ' + event.coordinates.lng.toFixed(4) : ''", v-on="on", readonly, append-icon="fas fa-map-marker-alt")
+      v-dialog(v-model="locationSelectorOpened", fullscreen, hide-overlay, transition="dialog-bottom-transition")
+        v-card
+          location-select(:initialPosition="{lng: -3.612036640743373, lat: 37.17319576390279}", @updated="updateLocation", @back="locationSelectorOpened = false")
+      .overline.font-weight-black DESCRIPCION DEL SITIO (OPCIONAL)
+      v-textarea(placeholder="En la fuente del parque", v-model="event.place_description")
+    .px-4(v-if="step == 4")
+      .overline.font-weight-black FECHA DE INICIO
+      v-alert(text, color="primary") A qué hora empieza el evento
+      v-menu(ref="menuDate", v-model="menuDay", :close-on-content-click="false", :return-value.sync="date", transition="scale-transition", offset-y, min-width="auto")
+        template(v-slot:activator="{on, attrs}")
+          v-text-field(:value="date", label="Fecha", v-on="on", v-bind="attrs", append-icon="far fa-calendar")
+        v-date-picker(v-model="date", no-title, :min="min", @change="updateDate")
+      v-menu(ref="menuTime", v-model="menuTime", :close-on-content-click="false", :nudge-right="40", :return-value.sync="time", transition="scale-transition", offset-y, max-width="290px", min-width="290px")
+        template(v-slot:activator="{on, attrs}")
+          v-text-field(v-model="time", label="Hora", append-icon="far fa-clock", readonly, v-bind="attrs", v-on="on")
+        v-time-picker(v-model="time", full-width, format="24hr", @click:minute="$refs.menuTime.save(time)", :allowed-minutes="allowedStep")
+      .overline.font-weight-black FECHA DE FINALIZACIÓN
+      v-alert(text, color="primary") A qué hora acaba el evento
+      v-menu(ref="menuDateEnd", v-model="menuDayEnd", :close-on-content-click="false", :return-value.sync="date", transition="scale-transition", offset-y, min-width="auto")
+        template(v-slot:activator="{on, attrs}")
+          v-text-field(:value="dateEnd", label="Fecha", v-on="on", v-bind="attrs", append-icon="far fa-calendar")
+        v-date-picker(v-model="dateEnd", no-title, :min="minEnd", @change="$refs.menuDateEnd.save(date)")
+      v-menu(ref="menuTimeEnd", v-model="menuTimeEnd", :close-on-content-click="false", :nudge-right="40", :return-value.sync="time", transition="scale-transition", offset-y, max-width="290px", min-width="290px")
+        template(v-slot:activator="{on, attrs}")
+          v-text-field(v-model="timeEnd", label="Hora", append-icon="far fa-clock", readonly, v-bind="attrs", v-on="on")
+        v-time-picker(v-model="timeEnd", full-width, format="24hr", @click:minute="$refs.menuTimeEnd.save(time)", :allowed-minutes="allowedStep")
+      v-alert(v-if="badDayOrder", text, type="error") La hora de finalización no puede ocurrir antes que la de inicio
+    v-btn(v-if="step > 1", fab, fixed, left, style="bottom: 32px", @click="step--")
+      v-icon fas fa-arrow-left
+    v-btn(color="primary", fab, fixed, right, style="bottom: 32px", @click="nextStep", :disabled="disabled")
+      v-icon {{ step == 4 ? 'fas fa-check' : 'fas fa-arrow-right' }}
+    //- v-layout.mt-6(justify-center)
       v-btn(rounded, color="primary") 
         v-icon.mr-2(small) fas fa-dice
         .text-capitalize Crear Actividad
@@ -53,35 +104,129 @@
 
 <script>
 import AvatarGroup from '@/components/avatar-group'
+import AvatarInput from '@/components/avatar-input'
 export default {
   components: {
     locationSelect: () => import('@/components/map/locationSelect'),
+    groupSelect: () => import('@/components/editor/groupSelect'),
     AvatarGroup,
+    AvatarInput,
   },
   data: () => ({
+    step: 1,
+    allowedStep: (m) => m % 5 === 0,
     date: new Date().toISOString().substr(0, 10),
     time: null,
+    dateEnd: new Date().toISOString().substr(0, 10),
+    timeEnd: null,
     min: new Date().toISOString().substr(0, 10),
+    minEnd: new Date().toISOString().substr(0, 10),
+    badDayOrder: false,
     menuDay: false,
     menuTime: false,
+    menuDayEnd: false,
+    menuTimeEnd: false,
     locationSelectorOpened: false,
-    location: null,
-    items: [
-      { header: 'Categoría' },
-      {
-        text: 'Foo',
-        color: 'blue',
-      },
-      {
-        text: 'Bar',
-        color: 'red',
-      },
-    ],
-    methods: {
-      updateLocation(coordinates) {
-        this.location = coordinates
+    selectGroupDialog: false,
+    items: [],
+    people: [],
+    event: {
+      title: '',
+      description: '',
+      place_description: '',
+      cover: '',
+      category: '',
+      coordinates: null,
+      group_id: null,
+      date: {
+        start: null,
+        end: null,
       },
     },
+    group: null,
   }),
+  async fetch() {
+    this.people = await this.$store.dispatch('user/getPeople')
+  },
+  computed: {
+    disabled() {
+      switch (this.step) {
+        case 1:
+          // return this.event.title.length == 0 || this.event.description.length == 0 || !this.event.category || this.event.cover.length == 0
+          return false
+        case 2:
+          return false
+        case 3:
+          return !this.event.coordinates
+        case 4:
+          return this.badDayOrder || !this.time || !this.timeEnd
+      }
+      return true
+    },
+  },
+  watch: {
+    date() {
+      this.checkTimeOrder()
+    },
+    dateEnd() {
+      this.checkTimeOrder()
+    },
+    time() {
+      this.checkTimeOrder()
+    },
+    timeEnd() {
+      this.checkTimeOrder()
+    },
+  },
+  mounted() {
+    this.items = [
+      { header: 'Categoría' },
+      ...Object.values(this.$store.state.event.categories),
+    ]
+  },
+  methods: {
+    updateLocation(coordinates) {
+      this.event.coordinates = coordinates
+    },
+    updateCover(image) {
+      this.event.cover = image
+    },
+    updateDate(date) {
+      this.$refs.menuDate.save(date)
+      this.dateEnd = new Date(date).toISOString().substr(0, 10)
+      this.minEnd = new Date(date).toISOString().substr(0, 10)
+    },
+    updateGroup(group) {
+      this.group = group
+    },
+    checkTimeOrder() {
+      if (this.time && this.timeEnd) {
+        this.badDayOrder =
+          new Date(this.date + ' ' + this.time) >
+          new Date(this.dateEnd + ' ' + this.timeEnd)
+      } else {
+        this.badDayOrder = false
+      }
+    },
+    async nextStep() {
+      if (this.step !== 4) {
+        this.step += 1
+      } else {
+        this.event.date.start = new Date(
+          this.date + ' ' + this.time
+        ).toISOString()
+        this.event.date.end = new Date(
+          this.dateEnd + ' ' + this.timeEnd
+        ).toISOString()
+        this.event.category = this.event.category.key
+        this.event.chat_id = this.group ? this.group.chat_id : null
+        const eventId = await this.$store.dispatch(
+          'event/createEvent',
+          this.event
+        )
+        this.$router.push({ path: `/events/${eventId}` })
+      }
+    },
+  },
 }
 </script>

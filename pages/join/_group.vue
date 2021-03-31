@@ -5,28 +5,19 @@
       v-avatar(color="primary")
         v-img(:src="chat.cover")
       .ml-2.background--text.font-weight-bold {{ chat.title }}
-    v-card(v-if="chat.event", flat, tile, style="position: fixed; top: 56px; left: 0; right: 0; z-index: 20;", color="primary")
-      v-list-item(@click="$router.push({ path: `/events/${chat.event[0].event_id}` })")
-        v-list-item-content
-          span.font-weight-bold {{ chat.event[0].title }}
-          span 3 de Febrero 17:30
-        v-list-item-action
-          v-btn(small, depressed, color="primary darken-1") ASISTIR
     v-sheet(color="white")
       messages(v-if="chatLoaded")
-    div(style="position: fixed; bottom: -16px; left: 0; right: 0;")
-      chat-bar(:chat="chat")
+    div(style="position: fixed; bottom: 0px; left: 0; right: 0;")
+      v-btn(block, tile, large, color="primary", @click="joinChat") UNIRME
   
 </template>
 
 <script>
 import messages from '@/components/chat/messages'
-import chatBar from '@/components/chat/chatBar'
 
 export default {
   components: {
     messages,
-    chatBar,
   },
   beforeRouteLeave(_, __, next) {
     this.$store.commit('chat/closeChat')
@@ -47,7 +38,25 @@ export default {
   },
   async mounted() {
     await this.$store.dispatch('chat/getGroup', this.$route.params.group)
+
     this.chatLoaded = true
+
+    if (this.isParticipant()) {
+      this.$router.push({ path: `/group/${this.chat.chat_id}` })
+    }
+  },
+  methods: {
+    async joinChat() {
+      await this.$store.dispatch('chat/joinChat', this.$route.params.group)
+      this.$router.replace({ path: `/group/${this.$route.params.group}` })
+    },
+    isParticipant() {
+      console.log(this.chat)
+      const index = this.chat.member.findIndex(
+        (participant) => participant.profile_id === this.user.profile_id
+      )
+      return index !== -1
+    },
   },
 }
 </script>

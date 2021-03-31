@@ -1,32 +1,71 @@
 <template lang="pug">
   #events
     v-toolbar(color="primary", dark, style="position: fixed; top: 0; width: 100%; z-index: 20")
-      v-btn(icon)
+      v-btn(icon, @click="$router.go(-1)")
         v-icon fas fa-arrow-left
       v-toolbar-title Eventos
       v-spacer
-      v-btn(color="white", rounded, depressed, dark, small)
+      v-btn(color="white", rounded, depressed, dark, small, @click="$router.push({ path: '/events/new' })")
         .primary--text.text-capitalize Nuevo Evento
-    .pa-4
-      v-card.mb-2.rounded-xl(v-for="i in 10", outlined)
-        v-img(src="https://picsum.photos/200", height="160")
-        v-chip.ml-4.mt-n6(color="deep-purple", dark)
-          v-icon.mr-1(small) fas fa-glass-cheers
-          span Fiesta
+    .pa-4.mt-12(v-if="authenticated")
+      .font-weight-black(style="font-size: 1.4em") Próximos Eventos
+      v-layout.my-2(style="overflow-x: scroll")
+        v-card.rounded-xl.pa-1.mr-2(v-for="(participation, i) in user.participation", :color="categories[participation.event.category].color", @click="$router.push({ path: `/events/${participation.event.event_id}` })", dark, style="font-size: .7em")
+          v-layout(align-center, style="height: 100%")
+            v-avatar.mr-2.rounded-xl(tile)
+              v-img(:src="participation.event.profile.profile_picture")
+            div.pr-1
+              .text-uppercase.font-weight-bold(style="white-space: nowrap") {{ participation.event.start_date | toDateShort }}
+              span(style="white-space: nowrap") A 700 metros
+      .font-weight-black(style="font-size: 1.4em") Eventos cerca
+      v-card.mb-2.rounded-xl(v-for="(event, i) in events", outlined, @click="$router.push({ path: `/events/${event.event_id}` })")
+        v-img(:src="event.cover", height="160")
+        category(:cat="event.category")
         v-layout.px-4.mt-2(justify-space-between, align-center)
-          .font-weight-light Mie 13 17:30
-          avatar-group(:avatars="['https://picsum.photos/200', 'https://picsum.photos/201', 'https://picsum.photos/202', 'https://picsum.photos/203', 'https://picsum.photos/204', 'https://picsum.photos/205', 'https://picsum.photos/206']", :limit="5")
-        v-card-title Nombre del Evento
+          .font-weight-light {{ event.start_date | toDate }} {{ event.start_date | toHour }}
+          v-chip 
+            span.mr-1 {{ event.participants }}
+            v-icon(small) fas fa-users
+        v-card-title {{ event.title }}
         v-layout
-          em.pb-2.ml-4 a 200m
+          em.pb-2.ml-4 a {{ haversineDistance([userPosition.lng, userPosition.lat], [event.place.lng, event.place.lat]) }}km
 
 </template>
 
 <script>
 import AvatarGroup from '@/components/avatar-group'
+import Category from '@/components/event/category'
+import geo from '@/mixins/geo'
+import date from '@/mixins/date'
+
 export default {
   components: {
     AvatarGroup,
+    Category,
+  },
+  mixins: [geo, date],
+  data() {
+    return {
+      events: [],
+      categories: this.$store.state.event.categories,
+    }
+  },
+  computed: {
+    userPosition() {
+      return this.$store.state.map.userPosition
+    },
+    user() {
+      return this.$store.state.auth.user
+    },
+    authenticated() {
+      return this.$store.state.auth.authenticated
+    },
+  },
+  async mounted() {
+    this.events = await this.$store.dispatch(
+      'event/getEvents',
+      this.$store.state.map.userPosition
+    )
   },
 }
 </script>
