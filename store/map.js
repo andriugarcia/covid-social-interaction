@@ -8,7 +8,10 @@ export const mutations = {
     state.userPosition = coordinates
   },
   setMapPosition(state, coordinates) {
-    state.mapPosition = coordinates
+    state.mapPosition = { ...coordinates }
+  },
+  flyToMe(state) {
+    state.mapPosition = { ...state.userPosition }
   },
 }
 

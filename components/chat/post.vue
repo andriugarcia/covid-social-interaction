@@ -1,9 +1,9 @@
 <template lang="pug">
-  #chatPost(v-if="content")
-    v-btn.mb-4.pl-0.ml-2(rounded, text, @click="$router.push({ path: `/${content.profile.username}` })")
+  v-card.pa-2.pb-1.rounded-lg#chatPost(v-if="content", color="primary", flat)
+    v-btn.mb-2.pl-0.ml-2(rounded, dark, text, @click="$router.push({ path: `/${content.profile.username}` })")
       v-avatar(color="primary", size="32")
         v-img(:src="content.profile.profile_picture")
-      .font-weight-bold.ml-1 {{ content.profile.username }}
+      .text-capitalize.font-weight-bold.ml-1 {{ content.profile.username }}
     post(:type="content.type", :content="content", grid)
     .my-4
 </template>

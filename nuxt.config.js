@@ -49,13 +49,12 @@ export default {
   vue: {
     config: {
       productionTip: false,
-      devtools: true,
     },
   },
 
-  // server: {
-  //   host: '0.0.0.0',
-  // },
+  server: {
+    host: '0.0.0.0',
+  },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   // components: true,
@@ -130,6 +129,11 @@ export default {
     },
   },
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    extend(config, ctx) {
+      if (ctx.isDev) {
+        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+      }
+    },
+  },
 }

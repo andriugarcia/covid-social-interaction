@@ -69,6 +69,8 @@ export default {
   },
   computed: {
     chats() {
+      if (!this.$store.getters['auth/authenticated'])
+        this.$router.replace({ path: '/' })
       return this.$store.state.chat.chats
     },
     closeChats() {

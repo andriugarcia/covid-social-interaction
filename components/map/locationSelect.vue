@@ -40,7 +40,7 @@ export default {
     return {
       accessToken: process.env.MAPBOX_TOKEN,
       mapStyle: 'mapbox://styles/mapbox/light-v9',
-      centre: Object.assign({}, this.initialPosition),
+      centre: { ...this.initialPosition },
       searchOpened: false,
       currentPosition: true,
     }

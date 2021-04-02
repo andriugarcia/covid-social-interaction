@@ -17,7 +17,7 @@
           bottom-avatar.bottomalign(v-if="!grid", :src="content.profile_picture || content.profile.profile_picture")
       v-dialog.rounded-lg(v-model="expanded", width="fit-content", persistent)
         v-layout(justify-center, style="position: fixed; bottom: 12px; left: 0; right: 0;")
-          v-card.rounded-pill(style="height: 150px; width: 60px;", color="yellow", @click="expanded = false")
+          v-card.rounded-pill(style="height: 150px; width: 60px;", color="yellow", @click="closePost")
             v-layout(justify-center, align-end, style="height: 100%")
               v-icon.black--text.mb-4 fas fa-times
         v-card.rounded-lg(style="position: absolute; top: 24px; bottom: 82px; right: 0px; left: 0px;", color="black")
@@ -111,17 +111,28 @@ export default {
     },
   },
 
+  watch: {
+    $route(route) {
+      if (route.hash === '') {
+        this.expanded = false
+      }
+    },
+  },
+
   mounted() {
     this.visible = true
   },
-
   destroyed() {
     this.visible = false
   },
-
   methods: {
     expand() {
-      this.expanded = !this.expanded
+      this.$router.push({ hash: this.content.post_id })
+      this.expanded = true
+    },
+    closePost() {
+      this.$router.replace({ hash: '' })
+      this.expanded = false
     },
     async replyMessage() {
       this.message.userId = this.content.profile_id

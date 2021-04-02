@@ -27,6 +27,25 @@ export const actions = {
     }
     return false
   },
+  initAuthError({ dispatch }, router) {
+    axios.interceptors.response.use(
+      (response) => {
+        return response
+      },
+      function (error) {
+        if (error.response.status === 405) {
+          dispatch('logout')
+          router.replace({ path: '/' })
+        }
+        return Promise.reject(error)
+      }
+    )
+  },
+  logout({ commit }) {
+    delete axios.defaults.headers.common.authorization
+    localStorage.removeItem('token')
+    commit('setUser', {})
+  },
   async login({ dispatch }, body) {
     try {
       const { data: token } = await axios.post(
@@ -57,7 +76,6 @@ export const actions = {
       return false
     }
   },
-
   async getMe({ rootState, commit, dispatch }) {
     try {
       const { data: user } = await axios.get(
@@ -67,7 +85,6 @@ export const actions = {
       dispatch('chat/getChats', {}, { root: true })
       dispatch('chat/getCloseChats', rootState.map.userPosition, { root: true })
 
-      console.log(user)
       socket.emit('join', {
         profile_id: user.profile_id,
       })

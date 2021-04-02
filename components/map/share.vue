@@ -58,9 +58,11 @@ export default {
     },
     selectMember(member) {
       if (member.selected) {
-        this.selectedList = this.selectedList.filter((e) => e !== member.chatid)
+        this.selectedList = this.selectedList.filter(
+          (e) => e !== member.chat_id
+        )
       } else {
-        this.selectedList.push(member.chatid)
+        this.selectedList.push(member.chat_id)
       }
       member.selected = !member.selected
     },

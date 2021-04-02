@@ -13,7 +13,7 @@
         .text-uppercase.font-weight-medium {{ event.start_date | toDateShort }}
         div(style="font-size: 2.4em; font-weight: 700; letter-spacing: -1px;") {{ event.title }}
         p.font-weight-light {{ event.description }}
-        v-layout.my-4(align-center)
+        v-layout.my-4(align-center, @click="$router.push({ path: '/' + event.profile.username })")
           v-avatar(style="border: 3px solid #F0134D;")
             v-img(:src="event.profile_picture")
           .ml-3
@@ -23,7 +23,7 @@
           v-btn.black--text.text-capitalize.rounded-lg(depressed, small, color="primary lighten-5") Ver Eventos
         .overline.text-uppercase.mt-2.font-weight-bold Ubicación
         p {{ event.place_description }}
-        MglMap(:accessToken="accessToken" :mapStyle="mapStyle", logoPosition="bottom-left", 
+        MglMap(@click="goToMaps", :accessToken="accessToken" :mapStyle="mapStyle", logoPosition="bottom-left", 
           :center.sync="event.place", :zoom="15", :interactive="false", style="width: 100%; height: 240px;")
           MglMarker(:coordinates="[event.place.lng, event.place.lat]")
         .overline.text-uppercase.mt-2.font-weight-bold Horario
@@ -73,6 +73,12 @@ import Mapbox from 'mapbox-gl'
 import Category from '@/components/event/category'
 
 export default {
+  components: {
+    AvatarGroup,
+    MglMap,
+    MglMarker,
+    Category,
+  },
   mixins: [date],
   data() {
     return {
@@ -88,12 +94,7 @@ export default {
       this.$route.params.event
     )
   },
-  components: {
-    AvatarGroup,
-    MglMap,
-    MglMarker,
-    Category,
-  },
+
   created() {
     // We need to set mapbox-gl library here in order to use it in template
     this.mapbox = Mapbox
@@ -106,6 +107,11 @@ export default {
     async unjoinEvent() {
       await this.$store.dispatch('event/unjoinEvent', this.$route.params.event)
       this.event.joined = false
+    },
+    goToMaps() {
+      window.open(
+        `https://www.google.com/maps/search/?api=1&query=${this.event.place.lat},${this.event.place.lng}`
+      )
     },
   },
 }

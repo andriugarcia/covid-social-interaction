@@ -1,7 +1,7 @@
 <template lang="pug">
 #activity
   v-toolbar(color="primary", dark)
-    v-btn(icon, @click="$emit('back')")
+    v-btn(icon, @click="$router.replace({ hash: '' })")
       v-icon fas fa-arrow-left
     span.font-weight-black Actividad
   v-layout.px-6(v-for="i in 10", align-center)

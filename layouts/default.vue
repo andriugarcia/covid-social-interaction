@@ -40,6 +40,9 @@ export default {
   },
   mounted() {
     const self = this
+
+    this.$store.dispatch('auth/initAuthError', this.$router) // Si recibe un 405 cierra sesion
+
     navigator.geolocation.getCurrentPosition(
       function (position) {
         self.updatePosition(position)

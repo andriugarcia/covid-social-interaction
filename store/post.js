@@ -53,6 +53,7 @@ export const actions = {
 
   async share(_, post) {
     try {
+      console.log(post)
       await axios.post(
         `${process.env.SERVER_URL}/posts/share/${post.post}`,
         post.targets

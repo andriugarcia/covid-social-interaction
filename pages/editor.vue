@@ -22,7 +22,7 @@
         v-progress-circular(indeterminate, color="grey lighten-5")
       v-btn(v-if="!uploading", fab, depressed, small, dark, @click="removeImage", style="position: absolute; top: 8px; right: 8px;")
         v-icon fas fa-times
-    div(style="position: absolute; bottom: 0; left: 0; right: 0;")
+    div(style="position: fixed; bottom: 0; left: 0; right: 0;")
       v-dialog(v-model="locationSelectorOpened", fullscreen, hide-overlay, transition="dialog-bottom-transition")
         template(v-slot:activator="{on, attrs}")
           v-btn(v-on="on", text)

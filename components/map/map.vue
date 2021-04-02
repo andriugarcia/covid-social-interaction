@@ -1,7 +1,7 @@
 <template lang="pug">
   #map
     MglMap(:accessToken="accessToken" :mapStyle="mapStyle", logoPosition="bottom-left", 
-          :maxZoom="16", :dragRotate="false", :center.sync="center", @load="onLoad", @moveend="onMove", @update:center="updateCenter"
+          :maxZoom="16", :dragRotate="false", :center.sync="mapPosition", @load="onLoad", @moveend="onMove",
           :zoom="14", :pitch="30", style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;", @click="mapClick")
       MglMarker(:coordinates="[userPosition.lng, userPosition.lat]")
         template(slot="marker")
@@ -22,23 +22,6 @@ export default {
     Post,
   },
 
-  props: {
-    mapPosition: {
-      type: Object,
-      default: () => ({
-        lng: 0,
-        lat: 0,
-      }),
-    },
-    userPosition: {
-      type: Object,
-      default: () => ({
-        lng: 0,
-        lat: 0,
-      }),
-    },
-  },
-
   data() {
     return {
       accessToken: process.env.MAPBOX_TOKEN, // your access token. Needed if you using Mapbox maps
@@ -48,11 +31,28 @@ export default {
   },
 
   computed: {
-    center: {
+    userPosition: {
       get() {
-        return this.mapPosition
+        return this.$store.state.map.userPosition
       },
-      set() {},
+      set(value) {
+        this.$store.commit('map/setUserPosition', value)
+      },
+    },
+    total() {
+      return this.$store.getters['chat/total']
+    },
+    mapPosition: {
+      get() {
+        return this.$store.state.map.mapPosition
+      },
+      set(value) {
+        if (
+          value.lat !== this.$store.state.map.mapPosition.lat &&
+          value.lat !== this.$store.state.map.mapPosition.lng
+        )
+          this.$store.commit('map/setMapPosition', value)
+      },
     },
     posts() {
       return this.$store.state.post.posts
@@ -65,9 +65,6 @@ export default {
   },
 
   methods: {
-    updateCenter(center) {
-      this.$emit('onMove', center)
-    },
     mapClick(map) {
       this.$emit('click', map.mapboxEvent.lngLat)
     },
