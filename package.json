@@ -41,7 +41,7 @@
     "vue-web-cam": "^1.9.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
+    "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^11.0.0",
     "@fortawesome/fontawesome-free": "^5.15.2",
     "@nuxt/types": "^2.14.12",
