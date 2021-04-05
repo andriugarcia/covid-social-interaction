@@ -19,10 +19,10 @@
         v-icon.mr-2(small) fas fa-user
         span.text-capitalize Crear Cuenta
 
-    .pb-6(style="position: fixed; bottom: 0; left: 0; right: 0;")
+    .pb-8(style="position: fixed; bottom: 0; left: 0; right: 0;")
       portals.pl-2
       v-sheet.mx-2.mt-2.elevation-5.rounded-xl
-        v-layout(justify-space-around, align-center)
+        v-layout.px-3(justify-space-around, align-center)
           v-card.my-1.px-2.rounded-lg.text-center(flat, @click="$router.push({path: '/events'})")
             v-icon.pa-1(color="black", style="display: block") fas fa-flag
             span.font-weight-bold(style="font-size: .7em") EVENTOS
@@ -32,11 +32,11 @@
           v-btn(fab, depressed, color="primary", @click="openEditor")
             v-icon fas fa-plus
           v-card.my-1.px-2.rounded-lg.text-center(flat, @click="openActivity")
-            v-badge(overlap, color="primary", :content="3")
+            v-badge(overlap, color="primary", :value="authenticated", :content="3")
               v-icon.pa-1(color="black", style="display: block") fas fa-bell
               span.font-weight-bold(style="font-size: .7em") ACTIVIDAD
           v-card.my-1.px-2.rounded-lg.text-center(flat, @click="openChat")
-            v-badge(overlap, color="primary", :value="total", :content="total")
+            v-badge(overlap, color="primary", :value="authenticated && total", :content="total")
               v-icon.pa-1(color="black", style="display: block") fas fa-comment-dots
               span.font-weight-bold(style="font-size: .7em") CHAT
     //- v-avatar(size="40", color="white", style="position: absolute top: 8px right: 8px")
@@ -62,41 +62,7 @@
         notifications(v-if="opened == 'notifications'", @back="opened = ''")
         search(v-if="opened == 'search'", @back="opened = ''", @updated="updateCentre")
     v-dialog(v-model="placeOpened", fullscreen, hide-overlay, transition="dialog-bottom-transition")
-      v-card.px-4.pt-3(style="border-radius: 24px 24px 0 0;")
-        v-toolbar
-          v-btn(icon, color="primary", @click="placeOpened = false")
-            v-icon fas fa-times
-          v-toolbar-title.font-weight-black.primary--text En esta zona
-        v-tabs(fixed-tabs)
-          v-tab
-            v-icon.mr-1(small) fas fa-map-pin
-            div Posts
-          v-tab
-            v-icon.mr-1(small) fas fa-flag
-            div Eventos
-        .masonry.pa-2(style="overflow-y: scroll; height: 80vh;")
-          //- post.mb-2(v-for="(post, i) in fullPosts", :key="i", :type="post.type", :content="post", grid)
-    //- v-bottom-sheet(v-model="activitiesOpened")
-      v-card.px-4.pt-3(style="border-radius: 24px 24px 0 0;")
-        v-layout(justify-center)
-          v-subheader ACTIVIDADES
-        div(style="height: 80vh; overflow-y: scroll")
-          v-card.rounded-lg.mb-2(v-for="i in 10", :key="i", outlined, style="border-color: #F0134D; border-width: 2px;")
-            v-img(src="https://images.pexels.com/photos/698907/pexels-photo-698907.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260", height="160", style="border-radius: 6px 6px 0 0;")
-            v-chip.mt-n6.ml-3(pill, color="purple darken-2") 
-              v-icon.mr-1.white--text(small, dark) fas fa-glass-cheers
-              .white--text.font-weight-bold Fiesta
-            v-layout.px-4(justify-space-between, style="width: 100%;")
-              .overline Mie 13 Jul 17:30
-              avatar-group(:avatars="['https://picsum.photos/200', 'https://picsum.photos/201', 'https://picsum.photos/202', 'https://picsum.photos/203', 'https://picsum.photos/204', 'https://picsum.photos/205', 'https://picsum.photos/206']", :limit="6")
-            v-card-title.font-weight-bold.py-0 Nombre de la Actividad
-            v-layout.ml-4.py-1
-              v-icon.black--text(small) fas fa-map-marker-alt
-              .ml-1.font-italic a 2km
-      v-layout.pb-2(justify-center, style="position: absolute; bottom: 0; left: 0; right: 0;")
-        v-btn(rounded, color="primary") 
-          v-icon.mr-2(small) fas fa-dice
-          .text-capitalize Nueva Actividad
+      place-selected(@back="closePosts", :coordinates="coordinatesSelected")
 
 </template>
 
@@ -119,6 +85,7 @@ export default {
     Post,
     Portals,
     Notifications,
+    placeSelected: () => import('@/components/map/placeSelected'),
   },
 
   mixins: [loginMixin],
@@ -134,6 +101,7 @@ export default {
     return {
       opened: '',
       placeOpened: false,
+      coordinatesSelected: null,
       fullPosts: [],
     }
   },
@@ -161,14 +129,13 @@ export default {
       this.$router.replace({ hash: '' })
       this.opened = ''
     },
-
     morePosts(coordinates) {
-      // const { hits } = await this.$store.dispatch(
-      //   'post/getPostsByPoint',
-      //   coordinates
-      // )
-      // this.fullPosts = hits.hits
+      this.coordinatesSelected = coordinates
       this.placeOpened = true
+    },
+    closePosts() {
+      this.coordinatesSelected = null
+      this.placeOpened = false
     },
     openSearch() {
       this.$router.push({ hash: 'search' })

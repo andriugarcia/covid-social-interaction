@@ -1,6 +1,7 @@
 export const state = () => ({
   loginOpened: false,
   postCreated: false,
+  shareCreated: false,
 })
 
 export const mutations = {
@@ -10,6 +11,10 @@ export const mutations = {
 
   setPostCreated(state, value) {
     state.postCreated = value
+  },
+
+  setShareCreated(state, value) {
+    state.shareCreated = value
   },
 
   disableAllWindows(state) {

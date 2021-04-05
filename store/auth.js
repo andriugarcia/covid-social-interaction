@@ -4,11 +4,15 @@ const socket = io(process.env.SOCKET_URL)
 
 export const state = () => ({
   user: {},
+  portals: {},
 })
 
 export const mutations = {
   setUser(state, user) {
     state.user = user
+  },
+  setPortals(state, portals) {
+    state.portals = Object.values(portals)
   },
 }
 
@@ -76,6 +80,15 @@ export const actions = {
       return false
     }
   },
+  async getPortals({ commit }) {
+    try {
+      const { data } = await axios.get(`${process.env.SERVER_URL}/portals`)
+
+      commit('setPortals', data)
+    } catch (err) {
+      console.error(err)
+    }
+  },
   async getMe({ rootState, commit, dispatch }) {
     try {
       const { data: user } = await axios.get(
@@ -84,6 +97,7 @@ export const actions = {
       commit('setUser', user)
       dispatch('chat/getChats', {}, { root: true })
       dispatch('chat/getCloseChats', rootState.map.userPosition, { root: true })
+      dispatch('getPortals')
 
       socket.emit('join', {
         profile_id: user.profile_id,

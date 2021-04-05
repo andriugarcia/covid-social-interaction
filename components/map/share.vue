@@ -14,15 +14,16 @@
       v-card.mr-2.pa-4.rounded-lg.text-center(flat, hover, color="primary darken-1")
         v-icon.mb-2(large, style="display: block; width: 80px;") fas fa-ellipsis-h
         span Más
-    v-text-field.mt-2(light, color="black", filled, rounded, dense, placeholder="Buscar", append-icon="fas fa-search")
-    v-list.pb-12(color="primary")
-      v-list-item(v-for="(member, i) in people", :key="i", @click="selectMember(member)")
+    v-text-field.mt-2(v-model="textFilter", hide-details, light, color="black", filled, rounded, dense, placeholder="Buscar", append-icon="fas fa-search")
+    v-list.pb-12(color="primary", style="max-height: 50vh; overflow-y: scroll;")
+      v-list-item(v-for="(member, i) in peopleFiltered", :key="i", @click="selectMember(member)")
         v-list-item-avatar(color="white")
           v-img(:src="member.chat.cover || getMember(member).profile_picture")
         v-list-item-title {{ member.chat.title || getMember(member).username }}
         v-list-item-action
           v-checkbox(:value="member.selected", small, color="white", outlined)
-    .pa-4(style="position: absolute; left: 0; right: 0; bottom: 0;")
+    v-card.pa-4(color="primary", style="position: absolute; left: 0; right: 0; bottom: 0;")
+      v-text-field.mb-2(v-model="message", hide-details, light, color="black", filled, dense, placeholder="Añade un comentario")
       v-btn.primary--text(block, rounded, :disabled="selectedList.length == 0", @click="send", :loading="loading", color="white") Enviar {{ selectedList.length != 0 ? '(' + selectedList.length + ')' : '' }}
             
 </template>
@@ -42,8 +43,19 @@ export default {
         selected: false,
       })),
       selectedList: [],
+      message: null,
+      textFilter: '',
       loading: false,
     }
+  },
+  computed: {
+    peopleFiltered() {
+      return this.people.filter((member) =>
+        (member.chat.title || this.getMember(member).username)
+          .toLowerCase()
+          .includes(this.textFilter.toLowerCase())
+      )
+    },
   },
   methods: {
     getMember({ chat }) {
@@ -70,9 +82,11 @@ export default {
       this.loading = true
       await this.$store.dispatch('post/share', {
         post: this.post,
+        message: this.message,
         targets: this.selectedList,
       })
       this.loading = false
+      this.$emit('back')
     },
   },
 }

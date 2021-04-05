@@ -1,10 +1,11 @@
 <template lang="pug">
   #chat(v-if="chatLoaded", style="width: 100%; height: 100%;")
     v-toolbar(flat, color="text", style="position: fixed; top: 0; left: 0; right: 0; z-index: 10;")
-      //- v-icon.mr-4(color="primary") fas fa-street-view
-      v-avatar(color="primary")
+      v-btn.mr-2(icon, dark, small, @click="$router.replace({ path: '/chat' })")
+        v-icon fas fa-chevron-left
+      v-avatar(@click="$router.push({ path: '/' + member.username })", color="primary")
         v-img(:src="member.profile_picture")
-      .ml-2.background--text.font-weight-bold {{ member.username }}
+      .ml-2.background--text.font-weight-bold(@click="$router.push({ path: '/' + member.username })") {{ member.username }}
     v-sheet(color="white")
       messages
     div(style="position: fixed; bottom: -16px; left: 0; right: 0;")

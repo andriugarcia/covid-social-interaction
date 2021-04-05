@@ -5,6 +5,14 @@
         v-avatar(size="40")
           v-img(:src="content.cover")
         span.mx-1.font-weight-bold {{ content.title }}
+      v-layout(justify-center)
+        .triangle
+    #event(v-else-if="type == 'event'")
+      v-card.pa-1.rounded-pill(dark, @click="$router.push({ path: `/events/${content.event_id}`})", :color="categories[content.category].color")
+        v-icon.mx-1(small) {{ categories[content.category].icon }}
+        span.mx-1.font-weight-bold {{ content.title }}
+      v-layout(justify-center)
+        .triangle
     div(v-else)
       component(:is="grid ? 'v-fade-transition' : 'v-scale-transition'", origin="bottom center 0")
         v-card.card.elevation-3.rounded-lg(v-show="visible", @click.stop="expand")
@@ -20,43 +28,13 @@
           v-card.rounded-pill(style="height: 150px; width: 60px;", color="yellow", @click="closePost")
             v-layout(justify-center, align-end, style="height: 100%")
               v-icon.black--text.mb-4 fas fa-times
-        v-card.rounded-lg(style="position: absolute; top: 24px; bottom: 82px; right: 0px; left: 0px;", color="black")
-          v-layout.pa-4(style="position: absolute; top: 0; left: 0; right: 0;", align-center)
-            v-btn(fab, color="primary", @click="$router.push({ path: `/${content.username || content.profile.username}` })")
-              v-avatar(color="white")
-                v-img(:src="content.profile_picture || content.profile.profile_picture")
-            .ml-2(:class="{'white--text': (type != 'short' && type != 'audio')}")
-              .font-weight-bold {{content.username || content.profile.username}}
-              v-layout
-                v-chip.mr-2(small, color="purple darken-2", dark)
-                  v-icon(small) fas fa-glass-cheers
-                  .ml-2.font-weight-bold Fiesta
-                span {{content.created_at | toDate }}
-            v-spacer
-            v-chip(:color="type != 'short' && type != 'audio' ? 'white' : 'primary'")
-              span {{ content.opened }}
-              v-icon.ml-1(small) fas fa-eye
-          image-map(v-if="expanded && type == 'image'", expanded, :content="content")
-          short-map(v-else-if="expanded && type == 'short'", :content="content", expanded)
-          video-map(v-else-if="expanded && type == 'video'", expanded, :content="content")
-          audio-map(v-else-if="expanded && type == 'audio'", expanded, :content="content")
-          .px-2(style="position: absolute; bottom: -20px; left: 0; right: 0;")
-            v-layout.px-2(v-if="!authenticated || content.profile_id != user.profile_id")
-              v-text-field.mr-3(v-model="message.text", rounded, @keydown.enter="replyMessage", :dark="type != 'short' && type != 'audio'", outlined, placeholder="Escribe un mensaje", color="primary")
-                template(#append)
-                  v-icon(v-if="!!message.text", @click="replyMessage") far fa-paper-plane
-              v-btn.mt-3.mr-3(v-if="!message.text", icon, :dark="type != 'short' && type != 'audio'", @click="shareDialog = true")
-                v-icon fas fa-share-alt
-            //- v-layout(v-else)
-              v-btn.mb-8(rounded, outlined, :dark="type != 'short' && type != 'audio'")
-                span Hacer Permanente
-                v-icon.ml-2 far fa-snowflake
-    v-bottom-sheet(v-model="shareDialog")
-      share(:post="content.post_id")
+        expanded-post(:type="type", :content="content")
 </template>
 
 <script>
 import bottomAvatar from './bottomAvatar.vue'
+import expandedPost from './expandedPost.vue'
+
 export default {
   components: {
     bottomAvatar,
@@ -65,16 +43,7 @@ export default {
     videoMap: () => import('./video.vue'),
     audioMap: () => import('./audio.vue'),
     groupMap: () => import('./group.vue'),
-    share: () => import('./share.vue'),
-  },
-
-  filters: {
-    toDate(value) {
-      const date = new Date(value)
-      return `${date.getUTCDate()}-${
-        date.getMonth() + 1
-      }-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
-    },
+    expandedPost,
   },
 
   props: {
@@ -92,22 +61,11 @@ export default {
   data: () => ({
     expanded: false,
     visible: false,
-    shareDialog: false,
-    message: {
-      userId: '',
-      src: null,
-      post_ref: '',
-      text: '',
-      type: 'post',
-    },
   }),
 
   computed: {
-    user() {
-      return this.$store.state.auth.user
-    },
-    authenticated() {
-      return this.$store.getters['auth/authenticated']
+    categories() {
+      return this.$store.state.event.categories
     },
   },
 
@@ -129,19 +87,11 @@ export default {
     expand() {
       this.$router.push({ hash: this.content.post_id })
       this.expanded = true
+      this.$store.dispatch('post/openPost', this.content.post_id)
     },
     closePost() {
       this.$router.replace({ hash: '' })
       this.expanded = false
-    },
-    async replyMessage() {
-      this.message.userId = this.content.profile_id
-      this.message.post_ref = this.content.post_id
-      await this.$store.dispatch('chat/createMessage', this.message)
-      this.$store.commit('setPostCreated', true)
-      this.message.userId = ''
-      this.message.post_ref = ''
-      this.message.text = ''
     },
   },
 }
@@ -158,5 +108,14 @@ export default {
 .card {
   width: fit-content;
   height: fit-content;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-bottom: 0 solid black;
+  border-top: 9px solid black;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
 }
 </style>

@@ -51,13 +51,35 @@ export const actions = {
     }
   },
 
-  async share(_, post) {
+  async openPost(_, postId) {
     try {
-      console.log(post)
-      await axios.post(
-        `${process.env.SERVER_URL}/posts/share/${post.post}`,
-        post.targets
+      await axios.post(`${process.env.SERVER_URL}/post/open/${postId}`)
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+
+  async getNearbyPosts(_, coordinates) {
+    try {
+      const { data } = await axios.get(
+        `${process.env.SERVER_URL}/posts/nearby?lat=${coordinates.lat}&lng=${coordinates.lng}`
       )
+      return data
+    } catch (err) {
+      console.error(err)
+      return []
+    }
+  },
+
+  async share({ commit }, post) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/posts/share/${post.post}`, {
+        targets: post.targets,
+        message: post.message,
+      })
+      commit('setShareCreated', true, { root: true })
       return true
     } catch (err) {
       console.error(err)

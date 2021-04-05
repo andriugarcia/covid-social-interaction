@@ -7,7 +7,7 @@
     .pa-4(v-if="step == 1")
       v-text-field(filled, dense, placeholder="Buscar Contactos")
       v-layout(wrap)
-        v-chip.pl-1.pr-2(v-for="(participant, i) in people", :key="i", v-if="!!participant.selected", @click="participant.selected = false; count--", color="primary", dark)
+        v-chip.mr-2.pl-1.pr-2(v-for="(participant, i) in people", :key="i", v-if="!!participant.selected", @click="participant.selected = false; count--", color="primary", dark)
           v-avatar(color="white")
             v-img(:src="participant.profile_picture")
           span.ml-1 {{ participant.username }}
@@ -105,8 +105,8 @@ export default {
     updateCover(src) {
       this.group.cover = src
     },
-    createGroup() {
-      this.$store.dispatch('chat/createGroup', {
+    async createGroup() {
+      await this.$store.dispatch('chat/createGroup', {
         ...this.group,
         username: this.$store.state.auth.user.username,
         members: this.members.map((user) => user.profile_id),

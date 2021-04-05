@@ -11,7 +11,7 @@
     v-layout.pt-4
       v-avatar.mr-2.mt-2(size="48", style="border: 3px solid #F0134D;")
         v-img(:src="user.profile_picture")
-      v-textarea(placeholder="Escribe tu post", counter="120", v-model="post.text", auto-grow, rows="1")
+      v-textarea(placeholder="Escribe tu post", :counter="limit", v-model="post.text", auto-grow, persistent-hint, :hint="post.text.length > 80 ? 'Solo se verá en el mapa los primeros 80 carácteres' : ''", rows="1")
     v-card.pa-2.rounded-xl.mt-2(v-if="post.type == 'audio'", outlined)
       v-progress-circular(v-if="uploading", indeterminate, color="primary")
       audio-player(v-else, :src="post.src")
@@ -40,7 +40,7 @@
           //- v-btn.mx-1(icon)
           //-   v-icon.text--text fas fa-image
         v-spacer
-        v-btn(rounded, flat, color="primary", dark, @click="publish")
+        v-btn(rounded, flat, color="primary", :disabled="disabled", dark, @click="publish")
           .mr-2.text-capitalize Publicar
           v-icon(small) far fa-edit
     v-bottom-sheet(v-model="permanentOpened")
@@ -69,6 +69,7 @@ export default {
     return {
       currentPosition: true,
       uploading: false,
+      limit: 280,
       post: {
         type: 'short',
         coordinates: { lat: 40.40860001, lng: -3.689840001 },
@@ -89,6 +90,9 @@ export default {
     },
     initialPosition() {
       return this.$store.state.map.userPosition
+    },
+    disabled() {
+      return this.post.text.length >= 280 || this.uploading
     },
   },
 

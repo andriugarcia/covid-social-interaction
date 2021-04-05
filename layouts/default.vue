@@ -4,6 +4,7 @@
     v-bottom-sheet(v-model="bottomSheetOpened")
       login
     v-snackbar(v-model="postCreated", :timeout="1500", centered, bottom, color="primary", elevation="16") Publicado correctamente
+    v-snackbar(v-model="shareCreated", :timeout="1500", centered, bottom, color="primary", elevation="16") Compartido correctamente
 </template>
 
 <script>
@@ -35,6 +36,14 @@ export default {
       },
       set(value) {
         this.$store.commit('setPostCreated', value)
+      },
+    },
+    shareCreated: {
+      get() {
+        return this.$store.state.shareCreated
+      },
+      set(value) {
+        this.$store.commit('setShareCreated', value)
       },
     },
   },

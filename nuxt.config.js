@@ -68,7 +68,7 @@ export default {
     '@nuxtjs/vuetify',
   ],
 
-  // plugins: ['~/plugins/fontawesome.js'],
+  plugins: [{ src: '~/plugins/masonry.js', ssr: false }],
 
   vuetify: {
     defaultAssets: {

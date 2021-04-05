@@ -1,12 +1,12 @@
 <template lang="pug">
   #contacts(style="height: 100%")
     v-card(flat, color="primary", tile, dark)
-      v-toolbar.px-2(color="primary", extended)
+      v-toolbar.px-2(v-if="!searchEnabled", color="primary", extended)
         v-btn(icon, small, @click="$router.go(-1)")
           v-icon fas fa-arrow-left
-        v-toolbar-title Actividad
+        v-toolbar-title Mensajes
         v-spacer
-        v-btn(icon)
+        v-btn(icon, @click="searchEnabled = true")
           v-icon fas fa-search
         template(#extension)
           v-tabs(v-model="tab", fixed-tabs)
@@ -16,6 +16,8 @@
             v-tab(key="close") 
               div Grupos Cerca
               v-chip.primary--text.ml-2(v-show="totalClose != 0", small, color="white") {{ totalClose }}
+      v-toolbar(v-else, color="primary")
+        v-text-field(prepend-icon="fas fa-arrow-left", placeholder="Buscar", hide-details, v-model="textFilter", @click:prepend="disableSearch")
     v-tabs-items(v-model="tab")
       v-tab-item(key="chats")
         v-list
@@ -65,13 +67,19 @@ export default {
       dial: false,
       newGroup: false,
       tab: 'chat',
+      searchEnabled: false,
+      textFilter: '',
     }
   },
   computed: {
     chats() {
       if (!this.$store.getters['auth/authenticated'])
         this.$router.replace({ path: '/' })
-      return this.$store.state.chat.chats
+      return this.$store.state.chat.chats.filter((chat) =>
+        (chat.chat.title || this.getMember(chat).username)
+          .toLowerCase()
+          .includes(this.textFilter.toLowerCase())
+      )
     },
     closeChats() {
       return this.$store.state.chat.closeChats
@@ -96,6 +104,10 @@ export default {
       } else {
         return chat.member[1].profile
       }
+    },
+    disableSearch() {
+      this.textFilter = ''
+      this.searchEnabled = false
     },
     openChat({ chat }) {
       if (typeof chat.type !== 'undefined' && chat.type === 'group') {

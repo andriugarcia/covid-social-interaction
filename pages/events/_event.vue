@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import loginMixin from '@/mixins/login'
 import AvatarGroup from '@/components/avatar-group'
 import date from '@/mixins/date'
 
@@ -79,7 +80,7 @@ export default {
     MglMarker,
     Category,
   },
-  mixins: [date],
+  mixins: [date, loginMixin],
   data() {
     return {
       event: null,
@@ -101,10 +102,12 @@ export default {
   },
   methods: {
     async joinEvent() {
+      if (this.openLoginIfNotAuthenticated()) return
       await this.$store.dispatch('event/joinEvent', this.$route.params.event)
       this.event.joined = true
     },
     async unjoinEvent() {
+      if (this.openLoginIfNotAuthenticated()) return
       await this.$store.dispatch('event/unjoinEvent', this.$route.params.event)
       this.event.joined = false
     },

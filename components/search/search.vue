@@ -6,6 +6,13 @@
       v-text-field.ml-2(outlined, rounded, v-model="searchText", @keydown.enter="select(0)", append-icon="fas fa-search", placeholder="Buscar sitio", autofocus)
     v-card(flat)
       v-list(v-if="places.length > 0")
+        v-subheader USUARIOS
+        v-list-item(v-for="(user, i) in users", :key="i", @click="$router.push({ path: '/' + user.username })")
+          v-list-item-avatar
+            v-img(:src="user.profile_picture")
+          v-list-item-content
+            v-list-item-title {{user.username}}
+        v-subheader SITIOS
         v-list-item(v-for="(place, i) in places", :key="i", @click="select(i)")
           v-list-item-avatar
             v-icon.black--text fas fa-map-marker-alt
@@ -25,6 +32,7 @@ export default {
   data: () => ({
     searchText: '',
     places: [],
+    users: [],
   }),
 
   computed: {
@@ -43,10 +51,16 @@ export default {
       if (value === '') {
         this.places = []
       }
-      const { data } = await axios.get(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${this.searchText}.json?proximity=${this.userPosition.lng},${this.userPosition.lat}&autocomplete=true&access_token=${process.env.MAPBOX_TOKEN}`
-      )
-      this.places = data.features
+
+      const [{ data: places }, { data: users }] = await Promise.all([
+        axios.get(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${this.searchText}.json?proximity=${this.userPosition.lng},${this.userPosition.lat}&autocomplete=true&access_token=${process.env.MAPBOX_TOKEN}`
+        ),
+        axios.get(`${process.env.SERVER_URL}/users/find/${this.searchText}`),
+      ])
+
+      this.users = users
+      this.places = places.features
         .map((place) => {
           return {
             name: place.place_name,

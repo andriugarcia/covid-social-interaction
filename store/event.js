@@ -228,4 +228,16 @@ export const actions = {
       return false
     }
   },
+  async getNearbyEvents(_, coordinates) {
+    try {
+      const { data } = await axios.get(
+        `${process.env.SERVER_URL}/events/nearby?lat=${coordinates.lat}&lng=${coordinates.lng}`
+      )
+      console.log(data)
+      return data
+    } catch (err) {
+      console.error(err)
+      return []
+    }
+  },
 }

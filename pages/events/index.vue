@@ -5,7 +5,7 @@
         v-icon fas fa-arrow-left
       v-toolbar-title Eventos
       v-spacer
-      v-btn(color="white", rounded, depressed, dark, small, @click="$router.push({ path: '/events/new' })")
+      v-btn(color="white", rounded, depressed, dark, small, @click="createEvent")
         .primary--text.text-capitalize Nuevo Evento
     .pa-4.mt-12(v-if="authenticated")
       .font-weight-black(style="font-size: 1.4em") Próximos Eventos
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import loginMixin from '@/mixins/login'
 import AvatarGroup from '@/components/avatar-group'
 import Category from '@/components/event/category'
 import geo from '@/mixins/geo'
@@ -43,7 +44,7 @@ export default {
     AvatarGroup,
     Category,
   },
-  mixins: [geo, date],
+  mixins: [geo, date, loginMixin],
   data() {
     return {
       events: [],
@@ -66,6 +67,12 @@ export default {
       'event/getEvents',
       this.$store.state.map.userPosition
     )
+  },
+  methods: {
+    createEvent() {
+      if (this.openLoginIfNotAuthenticated()) return
+      this.$router.push({ path: '/events/new' })
+    },
   },
 }
 </script>
