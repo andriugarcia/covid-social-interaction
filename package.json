@@ -36,7 +36,7 @@
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
     "nuxt": "^2.14.12",
-    "socket.io-client": "^3.1.1",
+    "socket.io-client": "^4.0.2",
     "vue-mapbox": "^0.4.1",
     "vue-web-cam": "^1.9.0"
   },
