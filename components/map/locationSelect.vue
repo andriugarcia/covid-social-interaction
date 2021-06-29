@@ -2,7 +2,7 @@
   #locationSelect
     MglMap(:accessToken="accessToken" :mapStyle="mapStyle", logoPosition="bottom-left", 
             :maxZoom="16", :dragRotate="false", :center.sync="centre"
-            :zoom="14", :pitch="30", style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;")
+            :zoom="zoom", :pitch="30", style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;")
     v-layout.pa-4(style="position: absolute; top: 0; left: 0; right: 0;")
       v-btn.mt-3(icon, @click="$emit('back')") 
         v-icon fas fa-arrow-left
@@ -34,6 +34,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    zoom: {
+      type: Number,
+      default: 15,
+    },
   },
 
   data() {
@@ -49,12 +53,20 @@ export default {
   created() {
     // We need to set mapbox-gl library here in order to use it in template
     this.mapbox = Mapbox
+    this.map = null
   },
 
   methods: {
     select() {
       this.$emit('updated', this.centre)
       this.$emit('back')
+    },
+
+    onLoad(ev) {
+      this.map = ev.map
+      setTimeout(() => {
+        this.map.resize()
+      }, 0)
     },
 
     updateCentre(coordinates) {

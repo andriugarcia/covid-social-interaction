@@ -1,7 +1,6 @@
 <template lang="pug">
-  v-layout#imageMap(align-center, style="height: 100%")
-    img.rounded-lg(:class="{'imageGrid': grid, 'imagePost': !expanded && !grid, 'imagePostExpanded': expanded}", :src="content.src")
-  
+  v-layout#imageMap(column, justify-center, style="height: 100%;")
+    img(:class="{'imageGrid': grid, 'imagePost': !expanded && !grid, 'imagePostExpanded': expanded, 'mt-8': content.text.length != 0 && expanded}", :src="content.src")
 </template>
 
 <script>

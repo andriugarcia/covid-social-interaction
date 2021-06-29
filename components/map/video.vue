@@ -1,14 +1,16 @@
 <template lang="pug">
-  v-layout#videoMap(align-center, style="height: 100%")
-    video.rounded-lg(:class="{'videoGrid': grid, 'videoPost': !expanded && !grid, 'videoPostExpanded': expanded}", autoplay, :muted="muted", loop)
-      source(src="https://storage.googleapis.com/web-dev-assets/video-and-source-tags/chrome.webm", type="video/webm")
-      source(src="https://storage.googleapis.com/web-dev-assets/video-and-source-tags/chrome.mp4", type="video/mp4")
+  v-layout#videoMap(column, justify-center, style="height: 100%")
+    video.rounded-lg(:class="{'videoGrid': grid, 'videoPost': !expanded && !grid, 'videoPostExpanded': expanded, 'mt-8': content.text.length != 0 && expanded}", autoplay, playsinline, :muted="muted", loop, :src="content.src")
 </template>
 
 <script>
 export default {
   props: {
     expanded: Boolean,
+    content: {
+      type: Object,
+      default: () => ({}),
+    },
     muted: Boolean,
     grid: Boolean,
   },

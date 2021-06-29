@@ -4,10 +4,13 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'olimaps',
+    title: 'Olimaps',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0',
+      },
       { hid: 'description', name: 'description', content: '' },
     ],
     link: [
@@ -66,9 +69,24 @@ export default {
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
     '@nuxtjs/vuetify',
+    // '@nuxtjs/onesignal', // BEFORE pwa
   ],
 
-  plugins: [{ src: '~/plugins/masonry.js', ssr: false }],
+  oneSignal: {
+    init: {
+      appId: 'YOUR_APP_ID',
+      allowLocalhostAsSecureOrigin: true,
+      welcomeNotification: {
+        disable: true,
+      },
+    },
+  },
+
+  plugins: [
+    { src: '~/plugins/masonry.js', ssr: false },
+    { src: '~/plugins/viewer.js' },
+    { src: '~/plugins/swiper.js', ssr: false },
+  ],
 
   vuetify: {
     defaultAssets: {
@@ -125,7 +143,14 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
-      lang: 'en',
+      name: 'Olimaps',
+      short_name: 'Olimaps',
+      description: 'Conoce e interactua con la gente de alrededor',
+      start_url: 'https://olimaps.com',
+      'background-color': '#FFC764',
+      'theme-color': '#F0134D',
+      lang: 'es',
+      useWebmanifestExtension: false,
     },
   },
 

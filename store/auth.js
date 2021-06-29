@@ -5,6 +5,7 @@ const socket = io(process.env.SOCKET_URL)
 export const state = () => ({
   user: {},
   portals: {},
+  newNotification: null,
 })
 
 export const mutations = {
@@ -13,6 +14,20 @@ export const mutations = {
   },
   setPortals(state, portals) {
     state.portals = Object.values(portals)
+  },
+  setNotification(state, newNotification) {
+    state.user.notifications.unshift(newNotification)
+    state.newNotification = newNotification
+
+    setTimeout(() => {
+      state.newNotification = null
+    }, 8000)
+  },
+  closeNewNotification(state) {
+    state.newNotification = null
+  },
+  updateProfile(state, updatedProfile) {
+    Object.assign(state.user, updatedProfile)
   },
 }
 
@@ -89,14 +104,13 @@ export const actions = {
       console.error(err)
     }
   },
-  async getMe({ rootState, commit, dispatch }) {
+  async getMe({ commit, dispatch }) {
     try {
       const { data: user } = await axios.get(
         `${process.env.SERVER_URL}/user/me`
       )
       commit('setUser', user)
       dispatch('chat/getChats', {}, { root: true })
-      dispatch('chat/getCloseChats', rootState.map.userPosition, { root: true })
       dispatch('getPortals')
 
       socket.emit('join', {
@@ -106,6 +120,11 @@ export const actions = {
       socket.on('chatnotification', (message) => {
         commit('chat/chatNotification', message, { root: true })
       })
+
+      socket.on('notification', (notification) => {
+        commit('setNotification', notification)
+      })
+
       return true
     } catch (err) {
       console.error(err)

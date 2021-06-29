@@ -1,12 +1,19 @@
 <template lang="pug">
-  #shortMap.rounded-lg(style="background-color: white; height: 100%;")
-    p.pb-4.font-weight-light.shortExpanded(v-if="expanded") {{content.text}}
-    p.pb-4.font-weight-light.short(v-else, :class="{'shortGrid': grid, 'short': !grid}") {{content.text | truncate}}
+#shortMap.rounded-lg(style='background-color: white; height: 100%')
+  p.pb-4.font-weight-light.shortExpanded(
+    v-if='expanded',
+    v-html='content.text'
+  )
+  p.pb-4.font-weight-light(
+    v-else,
+    :class='{ shortGrid: grid, short: !grid }',
+    v-html='content.text'
+  )
 </template>
 
 <script>
 export default {
-  filters: {
+  methods: {
     truncate(value) {
       const limit = 64
       if (value.length > limit) return value.substr(0, limit) + '...'
@@ -26,11 +33,11 @@ export default {
 
 <style scoped>
 .shortGrid {
+  width: 100vw;
+  font-size: 0.8em;
   display: block;
-  width: 1000px;
   height: auto;
-  margin: 24px;
-  font-size: 1.2em;
+  padding: 8px;
 }
 
 .short {
@@ -53,7 +60,6 @@ export default {
   /* max-width: 400px;
   min-width: 480px; */
   padding: 32px;
-  padding-top: 100px;
   font-size: 1.2em;
 }
 </style>

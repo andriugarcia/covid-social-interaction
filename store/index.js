@@ -2,6 +2,9 @@ export const state = () => ({
   loginOpened: false,
   postCreated: false,
   shareCreated: false,
+
+  appNotInstalled: false,
+  deferredPrompt: null,
 })
 
 export const mutations = {
@@ -19,5 +22,16 @@ export const mutations = {
 
   disableAllWindows(state) {
     state.loginOpened = false
+  },
+
+  downloadApp(state) {
+    state.deferredPrompt.prompt()
+    state.deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        state.appNotInstalled = false
+      } else {
+        state.appNotInstalled = true
+      }
+    })
   },
 }

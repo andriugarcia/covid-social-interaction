@@ -1,11 +1,27 @@
 <template lang="pug">
-  #audioInput.d-flex(:class="{'flex-row-reverse': left}")
-    v-btn(:icon="!dark || recording", :fab="dark && !recording", :dark="dark && !recording", :color="(dark && !recording) ? 'primary' : ''", @click="record")
-      v-icon(:class="{ 'red--text': recording, 'text--text': !dark }", :large="recording") {{ recording ? 'fas fa-stop-circle' : 'fas fa-microphone'}}
-    v-chip.font-weight-bold.mx-1(v-if="recording", dark, color="red") {{counter | getMinutes}}:{{counter | getSeconds}}
+#audioInput.d-flex(v-if='!notSupported', :class='{ "flex-row-reverse": left }')
+  v-btn(
+    :icon='!dark || recording',
+    depressed,
+    :fab='dark && !recording',
+    :dark='dark && !recording',
+    :color='dark && !recording ? "primary" : ""',
+    @click='record'
+  )
+    v-icon(
+      :class='{ "red--text": recording, "text--text": !dark }',
+      :large='recording'
+    ) {{ recording ? "fas fa-stop-circle" : "fas fa-microphone" }}
+  v-chip.font-weight-bold.mx-1(v-if='recording', dark, color='red') {{ counter | getMinutes }}:{{ counter | getSeconds }}
 </template>
 
 <script>
+import AudioRecorder from 'audio-recorder-polyfill'
+import mpegEncoder from 'audio-recorder-polyfill/mpeg-encoder'
+AudioRecorder.encoder = mpegEncoder
+AudioRecorder.prototype.mimeType = 'audio/mpeg'
+window.MediaRecorder = AudioRecorder
+
 export default {
   filters: {
     getMinutes(value) {
@@ -22,6 +38,7 @@ export default {
   },
   data() {
     return {
+      notSupported: false,
       recording: false,
       audioChunks: [],
       mediaRecorder: null,
@@ -30,12 +47,18 @@ export default {
     }
   },
   methods: {
+    mounted() {
+      if (MediaRecorder.notSupported) {
+        this.notSupported = true
+      }
+    },
     record() {
       if (this.recording) {
         this.recording = false
         clearInterval(this.interval)
         this.counter = 0
         this.mediaRecorder.stop()
+        this.mediaRecorder.stream.getTracks().forEach((i) => i.stop())
       } else {
         this.recording = true
         const self = this
@@ -51,6 +74,7 @@ export default {
             const audioBlob = new Blob(this.audioChunks, {
               type: this.mediaRecorder.mimeType,
             })
+
             this.$emit('update', audioBlob)
             // const audio = new Audio(audioUrl);
           })
@@ -61,6 +85,9 @@ export default {
         })
       }
     },
+    // stopRecording() {
+
+    // },
   },
 }
 </script>

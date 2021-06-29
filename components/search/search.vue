@@ -1,10 +1,10 @@
 <template lang="pug">
   #search.pa-4
     v-layout
-      v-btn.mt-3(v-if="!$vuetify.breakpoint.mdAndUp", icon, @click="$router.replace({ hash: '' })")
+      v-btn.mt-3(v-if="!$vuetify.breakpoint.mdAndUp", icon, @blur="searchText = ''", @click="$router.replace({ hash: '' })")
         v-icon.black--text fas fa-arrow-left
-      v-text-field.ml-2(outlined, rounded, v-model="searchText", @keydown.enter="select(0)", append-icon="fas fa-search", placeholder="Buscar sitio", autofocus)
-    v-card(flat)
+      v-text-field.ml-2(solo, outlined, flat, dense, rounded, v-model="searchText", @keydown.enter="select(0)", append-icon="fas fa-search", placeholder="Buscar sitio", hide-details, autofocus)
+    v-card(flat, :style="$vuetify.breakpoint.mdAndUp ? 'width: 400px;' : ''")
       v-list(v-if="places.length > 0")
         v-subheader USUARIOS
         v-list-item(v-for="(user, i) in users", :key="i", @click="$router.push({ path: '/' + user.username })")

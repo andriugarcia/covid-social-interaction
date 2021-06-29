@@ -1,14 +1,46 @@
 <template lang="pug">
-  #map
-    MglMap(:accessToken="accessToken" :mapStyle="mapStyle", logoPosition="bottom-left", 
-          :maxZoom="16", :dragRotate="false", :center.sync="mapPosition", @load="onLoad", @moveend="onMove",
-          :zoom="14", :pitch="30", style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;", @click="mapClick")
-      MglMarker(:coordinates="[userPosition.lng, userPosition.lat]")
-        template(slot="marker")
-          .cursor
-      MglMarker(v-for="(post, i) in posts" :key="post.post_id || post.chat_id" :coordinates="[post.coordinates.lat, post.coordinates.lng]" :offset="[0, -10]" anchor="bottom")
-        template(slot="marker")
-          post(:type="post.type", :content="post")
+#map
+  v-card.pa-8(
+    v-if='!userPosition || !mapPosition',
+    style='position: absolute; top: 0; left: 0; right: 0; bottom: 0',
+    flat
+  )
+    v-layout.text-center(
+      column,
+      justify-center,
+      align-center,
+      style='height: 100%'
+    )
+      v-icon(color='primary', x-large) fas fa-map-marker-alt
+      .mt-4 La geolocalización está desactivada
+      div Activa la geolocalización para poder utilizar el mapa
+  MglMap(
+    v-else,
+    :accessToken='accessToken',
+    :mapStyle='mapStyle',
+    logoPosition='bottom-left',
+    :minZoom='5',
+    :dragRotate='false',
+    :center.sync='mapPosition',
+    @load='onLoad',
+    @moveend='onMove',
+    :zoom.sync='zoom',
+    :pitch='30',
+    style='position: absolute; top: 0; left: 0; right: 0; bottom: 0',
+    @click='mapClick'
+  )
+    MglMarker(:coordinates='[userPosition.lng, userPosition.lat]')
+      template(slot='marker')
+        .cursor
+    MglMarker(
+      v-for='(post, i) in posts',
+      :key='post.post_id || post.chat_id',
+      :coordinates='[post.coordinates.lng, post.coordinates.lat]',
+      :offset='[0, -10]',
+      anchor='bottom'
+    )
+      template(slot='marker')
+        post(:type='post.type', :content='post')
 </template>
 
 <script>
@@ -31,6 +63,14 @@ export default {
   },
 
   computed: {
+    zoom: {
+      get() {
+        return this.$store.state.map.zoom
+      },
+      set(value) {
+        this.$store.commit('map/setZoom', value)
+      },
+    },
     userPosition: {
       get() {
         return this.$store.state.map.userPosition
@@ -59,9 +99,16 @@ export default {
     },
   },
 
+  watch: {
+    $route(route) {
+      if (this.map) this.map.resize()
+    },
+  },
+
   created() {
     // We need to set mapbox-gl library here in order to use it in template
     this.mapbox = Mapbox
+    this.map = null
   },
 
   methods: {
@@ -69,6 +116,8 @@ export default {
       this.$emit('click', map.mapboxEvent.lngLat)
     },
     onLoad(ev) {
+      this.map = ev.map
+      this.$store.commit('map/setEventActions', ev.component.actions)
       this.$store.dispatch('post/getPosts', ev.map.getBounds())
     },
     onMove(ev) {

@@ -21,6 +21,17 @@ export const actions = {
       return []
     }
   },
+  async userAutocomplete(_, searchText) {
+    try {
+      const { data } = await axios.get(`
+        ${process.env.SERVER_URL}/users/find/${searchText}
+      `)
+      return data
+    } catch (err) {
+      console.error(err)
+      return []
+    }
+  },
   async findUsers(_, text) {
     try {
       const { data } = await axios.get(
@@ -44,6 +55,27 @@ export const actions = {
   async unfollow(_, userId) {
     try {
       await axios.post(`${process.env.SERVER_URL}/unfollow/${userId}`)
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async updateProfile({ commit }, profile) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/user/updateProfile`, profile)
+      commit('auth/updateProfile', profile, { root: true })
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async updateProfilePicture(_, profilePicture) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/user/updateProfilePicture`, {
+        profilePicture,
+      })
       return true
     } catch (err) {
       console.error(err)

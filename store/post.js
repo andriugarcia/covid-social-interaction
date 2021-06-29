@@ -16,6 +16,7 @@ export const actions = {
       const { data } = await axios.get(
         `${process.env.SERVER_URL}/posts?xmin=${bbox._sw.lng}&ymin=${bbox._sw.lat}&xmax=${bbox._ne.lng}&ymax=${bbox._ne.lat}`
       )
+
       commit('setPosts', data)
     } catch (err) {
       console.error(err)
@@ -73,6 +74,16 @@ export const actions = {
     }
   },
 
+  async getSavedPosts(_) {
+    try {
+      const { data } = await axios.get(`${process.env.SERVER_URL}/posts/saved`)
+      return data
+    } catch (err) {
+      console.error(err)
+      return []
+    }
+  },
+
   async share({ commit }, post) {
     try {
       await axios.post(`${process.env.SERVER_URL}/posts/share/${post.post}`, {
@@ -80,6 +91,35 @@ export const actions = {
         message: post.message,
       })
       commit('setShareCreated', true, { root: true })
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+
+  async like(_, postId) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/posts/like/${postId}`)
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+
+  async dislike(_, postId) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/posts/dislike/${postId}`)
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async save(_, postId) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/posts/save/${postId}`)
       return true
     } catch (err) {
       console.error(err)
