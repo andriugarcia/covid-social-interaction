@@ -22,6 +22,13 @@ export const mutations = {
   setEventActions(state, eventActions) {
     state.eventActions = eventActions
   },
+  flyTo(state, coordinates) {
+    state.eventActions.flyTo({
+      center: coordinates,
+      zoom: 13,
+      speed: 2,
+    })
+  },
   flyToMe(state) {
     state.eventActions.flyTo({
       center: state.userPosition,

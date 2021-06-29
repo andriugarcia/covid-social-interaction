@@ -50,7 +50,7 @@
         )
           v-list-item-content
             span.font-weight-bold {{ chat.event[0].title }}
-            span 3 de Febrero 17:30
+            span {{ chat.event[0].start_date | toDateShort }}
           v-list-item-action
             v-btn(small, depressed, color='primary darken-1') ASISTIR
     v-sheet(color='white', style='position: relative')
@@ -229,9 +229,10 @@ import messages from '@/components/chat/messages'
 import chatBar from '@/components/chat/chatBar'
 import Post from '@/components/map/post'
 import Event from '@/components/event/item'
+import date from '@/mixins/date'
 
 export default {
-  mixins: [numberMixin],
+  mixins: [numberMixin, date],
   components: {
     messages,
     chatBar,

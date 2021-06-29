@@ -344,6 +344,15 @@ export const actions = {
       return false
     }
   },
+  async cancelEvent(_, eventId) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/events/cancel/${eventId}`)
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
   async getNearbyEvents(_, coordinates) {
     try {
       const { data } = await axios.get(

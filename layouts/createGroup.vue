@@ -6,7 +6,7 @@ v-card#createGroup(style='position: relative; height: 100%')
     flat,
     style='position: absolute; left: 0; right: 0; z-index: 10'
   )
-    v-btn(icon)
+    v-btn(icon, @click='$emit("back")')
       v-icon fas fa-arrow-left
     span Nuevo Grupo
   .pt-12.pa-4(v-if='step == 1')

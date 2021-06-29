@@ -11,9 +11,9 @@
       v-icon fas fa-arrow-left
     span {{ event.title }}
   v-sheet#event-content.overflow-y-auto(style='height: 100vh')
-    div(v-if='event.cover')
+    div(v-if='event.image')
       img(
-        :src='event.cover',
+        :src='event.image',
         style='height: 240px; width: 100%; object-fit: cover; object-position: center'
       )
       v-btn(absolute, top, left, icon, dark, @click='$router.go(-1)')
@@ -55,7 +55,7 @@
           div {{ event.start_date | toDate }}
           div De 17:30 a 20:30
       div(v-if='event.chat_id')
-        .overline.text-uppercase.mt-2.font-weight-bold Grupo
+        .overline.text-uppercase.mt-2.font-weight-bold CHAT GRUPAL
         v-card.pa-2.rounded-xl(
           outlined,
           @click='$router.push({ path: `/group/${event.chat_id}` })'
@@ -71,7 +71,7 @@
               rounded,
               depressed,
               color='primary lighten-4'
-            ) Entrar
+            ) Cotillear
       .overline.text-uppercase.mt-4.font-weight-bold {{ event.participants.length }} Participantes
       v-layout.mb-12.pb-6(wrap)
         v-flex.pa-2(
@@ -88,8 +88,17 @@
                 v-img(:src='participant.profile.profile_picture')
               span.font-weight-bold {{ participant.profile.username }}
   .pa-2(style='position: absolute; bottom: 0; left: 0; right: 0')
+    v-dialog(v-if='event.joined && event.participation.is_host')
+      template(v-slot:activator='{ on }')
+        v-btn(v-on='on', block, dark, large, color='primary', rounded) Cancelar Evento
+      v-card.pa-4.rounded-xl
+        .overline CANCELAR EVENTO
+        p ¿Estás seguro de querer cancelar el evento?
+        v-layout(justify-space-between)
+          v-btn(rounded, text) ATRÁS
+          v-btn(rounded, dark, depressed, color='red', @click='cancelEvent') CANCELAR
     v-btn(
-      v-if='!event.joined',
+      v-else-if='!event.joined',
       block,
       dark,
       large,
@@ -104,7 +113,7 @@
         .overline CANCELAR ASISTENCIA
         p ¿Estás seguro de querer cancelar tu asistencia al evento?
         v-layout(justify-space-between)
-          v-btn(rounded, text) SALIR
+          v-btn(rounded, text) ATRÁS
           v-btn(rounded, dark, depressed, color='red', @click='unjoinEvent') CANCELAR
 </template>
 
@@ -130,6 +139,7 @@ export default {
       'event/getEvent',
       this.$route.params.event
     )
+    console.log(this.event)
   },
 
   methods: {
@@ -142,6 +152,11 @@ export default {
       if (this.openLoginIfNotAuthenticated()) return
       await this.$store.dispatch('event/unjoinEvent', this.$route.params.event)
       this.event.joined = false
+    },
+    async cancelEvent() {
+      if (this.openLoginIfNotAuthenticated()) return
+      await this.$store.dispatch('event/cancelEvent', this.$route.params.event)
+      this.$router.replace({ path: 'event' })
     },
     getColor() {
       return (

@@ -1,25 +1,46 @@
 <template lang="pug">
-  #search.pa-4
-    v-layout
-      v-btn.mt-3(v-if="!$vuetify.breakpoint.mdAndUp", icon, @blur="searchText = ''", @click="$router.replace({ hash: '' })")
-        v-icon.black--text fas fa-arrow-left
-      v-text-field.ml-2(solo, outlined, flat, dense, rounded, v-model="searchText", @keydown.enter="select(0)", append-icon="fas fa-search", placeholder="Buscar sitio", hide-details, autofocus)
-    v-card(flat, :style="$vuetify.breakpoint.mdAndUp ? 'width: 400px;' : ''")
-      v-list(v-if="places.length > 0")
-        v-subheader USUARIOS
-        v-list-item(v-for="(user, i) in users", :key="i", @click="$router.push({ path: '/' + user.username })")
-          v-list-item-avatar
-            v-img(:src="user.profile_picture")
-          v-list-item-content
-            v-list-item-title {{user.username}}
-        v-subheader SITIOS
-        v-list-item(v-for="(place, i) in places", :key="i", @click="select(i)")
-          v-list-item-avatar
-            v-icon.black--text fas fa-map-marker-alt
-          v-list-item-content
-            v-list-item-title {{place.name}}
-            v-list-item-subtitle.font-italic {{place.distance}} km
-      .pa-4(v-else-if="searchText != ''") No hemos encontrado ningún lugar con este nombre
+#search.pa-4
+  v-layout(align-center)
+    v-btn(
+      v-if='!$vuetify.breakpoint.mdAndUp',
+      icon,
+      @blur='searchText = ""',
+      @click='$router.replace({ hash: "" })'
+    )
+      v-icon.black--text fas fa-arrow-left
+    v-text-field.ml-2(
+      solo,
+      outlined,
+      flat,
+      dense,
+      rounded,
+      v-model='searchText',
+      @keydown.enter='select(0)',
+      append-icon='fas fa-search',
+      placeholder='Buscar sitio',
+      hide-details,
+      autofocus
+    )
+  v-card(flat, :style='$vuetify.breakpoint.mdAndUp ? "width: 400px;" : ""')
+    v-list(v-if='places.length > 0')
+      v-subheader USUARIOS
+      v-list-item(
+        v-for='(user, i) in users',
+        :key='i',
+        @click='$router.push({ path: "/" + user.username })'
+      )
+        v-list-item-avatar
+          v-img(:src='user.profile_picture')
+        v-list-item-content
+          v-list-item-title {{ user.username }}
+      v-subheader SITIOS
+      v-list-item(v-for='(place, i) in places', :key='i', @click='select(i)')
+        v-list-item-avatar
+          v-icon.black--text fas fa-map-marker-alt
+        v-list-item-content
+          v-list-item-title {{ place.name }}
+          v-list-item-subtitle.font-italic {{ place.distance }} km
+    .pa-4(v-else-if='searchText != ""') No hemos encontrado ningún lugar con este nombre
 </template>
 
 <script>
@@ -78,10 +99,9 @@ export default {
 
   methods: {
     select(index) {
-      this.$emit('updated', {
-        lng: this.places[index].coordinates[0],
-        lat: this.places[index].coordinates[1],
-      })
+      console.log(this.places[index])
+      this.$store.commit('map/flyTo', this.places[index].coordinates)
+      this.$router.replace({ hash: '' })
     },
   },
 }

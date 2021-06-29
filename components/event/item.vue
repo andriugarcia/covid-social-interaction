@@ -11,7 +11,7 @@ v-card.rounded-xl(
     .pa-4(style='width: 100%')
       .font-weight-bold(style='font-size: 1.6em') {{ event.title }}
       .font-weight-bold {{ event.description }}
-      span.font-weight-light Miercoles 15 21:30
+      span.font-weight-light {{ event.start_date | toDateShort }}
       v-layout(align-center)
         span.mr-1 {{ event.place_description }}
         v-spacer
@@ -21,8 +21,10 @@ v-card.rounded-xl(
 
 <script>
 import geo from '@/mixins/geo'
+import date from '@/mixins/date'
+
 export default {
-  mixins: [geo],
+  mixins: [geo, date],
   props: ['event'],
   computed: {
     userPosition() {

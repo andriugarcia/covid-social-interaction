@@ -147,7 +147,7 @@ export default {
       short_name: 'Olimaps',
       description: 'Conoce e interactua con la gente de alrededor',
       start_url: 'https://olimaps.com',
-      'background-color': '#FFC764',
+      'background-color': '#f6f6f4',
       'theme-color': '#F0134D',
       lang: 'es',
       useWebmanifestExtension: false,

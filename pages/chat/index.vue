@@ -93,7 +93,7 @@
         v-icon {{ dial ? "fas fa-times" : "fas fa-pen" }}
     v-btn(fab, @click='newGroup = true')
       v-icon fas fa-user-friends
-create-group(v-else)
+create-group(v-else, @back='newGroup = false')
 </template>
 
 <script>

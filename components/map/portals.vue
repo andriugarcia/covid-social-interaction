@@ -3,13 +3,14 @@
     v-layout(style="overflow-x: scroll")
       v-btn.mr-2.rounded-xl(v-if="appNotInstalled", fab, depressed, color="primary")
         v-icon fas fa-arrow-circle-down
-      v-card.rounded-xl.pa-1.mr-2(v-if="authenticated", color="deep-purple", @click="", dark, style="font-size: .7em")
-        v-layout(align-center, style="height: 100%")
-          v-avatar.mr-2.rounded-xl(tile)
-            v-img(src="https://picsum.photos/200")
-          div.pr-1
-            .font-weight-bold(style="white-space: nowrap") MAR 15 17:30
-            span(style="white-space: nowrap") 32 personas
+      v-card.rounded-xl.pa-1.mr-2(
+        v-for='(participation, i) in user.participation',
+        :key='i',
+        :color='getColor(participation.event.emoji)',
+        @click='$router.push({ path: `/events/${participation.event.event_id}` })',
+        dark,
+        style='font-size: 0.7em'
+      )
       v-avatar.mr-2.rounded-xl(v-if="authenticated", v-for="(portal, i) in portals", :key="i", @click="openPortals(i)", tile, size="62", style="border: 3px solid #F0134D;")
         v-img(:src="portal.profile_picture")
     viewer(v-model="portalsOpened")

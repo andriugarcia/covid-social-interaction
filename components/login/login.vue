@@ -3,11 +3,7 @@ v-card#login.pa-6(color='primary', dark)
   div(v-if='type == "signup"')
     span(style='font-size: 2em') Crear Cuenta
     v-text-field(v-model='signupData.username', label='Username')
-    v-text-field(
-      v-model='signupData.email',
-      label='Email o Nombre de Usuario',
-      type='email'
-    )
+    v-text-field(v-model='signupData.email', label='Email', type='email')
     v-text-field(
       v-model='signupData.password',
       label='Password',
@@ -22,7 +18,11 @@ v-card#login.pa-6(color='primary', dark)
       v-btn.text-capitalize(small, text, @click='type = "login"') Iniciar Sesion
   div(v-else)
     span(style='font-size: 2em') Iniciar Sesión
-    v-text-field(v-model='loginData.email', label='Email', type='email')
+    v-text-field(
+      v-model='loginData.email',
+      label='Email o Nombre de Usuario',
+      type='email'
+    )
     v-text-field(
       v-model='loginData.password',
       label='Password',

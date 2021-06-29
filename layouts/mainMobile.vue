@@ -88,11 +88,7 @@
             span(style='font-size: 0.7em') CHAT
   viewer(v-model='opened')
     v-card
-      search(
-        v-if='opened == "search"',
-        @back='opened = ""',
-        @updated='updateCentre'
-      )
+      search(v-if='opened == "search"', @updated='updateCentre')
   v-dialog(
     v-model='placeOpened',
     fullscreen,
@@ -113,6 +109,13 @@ import Post from '../components/map/post'
 import Portals from '../components/map/portals'
 
 export default {
+  watch: {
+    $route(route) {
+      if (route.hash === '') {
+        this.opened = ''
+      }
+    },
+  },
   components: {
     Map,
     Postbar,
@@ -124,13 +127,6 @@ export default {
   },
 
   mixins: [loginMixin, numberMixin],
-
-  beforeRouteUpdate(to, _, next) {
-    if (to.hash === '') {
-      this.opened = ''
-    }
-    next()
-  },
 
   data() {
     return {
