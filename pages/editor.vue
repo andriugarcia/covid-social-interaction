@@ -79,13 +79,21 @@
       v-layout
         audio-input(@update='audioUpdated')
         v-divider.mx-2(vertical)
-        v-btn.mx-1(icon)
+        v-btn.mx-1(v-if='!$vuetify.breakpoint.mdAndUp', icon)
           v-icon.text--text fas fa-camera
           input(
             type='file',
             @change='imageUpdated',
             accept='image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm',
             capture='camera',
+            style='opacity: 0; position: absolute; top: 0; bottom: 0; left: 0; right: 0'
+          )
+        v-btn.mx-1(icon)
+          v-icon.text--text fas fa-image
+          input(
+            type='file',
+            @change='imageUpdated',
+            accept='image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm',
             style='opacity: 0; position: absolute; top: 0; bottom: 0; left: 0; right: 0'
           )
         //- v-btn.mx-1(icon)

@@ -1,7 +1,7 @@
 <template lang="pug">
 #messages.px-4(
   ref='chat',
-  style='padding-top: 100px; height: 100vh; overflow-y: scroll; padding-bottom: 82px'
+  style='padding-top: 100px; height: 100vh; overflow-y: scroll; overflow-x: hidden; padding-bottom: 82px'
 )
   v-layout(justify-center)
     v-sheet.rounded-xl.pa-4(
@@ -74,7 +74,7 @@
     overlap,
     :value='!isBottom && newMessages != 0',
     :content='newMessages',
-    style='position: absolute; bottom: 82px; right: 24px'
+    style='position: absolute; bottom: 82px; right: 16px'
   )
     v-fab-transition
       v-btn(

@@ -60,15 +60,25 @@
           template(v-slot:activator='{ on }')
             v-btn(icon, v-on='on')
               v-icon fas fa-paperclip
-          v-card.rounded-xl.pa-4(outlined)
+          v-card.pa-4(outlined)
             v-layout(wrap)
-              v-sheet.pa-1.ma-1(flat, @click='')
-                v-avatar(color='yellow')
-                  v-icon.black--text fas fa-flag
+              v-sheet.pa-1.ma-1.mx-2(flat)
+                v-avatar(color='primary', dark)
+                  v-icon.white--text fas fa-image
+                .mt-1 Media
+                input(
+                  type='file',
+                  @change='imageUpdated',
+                  accept='image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm',
+                  style='opacity: 0; position: absolute; top: 0; bottom: 0; left: 0; right: 0'
+                )
+              v-sheet.pa-1.ma-1.mx-2(flat, @click='')
+                v-avatar(color='primary', dark)
+                  v-icon.white--text fas fa-flag
                 .mt-1 Evento
-              v-sheet.pa-1.ma-1(flat, @click='shareGroup = true')
-                v-avatar(color='yellow')
-                  v-icon.black--text fas fa-user
+              v-sheet.pa-1.ma-1.mx-2(flat, @click='shareGroup = true')
+                v-avatar(color='primary', dark)
+                  v-icon.white--text fas fa-user
                 .mt-1 Grupo
     //- v-text-field(v-model="message.text", solo, hide-details, rounded, outlined, @click:prepend-inner="cameraToggle = true", @keydown.enter="sendMessage", placeholder="Escribe un mensaje", color="primary", append-icon="")
       template(#prepend-inner)

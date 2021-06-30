@@ -2,7 +2,7 @@
 #Home
   Map(@click='morePosts')
   v-layout.pa-4(
-    style='position: absolute; top: 0px; right: 0; left: 0',
+    style='position: fixed; top: 0px; right: 0; left: 0',
     align-center
   )
     img(src='@/assets/olimaps-logo.png', style='width: 36px; height: 36px')
@@ -67,7 +67,7 @@
             overlap,
             color='primary',
             :value='authenticated',
-            :content='formatNumber(3)'
+            :content='formatNumber(totalNotifications)'
           )
             v-icon.pa-1(color='black', style='display: block') fas fa-bell
             span(style='font-size: 0.7em') ACTIVIDAD
@@ -140,6 +140,9 @@ export default {
   computed: {
     total() {
       return this.$store.getters['chat/total']
+    },
+    totalNotifications() {
+      return this.$store.getters['auth/totalNotifications']
     },
     user() {
       return this.$store.state.auth.user

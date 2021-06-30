@@ -35,6 +35,10 @@ export const getters = {
   authenticated(state) {
     return Object.keys(state.user).length !== 0
   },
+  totalNotifications(state) {
+    console.log(state.user)
+    return state.user.notifications.reduce((a, b) => a + (b.read ? 0 : 1), 0)
+  },
 }
 
 export const actions = {
@@ -113,17 +117,19 @@ export const actions = {
       dispatch('chat/getChats', {}, { root: true })
       dispatch('getPortals')
 
-      socket.emit('join', {
-        profile_id: user.profile_id,
-      })
+      // socket.emit('join', {
+      //   profile_id: user.profile_id,
+      // })
 
-      socket.on('chatnotification', (message) => {
-        commit('chat/chatNotification', message, { root: true })
-      })
+      // socket.on('chatnotification', (message) => {
+      //   commit('chat/chatNotification', message, { root: true })
+      // })
 
-      socket.on('notification', (notification) => {
-        commit('setNotification', notification)
-      })
+      // socket.on('notification', (notification) => {
+      //   commit('setNotification', notification)
+      // })
+
+      console.log(user)
 
       return true
     } catch (err) {

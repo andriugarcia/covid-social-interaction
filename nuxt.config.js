@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -127,7 +129,26 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     'vue-web-cam/nuxt',
+    '@nuxtjs/firebase',
   ],
+
+  firebase: {
+    config: {
+      apiKey: 'AIzaSyBxGHKm38LWJkSQa5l2b17JfyEh-Uu6ztA',
+      authDomain: 'olimaps-firebase.firebaseapp.com',
+      projectId: 'olimaps-firebase',
+      storageBucket: 'olimaps-firebase.appspot.com',
+      messagingSenderId: '581147596652',
+      appId: '1:581147596652:web:721cf9ef21c90aa5d2c549',
+      measurementId: 'G-N24W84QP8E'
+    },
+    services: {
+      messaging: {
+        createServiceWorker: true,
+        inject: fs.readFileSync('./serviceWorker.js')
+      },
+    }
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
@@ -147,7 +168,7 @@ export default {
       short_name: 'Olimaps',
       description: 'Conoce e interactua con la gente de alrededor',
       start_url: 'https://olimaps.com',
-      'background-color': '#f6f6f4',
+      'background-color': '#F0134D',
       'theme-color': '#F0134D',
       lang: 'es',
       useWebmanifestExtension: false,

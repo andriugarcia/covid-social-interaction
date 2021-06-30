@@ -87,19 +87,19 @@ export const mutations = {
 
 export const actions = {
   joinNearby({ rootState, commit }) {
-    socket.emit('join-nearby', {
-      user: rootState.auth.user,
-      coordinates: rootState.map.userPosition,
-    })
+    // socket.emit('join-nearby', {
+    //   user: rootState.auth.user,
+    //   coordinates: rootState.map.userPosition,
+    // })
 
-    socket.on('message', (message) => {
-      commit('pushNearbyMessage', message)
-    })
+    // socket.on('message', (message) => {
+    //   commit('pushNearbyMessage', message)
+    // })
   },
   updateNearbyPosition({ rootState }) {
-    socket.emit('move', {
-      coordinates: rootState.map.userPosition,
-    })
+    // socket.emit('move', {
+    //   coordinates: rootState.map.userPosition,
+    // })
   },
   createNearbyMessage({ commit, rootState }, message) {
     socket.emit('send-nearby', {
@@ -272,11 +272,11 @@ export const actions = {
   },
   async createGroup(_, group) {
     try {
-      await axios.post(`${process.env.SERVER_URL}/group/new`, group)
-      return true
+      const { data } = await axios.post(`${process.env.SERVER_URL}/group/new`, group)
+      return data
     } catch (err) {
       console.error(err)
-      return false
+      return null
     }
   },
   async joinChat(_, chatId) {

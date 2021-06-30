@@ -109,9 +109,8 @@ v-card#createGroup(style='position: relative; height: 100%')
     fab,
     large,
     dark,
-    right,
     color='primary',
-    style='position: absolute; bottom: 16px',
+    style='position: absolute; bottom: 16px; right: 8px',
     :disabled='!group.title || !group.cover',
     @click='createGroup'
   )
@@ -170,12 +169,12 @@ export default {
       this.group.cover = src
     },
     async createGroup() {
-      await this.$store.dispatch('chat/createGroup', {
+      const chat_id = await this.$store.dispatch('chat/createGroup', {
         ...this.group,
         username: this.$store.state.auth.user.username,
         members: this.members.map((user) => user.profile_id),
       })
-      // this.$router.push({ path: `/group/${  }` })
+      this.$router.push({ path: `/group/${chat_id}` })
     },
   },
 }

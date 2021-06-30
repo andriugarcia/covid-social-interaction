@@ -101,6 +101,8 @@ export default {
   mounted() {
     const self = this
 
+    // this.initPushNotifications()
+
     this.$store.dispatch('auth/initAuthError', this.$router) // Si recibe un 405 cierra sesion
 
     this.checkIfAppIsInstalled()
@@ -119,6 +121,19 @@ export default {
     })
   },
   methods: {
+    async initPushNotifications() {
+      console.log('INIT PUSH NOTIFICATIONS')
+      const currentToken = await this.$fire.messaging.getToken()
+      console.log(currentToken)
+
+      this.$fire.messaging.onMessage((payload) => {
+        console.info('Message received: ', payload)
+      })
+      this.$fire.messaging.onTokenRefresh(async () => {
+        const refreshToken = await this.$fire.messaging.getToken()
+        console.log('Token Refreshed', refreshToken)
+      })
+    },
     checkIfAppIsInstalled() {
       window.addEventListener('beforeinstallprompt', (e) => {
         // Prevent the mini-infobar from appearing on mobile
