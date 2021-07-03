@@ -1,6 +1,9 @@
 <template lang="pug">
-  v-layout#imageMap(column, justify-center, style="height: 100%;")
-    img(:class="{'imageGrid': grid, 'imagePost': !expanded && !grid, 'imagePostExpanded': expanded, 'mt-8': content.text.length != 0 && expanded}", :src="content.src")
+v-layout#imageMap(column, justify-center, style='height: 100%')
+  img(
+    :class='{ imageGrid: grid, imagePost: !expanded && !grid, imagePostExpanded: expanded }',
+    :src='content.src'
+  )
 </template>
 
 <script>
@@ -38,5 +41,9 @@ export default {
   max-height: 100%;
   width: 100%;
   height: auto;
+}
+
+.black-bottom-gradient {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
 }
 </style>

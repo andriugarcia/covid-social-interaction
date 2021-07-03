@@ -415,8 +415,8 @@ export default {
     checkTimeOrder() {
       if (this.time && this.timeEnd) {
         this.badDayOrder =
-          new Date(this.date + ' ' + this.time) >
-          new Date(this.dateEnd + ' ' + this.timeEnd)
+          new Date(this.date.replace(/-/g, '/') + ' ' + this.time) >
+          new Date(this.dateEnd.replace(/-/g, '/') + ' ' + this.timeEnd)
       } else {
         this.badDayOrder = false
       }

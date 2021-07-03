@@ -35,8 +35,8 @@ export const getters = {
   authenticated(state) {
     return Object.keys(state.user).length !== 0
   },
-  totalNotifications(state) {
-    console.log(state.user)
+  totalNotifications(state, getters) {
+    if (!getters.authenticated) return 0
     return state.user.notifications.reduce((a, b) => a + (b.read ? 0 : 1), 0)
   },
 }

@@ -23,17 +23,18 @@
     )
   v-card(flat, :style='$vuetify.breakpoint.mdAndUp ? "width: 400px;" : ""')
     v-list(v-if='places.length > 0')
-      v-subheader USUARIOS
-      v-list-item(
-        v-for='(user, i) in users',
-        :key='i',
-        @click='$router.push({ path: "/" + user.username })'
-      )
-        v-list-item-avatar
-          v-img(:src='user.profile_picture')
-        v-list-item-content
-          v-list-item-title {{ user.username }}
-      v-subheader SITIOS
+      div(v-if='!onlyPlaces')
+        v-subheader USUARIOS
+        v-list-item(
+          v-for='(user, i) in users',
+          :key='i',
+          @click='$router.push({ path: "/" + user.username })'
+        )
+          v-list-item-avatar
+            v-img(:src='user.profile_picture')
+          v-list-item-content
+            v-list-item-title {{ user.username }}
+      v-subheader(v-if='!onlyPlaces') SITIOS
       v-list-item(v-for='(place, i) in places', :key='i', @click='select(i)')
         v-list-item-avatar
           v-icon.black--text fas fa-map-marker-alt
@@ -49,7 +50,12 @@ import geo from '@/mixins/geo'
 
 export default {
   mixins: [geo],
-
+  props: {
+    onlyPlaces: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data: () => ({
     searchText: '',
     places: [],

@@ -13,9 +13,9 @@
       v-layout(justify-space-between, style='width: 100%', align-end)
         .mb-4.ml-4(:class='{ "white--text": type != "short" }')
           .ml-2
-            span.font-weight-bold.mr-2 {{ content.username || content.profile.username }}
-            span {{ content.created_at | toRelativeDate }}
-          p.pa-2.py-2(
+            span.font-weight-bold.mr-2.letter-shadow {{ content.username || content.profile.username }}
+            span.letter-shadow {{ content.created_at | toRelativeDate }}
+          p.pa-2.py-2.letter-shadow(
             v-if='type != "short" && content.text.length != 0',
             v-html='content.text'
           )
@@ -174,3 +174,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.letter-shadow {
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+</style>
