@@ -2,38 +2,30 @@
 v-card.pa-4(color='primary', dark)
   .font-weight-bold(style='font-size: 2em') Compartir
   v-layout.py-3(style='overflow-x: scroll')
-    v-card.mr-2.pa-4.rounded-lg.text-center(
-      flat,
-      hover,
-      color='primary darken-1',
-      @click='mark'
-    )
-      v-icon.mb-2(large, style='display: block; width: 80px') far fa-bookmark
-      span Guardar
-    v-card.mr-2.pa-4.rounded-lg.text-center(
+    v-card.mr-2.pa-2.rounded-lg.text-center(
       flat,
       hover,
       color='primary darken-1',
       @click='share("whatsapp")'
     )
-      v-icon.mb-2(large, style='display: block; width: 80px') fab fa-whatsapp
+      v-icon.mb-2(style='display: block; width: 80px') fab fa-whatsapp
       span Whatsapp
-    v-card.mr-2.pa-4.rounded-lg.text-center(
+    v-card.mr-2.pa-2.rounded-lg.text-center(
       flat,
       hover,
       color='primary darken-1',
       @click='share("twitter")'
     )
-      v-icon.mb-2(large, style='display: block; width: 80px') fab fa-twitter
+      v-icon.mb-2(style='display: block; width: 80px') fab fa-twitter
       span Twitter
-    v-card.mr-2.pa-4.rounded-lg.text-center(
+    v-card.mr-2.pa-2.rounded-lg.text-center(
       v-if='navigatorShareExists()',
       flat,
       hover,
       color='primary darken-1',
       @click='openShare'
     )
-      v-icon.mb-2(large, style='display: block; width: 80px') fas fa-ellipsis-h
+      v-icon.mb-2(style='display: block; width: 80px') fas fa-ellipsis-h
       span Más
   v-text-field.mt-2(
     v-model='textFilter',
@@ -140,9 +132,6 @@ export default {
           )
       }
     },
-    mark() {
-      this.$store.dispatch('post/save', this.post.post_id)
-    },
     selectMember(member) {
       if (member.selected) {
         this.selectedList = this.selectedList.filter(
@@ -164,6 +153,7 @@ export default {
       this.$emit('back')
     },
     navigatorShareExists() {
+      console.log(navigator.share)
       return typeof navigator.share !== 'undefined'
     },
     openShare() {

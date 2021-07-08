@@ -3,7 +3,8 @@
   v-dialog.rounded-xl(
     v-model='dialogValue',
     :width='500',
-    transition='dialog-bottom-transition'
+    transition='dialog-bottom-transition',
+    @click:outside='$emit("click:outside")'
   )
     slot.rounded-xl(style='height: 100%')
 #mobile(v-else)

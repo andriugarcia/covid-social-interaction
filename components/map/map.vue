@@ -20,7 +20,6 @@
     :mapStyle='mapStyle',
     logoPosition='bottom-left',
     :minZoom='5',
-    :dragRotate='false',
     :center.sync='mapPosition',
     @load='onLoad',
     @moveend='onMove',
@@ -56,6 +55,7 @@ export default {
 
   data() {
     return {
+      taps: 0,
       accessToken: process.env.MAPBOX_TOKEN, // your access token. Needed if you using Mapbox maps
       mapStyle: 'mapbox://styles/mapbox/light-v9',
       bounds: {},
@@ -113,7 +113,16 @@ export default {
 
   methods: {
     mapClick(map) {
-      this.$emit('click', map.mapboxEvent.lngLat)
+      this.taps++
+      if (this.taps === 1) {
+        this.timer = setTimeout(() => {
+          this.$emit('click', map.mapboxEvent.lngLat)
+          this.taps = 0
+        }, 300)
+      } else {
+        clearTimeout(this.timer)
+        this.taps = 0
+      }
     },
     onLoad(ev) {
       this.map = ev.map

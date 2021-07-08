@@ -1,6 +1,5 @@
 import axios from 'axios'
-import io from 'socket.io-client'
-const socket = io(process.env.SOCKET_URL)
+import socket from '../socket'
 
 export const state = () => ({
   chats: [],
@@ -87,30 +86,39 @@ export const mutations = {
 
 export const actions = {
   joinNearby({ rootState, commit }) {
-    // socket.emit('join-nearby', {
-    //   user: rootState.auth.user,
-    //   coordinates: rootState.map.userPosition,
-    // })
+    console.log("JOIN NEARBY")
+    socket.emit('join-nearby', {
+      user: rootState.auth.user,
+      coordinates: rootState.map.userPosition,
+    })
 
-    // socket.on('message', (message) => {
-    //   commit('pushNearbyMessage', message)
-    // })
+    socket.once('message', (message) => {
+      console.log('MENSAJE RECIBIDO')
+      commit('pushNearbyMessage', message)
+    })
+    socket.on('disconnected', (message) => {
+      console.log('DESCONECTADO')
+      socket.disconnect()
+    })
   },
   updateNearbyPosition({ rootState }) {
-    // socket.emit('move', {
-    //   coordinates: rootState.map.userPosition,
-    // })
+    socket.emit('move', {
+      coordinates: rootState.map.userPosition,
+    })
   },
   createNearbyMessage({ commit, rootState }, message) {
+    console.log("SEND NEARBY MESSAGE")
     socket.emit('send-nearby', {
       ...message,
       created_at: Date.now(),
       profile: rootState.auth.user,
+      author: rootState.auth.user.profile_id
     })
     commit('pushNearbyMessage', {
       ...message,
       created_at: Date.now(),
       profile: rootState.auth.user,
+      author: rootState.auth.user.profile_id
     })
   },
   async getChats({ commit }) {

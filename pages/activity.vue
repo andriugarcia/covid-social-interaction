@@ -4,6 +4,7 @@
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left
     span.font-weight-black Actividad
+  push-alert
   v-list-item.px-6(
     v-for='(notification, i) in notifications',
     :key='i',
@@ -20,8 +21,15 @@
 
 <script>
 import iconNotificationMixin from '@/mixins/iconNotification'
+import pushAlert from '@/components/pushAlert'
 export default {
   mixins: [iconNotificationMixin],
+  components: {
+    pushAlert,
+  },
+  mounted() {
+    this.$store.dispatch('user/readNotifications')
+  },
   computed: {
     notifications() {
       return this.$store.state.auth.user.notifications

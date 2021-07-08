@@ -16,7 +16,7 @@ export const actions = {
       const { data } = await axios.get(
         `${process.env.SERVER_URL}/posts?xmin=${bbox._sw.lng}&ymin=${bbox._sw.lat}&xmax=${bbox._ne.lng}&ymax=${bbox._ne.lat}`
       )
-
+      console.log(data.map(post => post.is_liked))
       commit('setPosts', data)
     } catch (err) {
       console.error(err)
@@ -120,6 +120,15 @@ export const actions = {
   async save(_, postId) {
     try {
       await axios.post(`${process.env.SERVER_URL}/posts/save/${postId}`)
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async unsave(_, postId) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/posts/unsave/${postId}`)
       return true
     } catch (err) {
       console.error(err)

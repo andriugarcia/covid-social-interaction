@@ -23,7 +23,7 @@
           group-map(v-else-if="type == 'group'", :content="content", :grid="grid")
           span(v-else) Format Not Found
           bottom-avatar.bottomalign(v-if="!grid", :src="content.profile_picture || content.profile.profile_picture")
-      viewer.rounded-lg(v-model="expanded")
+      viewer.rounded-lg(v-model="expanded", @click:outside="closePost",)
         expanded-post(v-if="expanded", :type="type", v-touch="{ down: () => closePost() }", :content="content", @back="closePost")
 </template>
 

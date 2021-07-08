@@ -128,7 +128,6 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
-    'vue-web-cam/nuxt',
     '@nuxtjs/firebase',
   ],
 
@@ -145,7 +144,7 @@ export default {
     services: {
       messaging: {
         createServiceWorker: true,
-        inject: fs.readFileSync('./serviceWorker.js')
+        // inject: fs.readFileSync('./serviceWorker.js')
       },
     }
   },
@@ -170,6 +169,8 @@ export default {
       start_url: 'https://olimaps.com',
       'background-color': '#F0134D',
       'theme-color': '#F0134D',
+      display: 'standalone',
+      orientation: "portrait",
       lang: 'es',
       useWebmanifestExtension: false,
     },

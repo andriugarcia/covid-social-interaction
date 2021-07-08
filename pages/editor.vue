@@ -109,7 +109,12 @@
       )
         .mr-2.text-capitalize Publicar
         v-icon(small) far fa-edit
-  viewer(v-model='locationSelectorOpened')
+  v-dialog(
+    v-model='locationSelectorOpened',
+    fullscreen,
+    hide-overlay,
+    transition='dialog-bottom-transition'
+  )
     v-card
       location-select(
         v-if='locationSelectorOpened',

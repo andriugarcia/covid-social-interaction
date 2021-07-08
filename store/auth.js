@@ -1,11 +1,11 @@
 import axios from 'axios'
-import io from 'socket.io-client'
-const socket = io(process.env.SOCKET_URL)
+import socket from '../socket'
 
 export const state = () => ({
   user: {},
   portals: {},
   newNotification: null,
+  pushEnabled: false,
 })
 
 export const mutations = {
@@ -14,6 +14,9 @@ export const mutations = {
   },
   setPortals(state, portals) {
     state.portals = Object.values(portals)
+  },
+  setPushEnabled(state, pushEnabled) {
+    state.pushEnabled = pushEnabled
   },
   setNotification(state, newNotification) {
     state.user.notifications.unshift(newNotification)
@@ -67,6 +70,8 @@ export const actions = {
   logout({ commit }) {
     delete axios.defaults.headers.common.authorization
     localStorage.removeItem('token')
+    localStorage.removeItem('pushToken')
+    commit('setPushEnabled', false)
     commit('setUser', {})
   },
   async login({ dispatch }, body) {
@@ -121,13 +126,13 @@ export const actions = {
       //   profile_id: user.profile_id,
       // })
 
-      // socket.on('chatnotification', (message) => {
-      //   commit('chat/chatNotification', message, { root: true })
-      // })
+      socket.once('chatnotification', (message) => {
+        commit('chat/chatNotification', message, { root: true })
+      })
 
-      // socket.on('notification', (notification) => {
-      //   commit('setNotification', notification)
-      // })
+      socket.once('notification', (notification) => {
+        commit('setNotification', notification)
+      })
 
       console.log(user)
 

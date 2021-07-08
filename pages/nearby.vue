@@ -6,7 +6,7 @@
     style='position: absolute; top: 0; left: 0; right: 0; z-index: 10'
   )
     v-icon.mr-4(color='primary') fas fa-street-view
-    div
+    .white--text
       .font-weight-bold Close to you
       span 30 personas cerca
   v-sheet(color='white')
@@ -26,6 +26,8 @@ export default {
   },
   computed: {
     user() {
+      if (!this.$store.getters['auth/authenticated'])
+        this.$router.replace({ path: '/' })
       return this.$store.state.auth.user
     },
   },

@@ -86,14 +86,14 @@
         @click='scrollToBottom'
       )
         v-icon(small) fas fa-chevron-down
-  viewer(v-model='imageOpened')
+  viewer(v-model='imageOpened', @click:outside='closeImage')
     v-layout(
       style='height: 100%; background-color: #000000c0',
       justify-center,
       align-center
     )
       v-btn(
-        @click='imageOpened = false',
+        @click='closeImage',
         depressed,
         color='white',
         fab,
@@ -192,6 +192,7 @@ export default {
       this.$refs.chat.scrollTop = this.$refs.chat.scrollHeight
     },
     async handleScroll() {
+      if (!this.nearby) return
       this.isBottom =
         this.$refs.chat.scrollTop > this.$refs.chat.scrollHeight - 1000
       if (
@@ -216,6 +217,10 @@ export default {
       this.imageOpened = true
       this.imageSrc = src
       this.$router.push({ hash: 'image' })
+    },
+    closeImage() {
+      this.imageOpened = false
+      this.$router.replace({ hash: '' })
     },
   },
 }

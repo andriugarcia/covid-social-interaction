@@ -48,14 +48,15 @@ v-app
 
 <script>
 import iconNotificationMixin from '@/mixins/iconNotification'
+import pushNotificationMixin from '@/mixins/push'
 export default {
-  mixins: [iconNotificationMixin],
+  mixins: [iconNotificationMixin, pushNotificationMixin],
   components: {
     login: () => import('../components/login/login.vue'),
     mainMobile: () => import('../layouts/mainMobile.vue'),
     mainDesktop: () => import('../layouts/mainDesktop.vue'),
   },
-  async middleware({ store }) {
+  async middleware({ app, store }) {
     await store.dispatch('auth/checkLogged')
   },
   data: () => ({
@@ -101,14 +102,15 @@ export default {
   mounted() {
     const self = this
 
-    // this.initPushNotifications()
-
     this.$store.dispatch('auth/initAuthError', this.$router) // Si recibe un 405 cierra sesion
 
+    this.registerMessagingSw()
+    this.checkIfNotificationsEnabled()
     this.checkIfAppIsInstalled()
 
     navigator.geolocation.getCurrentPosition(
       function (position) {
+        console.log('GET CURRENT POSITION')
         self.updatePosition(position)
       },
       (error) => {
@@ -117,22 +119,25 @@ export default {
       { timeout: 10000 }
     )
     navigator.geolocation.watchPosition(function (position) {
+      console.log('POSITION UPDATED')
       self.updatePosition(position, true)
     })
   },
   methods: {
-    async initPushNotifications() {
-      console.log('INIT PUSH NOTIFICATIONS')
-      const currentToken = await this.$fire.messaging.getToken()
-      console.log(currentToken)
-
-      this.$fire.messaging.onMessage((payload) => {
-        console.info('Message received: ', payload)
-      })
-      this.$fire.messaging.onTokenRefresh(async () => {
-        const refreshToken = await this.$fire.messaging.getToken()
-        console.log('Token Refreshed', refreshToken)
-      })
+    registerMessagingSw() {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('firebase-messaging-sw.js')
+          .then(function (registration) {
+            console.log(
+              'Registration successful, scope is:',
+              registration.scope
+            )
+          })
+          .catch(function (err) {
+            console.log('Service worker registration failed, error:', err)
+          })
+      }
     },
     checkIfAppIsInstalled() {
       window.addEventListener('beforeinstallprompt', (e) => {

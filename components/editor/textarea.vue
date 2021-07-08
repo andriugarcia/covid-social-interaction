@@ -127,6 +127,15 @@ export default {
     const trueInput = document.getElementById('input-true-text')
     overlayElm.addEventListener('click', this.onSelectHashtag, false)
 
+    document
+      .getElementById('input-true-text')
+      .addEventListener('keypress', (evt) => {
+        if (evt.which === 13) {
+          evt.preventDefault()
+          this.$emit('enter')
+        }
+      })
+
     trueInput.addEventListener('paste', function (e) {
       // cancel paste
       e.preventDefault()

@@ -54,7 +54,8 @@
           v-model='message.text',
           top,
           placeholder='Escribe tu mensaje...',
-          size='1em'
+          size='1em',
+          @enter='sendMessage'
         )
         v-menu(top, offset-y)
           template(v-slot:activator='{ on }')

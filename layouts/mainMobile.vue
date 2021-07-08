@@ -66,7 +66,7 @@
           v-badge(
             overlap,
             color='primary',
-            :value='authenticated',
+            :value='totalNotifications > 0',
             :content='formatNumber(totalNotifications)'
           )
             v-icon.pa-1(color='black', style='display: block') fas fa-bell

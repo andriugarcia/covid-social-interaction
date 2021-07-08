@@ -170,25 +170,25 @@ export default {
       navigator.geolocation.getCurrentPosition(function (position) {
         self.coordinates = [position.coords.longitude, position.coords.latitude]
         // socket.emit('join', {
-        //   coordinates: self.coordinates
+        //   coordinates: self.coordinates,
         // })
 
-        // socket.on('message', (message) => {
+        // socket.once('message', (message) => {
         //   self.chat.push(message)
         // })
 
-        // let watchID = navigator.geolocation.watchPosition(function(position) {
+        // let watchID = navigator.geolocation.watchPosition(function (position) {
         //   socket.emit('move', {
-        //     coordinates: [position.coords.longitude, position.coords.latitude]
+        //     coordinates: [position.coords.longitude, position.coords.latitude],
         //   })
         // })
       })
     } else {
       /* la geolocalización NO está disponible */
     }
-    // socket.on('new-message', (message) => {
-    //   this.messages.push(message)
-    // })
+    socket.once('new-message', (message) => {
+      this.messages.push(message)
+    })
   },
 
   methods: {

@@ -9,6 +9,9 @@
     :center.sync='centre',
     :zoom='zoom',
     :pitch='30',
+    @load='onLoad',
+    @movestart='moving = true',
+    @moveend='moving = false',
     style='position: absolute; top: 0; left: 0; right: 0; bottom: 0'
   )
   v-layout.pa-4(style='position: absolute; top: 0; left: 0; right: 0')
@@ -36,14 +39,16 @@
           @updated='updateCentre',
           onlyPlaces
         )
-  v-layout(
-    column,
-    align-center,
-    style='position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)'
-  )
-    v-card.pa-2.rounded-lg
+  //- v-layout(
+  //-   column,
+  //-   align-center,
+  //-   style='position: absolute; top: calc(50% - 30px); left: 50%'
+  //- )
+    //- .pin(:class='{ moving: moving, notmoving: !moving }')
+    //- .dot
+    //- v-card.pa-2.rounded-lg
       div {{ centre.lng.toFixed(4) }}, {{ centre.lat.toFixed(4) }}
-    .triangle
+    //- .triangle
   .pa-4(style='position: absolute; left: 0; right: 0; bottom: 12px')
     v-btn(block, rounded, color='primary', @click='select') Seleccionar Aquí
 </template>
@@ -59,10 +64,6 @@ export default {
   },
 
   props: {
-    initialPosition: {
-      type: Object,
-      default: () => ({}),
-    },
     zoom: {
       type: Number,
       default: 15,
@@ -73,15 +74,21 @@ export default {
     return {
       accessToken: process.env.MAPBOX_TOKEN,
       mapStyle: 'mapbox://styles/mapbox/light-v9',
-      centre: { ...this.initialPosition },
+      centre: { ...this.$store.state.map.userPosition },
       searchOpened: false,
       currentPosition: true,
+      moving: false,
     }
   },
 
-  created() {
+  mounted() {
     // We need to set mapbox-gl library here in order to use it in template
     this.mapbox = Mapbox
+    this.map = null
+  },
+
+  _destroyed() {
+    this.mapbox = null
     this.map = null
   },
 
@@ -93,9 +100,11 @@ export default {
 
     onLoad(ev) {
       this.map = ev.map
+      const self = this
       setTimeout(() => {
-        this.map.resize()
-      }, 0)
+        console.log('RESIZING')
+        self.map.resize()
+      }, 600)
     },
 
     updateCentre(coordinates) {
@@ -113,5 +122,31 @@ export default {
   border-top: 9px solid black;
   border-left: 9px solid transparent;
   border-right: 9px solid transparent;
+}
+</style>
+
+<style lang="scss" scoped>
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #f0134d;
+}
+
+.pin {
+  border-radius: 50% 50% 50% 0;
+  border: 14px solid #f0134d;
+  width: 40px;
+  height: 40px;
+  transform: rotate(-45deg);
+  position: relative;
+}
+
+.moving {
+  bottom: 24px;
+}
+
+.notmoving {
+  bottom: 0;
 }
 </style>

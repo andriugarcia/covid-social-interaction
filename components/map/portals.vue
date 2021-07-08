@@ -80,6 +80,7 @@ export default {
       return this.$store.getters['auth/authenticated']
     },
     portals() {
+      console.log(this.$store.state.auth.portals)
       return this.$store.state.auth.portals
     },
     appNotInstalled() {

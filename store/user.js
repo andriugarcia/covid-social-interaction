@@ -82,4 +82,26 @@ export const actions = {
       return false
     }
   },
+  async readNotifications(_) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/user/readNotifications`)
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async sendNotificationToken(_, token) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/subscribePushClient`, {
+        token
+      })
+      console.log("TOKEN ENVIADO CON EXITO", token)
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+
+  }
 }
