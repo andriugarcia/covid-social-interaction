@@ -156,7 +156,21 @@ export default {
       this.$store.dispatch('auth/logout')
     },
     flyToMe() {
-      this.$store.commit('map/flyToMe')
+      if (!this.$store.state.map.locationEnabled) {
+        const self = this
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            console.log('GET CURRENT POSITION')
+            self.updatePosition(position)
+          },
+          (error) => {
+            console.error(error)
+          },
+          { timeout: 10000 }
+        )
+      } else {
+        this.$store.commit('map/flyToMe')
+      }
     },
     updateCentre(coordinates) {
       this.$store.commit('map/setMapPosition', coordinates)

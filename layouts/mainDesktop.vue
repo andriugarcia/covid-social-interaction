@@ -1,55 +1,104 @@
 <template lang="pug">
-  #Home
-    v-layout(style="height: 100vh; position: relative;")
-      v-sheet(color="text")
-        v-layout(column, align-center)
-          v-btn.mb-2.mt-5(icon, nuxt, to="/")
-            v-avatar
-              v-img(:src="require('../assets/olimaps-logo.png')")
-          v-btn.my-2(fab, depressed, color="primary", @click="openEditor")
-            v-icon fas fa-plus
-          .pl-1
-            v-card.py-1.my-2.text-center(flat, :dark="!$route.name.startsWith('events')", :color="$route.name.startsWith('events') ? '#ffffff' : 'text'", @click="$router.push({path: '/events'})", style="border-radius: 8px 0 0 8px; width: 100%;")
-              v-icon.pa-1(style="display: block") fas fa-flag
-              span.font-weight-bold(style="font-size: .7em") EVENTOS
-            v-card.py-1.my-2.text-center(flat, :dark="$route.name != 'activity'", :color="$route.name == 'activity' ? '#ffffff' : 'text'", @click="openActivity", style="border-radius: 8px 0 0 8px; width: 100%;")
-              v-badge(overlap, color="primary", :value="authenticated", :content="formatNumber(3)")
-                v-icon.pa-1(style="display: block") fas fa-bell
-                span.font-weight-bold(style="font-size: .7em") ACTIVIDAD
-            v-card.py-1.my-2.text-center(flat, :dark="!$route.name.startsWith('chat') && !$route.name.startsWith('group')", :color="$route.name.startsWith('chat') || $route.name.startsWith('group') ? '#ffffff' : 'text'", @click="openChat", style="border-radius: 8px 0 0 8px; width: 100%;")
-              v-badge(overlap, color="primary", :value="authenticated && total", :content="formatNumber(total)")
-                v-icon.pa-1(style="display: block") fas fa-comment-dots
-                span.font-weight-bold(style="font-size: .7em") CHAT
-          v-btn.mb-2.rounded-xl(v-if="appNotInstalled", fab, depressed, color="primary", style="position: absolute; bottom: 0")
-            v-icon fas fa-arrow-circle-down
-      v-flex(v-if="$route.name != 'index'", md5)
-        v-sheet(style="height: 100%;")
-          slot(style="position: relative")
-      Map(@click="morePosts", style="position: relative; width: 100%; height: 100%")
-    v-layout.pa-4(style="position: absolute; top: 0px; right: 0; left: 0;", align-center)
-      //- img(src="@/assets/olimaps-logo.png", style="width: 36px; height: 36px;")
-      //- img(src="@/assets/olimaps-logo-light.png", style="height: 30px")
-      v-spacer
-      search
-      v-btn.mr-2(small, depressed, fab, @click="flyToMe")
-        v-icon(small, color="grey darken-2") fas fa-crosshairs
-      v-menu(v-if="authenticated", rounded, offset-y)
-        template(v-slot:activator="{on}")
-          v-btn(fab, color="primary", v-on="on")
-            v-avatar(color="white")
-              v-img(:src="user.profile_picture")
-        v-card
-          v-list
-            v-list-item(@click="logout") Cerrar Sesión
-      v-btn(v-else, depressed, rounded, color="primary", @click="$store.commit('setLogin', true)")
-        v-icon.mr-2(small) fas fa-user
-        span.text-capitalize Crear Cuenta
-    viewer(v-model="opened")
+#Home
+  v-layout(style='height: 100vh; position: relative')
+    v-sheet(color='text')
+      v-layout(column, align-center)
+        v-btn.mb-2.mt-5(icon, nuxt, to='/')
+          v-avatar
+            v-img(:src='require("../assets/olimaps-logo.png")')
+        v-btn.my-2(fab, depressed, color='primary', @click='openEditor')
+          v-icon fas fa-plus
+        .pl-1
+          v-card.py-1.my-2.text-center(
+            flat,
+            :dark='!$route.name.startsWith("events")',
+            :color='$route.name.startsWith("events") ? "#ffffff" : "text"',
+            @click='$router.push({ path: "/events" })',
+            style='border-radius: 8px 0 0 8px; width: 100%'
+          )
+            v-icon.pa-1(style='display: block') fas fa-flag
+            span.font-weight-bold(style='font-size: 0.7em') EVENTOS
+          v-card.py-1.my-2.text-center(
+            flat,
+            :dark='$route.name != "activity"',
+            :color='$route.name == "activity" ? "#ffffff" : "text"',
+            @click='openActivity',
+            style='border-radius: 8px 0 0 8px; width: 100%'
+          )
+            v-badge(
+              overlap,
+              color='primary',
+              :value='authenticated',
+              :content='formatNumber(3)'
+            )
+              v-icon.pa-1(style='display: block') fas fa-bell
+              span.font-weight-bold(style='font-size: 0.7em') ACTIVIDAD
+          v-card.py-1.my-2.text-center(
+            flat,
+            :dark='!$route.name.startsWith("chat") && !$route.name.startsWith("group")',
+            :color='$route.name.startsWith("chat") || $route.name.startsWith("group") ? "#ffffff" : "text"',
+            @click='openChat',
+            style='border-radius: 8px 0 0 8px; width: 100%'
+          )
+            v-badge(
+              overlap,
+              color='primary',
+              :value='authenticated && total',
+              :content='formatNumber(total)'
+            )
+              v-icon.pa-1(style='display: block') fas fa-comment-dots
+              span.font-weight-bold(style='font-size: 0.7em') CHAT
+        v-btn.mb-2.rounded-xl(
+          v-if='appNotInstalled',
+          fab,
+          depressed,
+          color='primary',
+          style='position: absolute; bottom: 0'
+        )
+          v-icon fas fa-arrow-circle-down
+    v-flex(v-if='$route.name != "index"', md5)
+      v-sheet(style='height: 100%')
+        slot(style='position: relative')
+    Map(
+      @click='morePosts',
+      style='position: relative; width: 100%; height: 100%'
+    )
+  v-layout.pa-4(
+    style='position: absolute; top: 0px; right: 0; left: 0',
+    align-center
+  )
+    //- img(src="@/assets/olimaps-logo.png", style="width: 36px; height: 36px;")
+    //- img(src="@/assets/olimaps-logo-light.png", style="height: 30px")
+    v-spacer
+    search
+    v-btn.mr-2(small, depressed, fab, @click='flyToMe')
+      v-icon(small, color='grey darken-2') fas fa-crosshairs
+    v-menu(v-if='authenticated', rounded, offset-y)
+      template(v-slot:activator='{ on }')
+        v-btn(fab, color='primary', v-on='on')
+          v-avatar(color='white')
+            v-img(:src='user.profile_picture')
       v-card
-        search(v-if="opened == 'search'", @back="opened = ''", @updated="updateCentre")
-    viewer(v-model="placeOpened")
-      place-selected(@back="closePosts", :coordinates="coordinatesSelected")
-
+        v-list
+          v-list-item(@click='logout') Cerrar Sesión
+    v-btn(
+      v-else,
+      depressed,
+      rounded,
+      color='primary',
+      @click='$store.commit("setLogin", true)'
+    )
+      v-icon.mr-2(small) fas fa-user
+      span.text-capitalize Crear Cuenta
+  viewer(v-model='opened')
+    v-card
+      search(
+        v-if='opened == "search"',
+        @back='opened = ""',
+        @updated='updateCentre'
+      )
+  viewer(v-model='placeOpened')
+    place-selected(@back='closePosts', :coordinates='coordinatesSelected')
 </template>
 
 <script>
@@ -113,7 +162,21 @@ export default {
       this.$store.dispatch('auth/logout')
     },
     flyToMe() {
-      this.$store.commit('map/flyToMe')
+      if (!this.$store.state.map.locationEnabled) {
+        const self = this
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            console.log('GET CURRENT POSITION')
+            self.updatePosition(position)
+          },
+          (error) => {
+            console.error(error)
+          },
+          { timeout: 10000 }
+        )
+      } else {
+        this.$store.commit('map/flyToMe')
+      }
     },
     updateCentre(coordinates) {
       this.$store.commit('map/setMapPosition', coordinates)

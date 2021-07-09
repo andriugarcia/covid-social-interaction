@@ -1,22 +1,7 @@
 <template lang="pug">
 #map
-  v-card.pa-8(
-    v-if='!userPosition || !mapPosition',
-    style='position: absolute; top: 0; left: 0; right: 0; bottom: 0',
-    flat
-  )
-    v-layout.text-center(
-      column,
-      justify-center,
-      align-center,
-      style='height: 100%'
-    )
-      v-icon(color='primary', x-large) fas fa-map-marker-alt
-      .mt-4 La geolocalización está desactivada
-      div Activa la geolocalización para poder utilizar el mapa
-      v-btn.mt-4(color='primary', depressed, rounded, @click='tryLocation') Reintentar
   MglMap(
-    v-else,
+    v-if='mapPosition',
     :accessToken='accessToken',
     :mapStyle='mapStyle',
     logoPosition='bottom-left',
@@ -25,13 +10,10 @@
     @load='onLoad',
     @moveend='onMove',
     :zoom.sync='zoom',
-    :pitch='30',
+    :pitch='20',
     style='position: absolute; top: 0; left: 0; right: 0; bottom: 0',
     @click='mapClick'
   )
-    MglMarker(:coordinates='[userPosition.lng, userPosition.lat]')
-      template(slot='marker')
-        .cursor
     MglMarker(
       v-for='(post, i) in posts',
       :key='post.post_id || post.chat_id',
@@ -41,6 +23,12 @@
     )
       template(slot='marker')
         post(:type='post.type', :content='post')
+    MglMarker(
+      v-if='userPosition',
+      :coordinates='[userPosition.lng, userPosition.lat]'
+    )
+      template(slot='marker')
+        .cursor
 </template>
 
 <script>
@@ -64,6 +52,9 @@ export default {
   },
 
   computed: {
+    locationEnabled() {
+      return this.$store.state.map.locationEnabled
+    },
     zoom: {
       get() {
         return this.$store.state.map.zoom
@@ -125,6 +116,20 @@ export default {
         },
         { timeout: 10000 }
       )
+    },
+    updatePosition(position, onlyUser = false) {
+      const coordinates = {
+        lng: position.coords.longitude,
+        lat: position.coords.latitude,
+      }
+
+      // if (!onlyUser) {
+      //   this.$store.commit('map/setMapPosition', coordinates)
+      // }
+      this.$store.commit('map/setUserPosition', coordinates)
+      this.$store.dispatch('chat/joinNearby')
+      this.$store.dispatch('chat/getCloseChats')
+      this.$store.dispatch('event/getEvents')
     },
     mapClick(map) {
       this.taps++

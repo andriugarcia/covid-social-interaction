@@ -1,17 +1,21 @@
 export const state = () => ({
   userPosition: null,
   mapPosition: null,
-  zoom: 15,
+  locationEnabled: false,
+  zoom: 14,
   eventActions: null,
 })
 
 export const mutations = {
+  setDefaultPosition(state) {
+    state.zoom = 2
+    state.mapPosition = { lat: 40, lng: -5 }
+  },
   setUserPosition(state, coordinates) {
     state.userPosition = { ...coordinates }
-
-    if (!state.mapPosition) {
+    if (!state.mapPosition)
       state.mapPosition = { ...coordinates }
-    }
+    state.locationEnabled = true
   },
   setMapPosition(state, coordinates) {
     state.mapPosition = { ...coordinates }

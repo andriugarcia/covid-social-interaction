@@ -14,7 +14,7 @@
           span.mx-1.font-weight-bold {{ content.title }}
         v-avatar(small, :color="getColor()", :size="32", style="font-size: 2em") {{ content.emoji }}
     div(v-else)
-      component(:is="grid ? 'v-fade-transition' : 'v-scale-transition'", origin="bottom center 0")
+      v-scale-transition(origin="bottom center 0")
         v-card.card.rounded-lg(v-show="visible", outlined, @click.stop="expand")
           image-map(v-if="type == 'image'", :content="content", :grid="grid")
           short-map(v-else-if="type == 'short'", :content="content", :grid="grid")
@@ -23,7 +23,7 @@
           group-map(v-else-if="type == 'group'", :content="content", :grid="grid")
           span(v-else) Format Not Found
           bottom-avatar.bottomalign(v-if="!grid", :src="content.profile_picture || content.profile.profile_picture")
-      viewer.rounded-lg(v-model="expanded", @click:outside="closePost",)
+      viewer.rounded-lg(v-model="expanded", @click:outside="closePost")
         expanded-post(v-if="expanded", :type="type", v-touch="{ down: () => closePost() }", :content="content", @back="closePost")
 </template>
 
@@ -74,7 +74,9 @@ export default {
   },
 
   mounted() {
-    this.visible = true
+    setTimeout(() => {
+      this.visible = true
+    }, 0)
   },
   destroyed() {
     this.visible = false

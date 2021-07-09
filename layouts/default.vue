@@ -117,6 +117,7 @@ export default {
           self.updatePosition(position)
         },
         (error) => {
+          self.$store.commit('map/setDefaultPosition')
           console.error(error)
         },
         { timeout: 10000 }
