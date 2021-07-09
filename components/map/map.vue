@@ -14,6 +14,7 @@
       v-icon(color='primary', x-large) fas fa-map-marker-alt
       .mt-4 La geolocalización está desactivada
       div Activa la geolocalización para poder utilizar el mapa
+      v-btn.mt-4(color='primary', depressed, rounded, @click='tryLocation') Reintentar
   MglMap(
     v-else,
     :accessToken='accessToken',
@@ -112,6 +113,19 @@ export default {
   },
 
   methods: {
+    tryLocation() {
+      const self = this
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          console.log('GET CURRENT POSITION')
+          self.updatePosition(position)
+        },
+        (error) => {
+          console.error(error)
+        },
+        { timeout: 10000 }
+      )
+    },
     mapClick(map) {
       this.taps++
       if (this.taps === 1) {

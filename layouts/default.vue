@@ -100,30 +100,32 @@ export default {
     },
   },
   mounted() {
-    const self = this
-
     this.$store.dispatch('auth/initAuthError', this.$router) // Si recibe un 405 cierra sesion
 
     this.registerMessagingSw()
     this.checkIfNotificationsEnabled()
     this.checkIfAppIsInstalled()
 
-    navigator.geolocation.getCurrentPosition(
-      function (position) {
-        console.log('GET CURRENT POSITION')
-        self.updatePosition(position)
-      },
-      (error) => {
-        console.error(error)
-      },
-      { timeout: 10000 }
-    )
-    navigator.geolocation.watchPosition(function (position) {
-      console.log('POSITION UPDATED')
-      self.updatePosition(position, true)
-    })
+    this.enableLocation()
   },
   methods: {
+    enableLocation() {
+      const self = this
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          console.log('GET CURRENT POSITION')
+          self.updatePosition(position)
+        },
+        (error) => {
+          console.error(error)
+        },
+        { timeout: 10000 }
+      )
+      navigator.geolocation.watchPosition(function (position) {
+        console.log('POSITION UPDATED')
+        self.updatePosition(position, true)
+      })
+    },
     registerMessagingSw() {
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker
