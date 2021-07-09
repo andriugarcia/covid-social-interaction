@@ -14,7 +14,7 @@
           span.mx-1.font-weight-bold {{ content.title }}
         v-avatar(small, :color="getColor()", :size="32", style="font-size: 2em") {{ content.emoji }}
     div(v-else)
-      v-scale-transition(origin="bottom center 0")
+      transition(name="scale")
         v-card.card.rounded-lg(v-show="visible", outlined, @click.stop="expand")
           image-map(v-if="type == 'image'", :content="content", :grid="grid")
           short-map(v-else-if="type == 'short'", :content="content", :grid="grid")
@@ -120,5 +120,22 @@ export default {
   border-top: 9px solid black;
   border-left: 9px solid transparent;
   border-right: 9px solid transparent;
+}
+
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.2s ease;
+}
+.scale-enter {
+  opacity: 0;
+  transform: translate(0, 5px);
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.2s ease;
+}
+.fade-enter {
+  opacity: 0;
+  transform: translate(0, 5px);
 }
 </style>
