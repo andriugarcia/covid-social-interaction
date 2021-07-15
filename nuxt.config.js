@@ -144,7 +144,7 @@ export default {
     services: {
       messaging: {
         createServiceWorker: true,
-        // inject: fs.readFileSync('./serviceWorker.js')
+        inject: fs.readFileSync('./serviceWorker.js')
       },
     }
   },

@@ -1,7 +1,7 @@
 <template lang="pug">
   #portals
     v-layout(style="overflow-x: scroll")
-      v-btn.mr-2.rounded-xl(v-if="appNotInstalled", fab, depressed, color="primary")
+      v-btn.mr-2.rounded-xl(v-if="appNotInstalled", fab, depressed, color="primary", @click="downloadApp")
         v-icon fas fa-arrow-circle-down
       v-card.rounded-xl.pa-1.mr-2(
         v-if="authenticated",

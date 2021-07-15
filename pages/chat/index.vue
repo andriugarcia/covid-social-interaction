@@ -95,12 +95,13 @@ v-sheet#contacts(
                 v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} miembros
               v-list-item-action
                 //- v-chip(v-if="chat.unread != 0", color="primary") {{ chat.unread }}
-  v-speed-dial(v-model='dial', absolute, bottom, right)
+  v-speed-dial(v-model='dial', absolute, bottom, right, direction='left')
     template(#activator)
       v-btn(fab, color='primary', dark)
         v-icon {{ dial ? "fas fa-times" : "fas fa-pen" }}
-    v-btn(fab, @click='newGroup = true')
-      v-icon fas fa-user-friends
+    v-btn(@click='newGroup = true', rounded)
+      v-icon(small) fas fa-user-friends
+      span.text-capitalize.ml-2(style='letter-spacing: 0') Nuevo grupo
 create-group(v-else, @back='newGroup = false')
 </template>
 

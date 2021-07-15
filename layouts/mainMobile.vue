@@ -3,19 +3,26 @@
   Map(@click='morePosts')
   v-layout.pa-4(
     style='position: fixed; top: 0px; right: 0; left: 0',
-    align-center
+    align-center,
+    color='white'
   )
     img(src='@/assets/olimaps-logo.png', style='width: 36px; height: 36px')
     img(src='@/assets/olimaps-logo-light.png', style='height: 30px')
     v-spacer
-    v-btn.mr-2(small, depressed, fab, @click='flyToMe')
-      v-icon(small, color='grey darken-2') fas fa-crosshairs
+    v-btn.mr-2(
+      x-small,
+      fab,
+      color='white',
+      @click='flyToMe',
+      style='border: 1px solid black'
+    )
+      v-icon(x-small, color='grey darken-2') fas fa-crosshairs
     v-menu(v-if='authenticated', rounded, offset-y)
       template(v-slot:activator='{ on }')
         v-btn(fab, color='primary', v-on='on')
           v-avatar(color='white')
             v-img(:src='user.profile_picture')
-      v-card
+      v-card(outlined)
         v-list
           v-list-item(@click='$router.push({ path: "/" + user.username })') Mi perfil
           v-list-item(@click='$router.push({ path: "/saved" })') Post Guardados
@@ -30,9 +37,9 @@
       v-icon.mr-2(small) fas fa-user
       span.text-capitalize Crear Cuenta
 
-  .pb-8(style='position: fixed; bottom: 0; left: 0; right: 0')
+  div(style='position: fixed; bottom: 0; left: 0; right: 0')
     portals.pl-2
-    v-card.mx-2.mt-2.rounded-xl(outlined)
+    v-card.ma-2.rounded-xl(outlined, tile)
       v-layout(justify-space-around, align-center)
         v-flex.mx-2.rounded-lg.text-center(
           depressed,

@@ -1,15 +1,15 @@
 <template lang="pug">
-#editor.pa-4(style='position: relative; height: 100%')
-  v-layout(align-center)
+#editor(style='position: relative; height: 100%')
+  v-toolbar(color='primary', dark)
     v-btn(icon, @click='$router.go(-1)')
-      v-icon.text--text fas fa-arrow-left
-    .ml-2.overline.text--text.font-weight-bold POSTEAR
+      v-icon fas fa-arrow-left
+    v-toolbar-title Nuevo Post
     v-spacer
     //- v-btn.text-capitalize(rounded, depressed, small, dark, color="text", @click="permanentOpened = true") 
       span Hacer permanente
       v-icon.ml-2(small) far fa-snowflake
-  v-layout.pt-4
-    v-avatar.mr-2.mt-2(size='48', style='border: 3px solid #f0134d')
+  v-layout.px-4
+    v-avatar.mr-2.mt-6(size='48', style='border: 3px solid #f0134d')
       v-img(:src='user.profile_picture')
     div(style='width: 100%')
       texteditor.mt-6.pb-2(
@@ -69,7 +69,11 @@
     )
       v-icon fas fa-times
   div(style='position: absolute; bottom: 0; left: 0; right: 0')
-    v-btn(text, @click='locationSelectorOpened = true')
+    v-btn.px-2.ml-3.rounded-lg(
+      outlined,
+      color='grey lighten-3',
+      @click='locationSelectorOpened = true'
+    )
       v-icon.text--text fas fa-globe-europe
       .ml-2.text--text.font-weight-bold.text-capitalize(
         style='letter-spacing: 0'
@@ -101,14 +105,14 @@
       v-spacer
       v-btn(
         rounded,
-        flat,
+        depressed,
         color='primary',
         :disabled='disabled',
         dark,
         @click='publish'
       )
-        .mr-2.text-capitalize Publicar
-        v-icon(small) far fa-edit
+        v-icon(small) fas fa-plus
+        .ml-2.text-capitalize Publicar
   v-dialog(
     v-model='locationSelectorOpened',
     fullscreen,

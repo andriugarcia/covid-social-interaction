@@ -1,5 +1,6 @@
 export const state = () => ({
   userPosition: null,
+  userDirection: null,
   mapPosition: null,
   locationEnabled: false,
   zoom: 14,
@@ -16,6 +17,8 @@ export const mutations = {
     if (!state.mapPosition)
       state.mapPosition = { ...coordinates }
     state.locationEnabled = true
+    console.log(coordinates.direction)
+    state.userDirection = coordinates.direction
   },
   setMapPosition(state, coordinates) {
     state.mapPosition = { ...coordinates }

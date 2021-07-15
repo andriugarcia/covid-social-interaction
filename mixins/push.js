@@ -16,7 +16,7 @@ export default {
     async enablePushNotifications() {
       if (!this.$store.getters['auth/authenticated']) return false
       console.log('INIT PUSH NOTIFICATIONS')
-      this.$store.commit('auth/setPushEnabled', this.$fire.messaging.isSupported())
+      this.$store.commit('auth/setPushEnabled', typeof this.$fireMess !== 'undefined')
       try {
         const currentToken = await this.$fire.messaging.getToken()
 

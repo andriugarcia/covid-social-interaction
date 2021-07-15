@@ -26,10 +26,12 @@
       template(v-slot:activator='{ on, attrs }')
         v-text-field.ml-2(
           outlined,
+          flat,
           solo,
           rounded,
           append-icon='fas fa-search',
           readonly,
+          hide-details,
           v-on='on',
           placeholder='Buscar sitio'
         )
@@ -39,18 +41,31 @@
           @updated='updateCentre',
           onlyPlaces
         )
-  //- v-layout(
-  //-   column,
-  //-   align-center,
-  //-   style='position: absolute; top: calc(50% - 30px); left: 50%'
-  //- )
-    //- .pin(:class='{ moving: moving, notmoving: !moving }')
-    //- .dot
+  v-layout(
+    column,
+    align-center,
+    style='position: absolute; top: calc(50% - 30px); left: 50%'
+  )
+    v-icon(
+      color='primary',
+      size='46',
+      :class='{ moving: moving, notmoving: !moving }'
+    ) fas fa-map-marker-alt
+    .dot
     //- v-card.pa-2.rounded-lg
       div {{ centre.lng.toFixed(4) }}, {{ centre.lat.toFixed(4) }}
     //- .triangle
-  .pa-4(style='position: absolute; left: 0; right: 0; bottom: 12px')
-    v-btn(block, rounded, color='primary', @click='select') Seleccionar Aquí
+  v-layout.pa-4(
+    style='position: absolute; left: 0; right: 0; bottom: 12px',
+    justify-center
+  )
+    v-btn(
+      rounded,
+      color='primary',
+      :disabled='moving',
+      depressed,
+      @click='select'
+    ) Seleccionar Aquí
 </template>
 
 <script>
@@ -123,23 +138,12 @@ export default {
   border-left: 9px solid transparent;
   border-right: 9px solid transparent;
 }
-</style>
 
-<style lang="scss" scoped>
 .dot {
   width: 4px;
   height: 4px;
   border-radius: 50%;
   background-color: #f0134d;
-}
-
-.pin {
-  border-radius: 50% 50% 50% 0;
-  border: 14px solid #f0134d;
-  width: 40px;
-  height: 40px;
-  transform: rotate(-45deg);
-  position: relative;
 }
 
 .moving {

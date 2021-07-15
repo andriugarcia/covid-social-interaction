@@ -4,8 +4,8 @@
     v-if='mapPosition',
     :accessToken='accessToken',
     :mapStyle='mapStyle',
-    logoPosition='bottom-left',
-    :minZoom='5',
+    logoPosition='top-left',
+    :minZoom='3',
     :center.sync='mapPosition',
     @load='onLoad',
     @moveend='onMove',
@@ -155,7 +155,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .cursor {
   width: 25px;
   height: 25px;

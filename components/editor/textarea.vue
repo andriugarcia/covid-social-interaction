@@ -14,7 +14,7 @@
         :style='placeholderTextStyle',
         v-show='shouldShowPlaceholder'
       ) {{ placeholder }}
-    v-card
+    v-card(outlined, flat)
       v-list(style='height: 300px')
         v-list-item(
           v-for='(user, i) in userList',

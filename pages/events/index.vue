@@ -11,7 +11,7 @@
     v-spacer
     v-btn(color='white', rounded, depressed, dark, small, @click='createEvent')
       .primary--text.text-capitalize Nuevo Evento
-  .pa-4(v-if='authenticated')
+  v-sheet.pa-4(v-if='authenticated', color='white', height='100%')
     .font-weight-black(style='font-size: 1.4em; margin-top: 60px') Próximos Eventos
     v-alert(
       v-if='user.participation.length === 0',

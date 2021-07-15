@@ -8,9 +8,10 @@
     v-layout.px-4.pt-4
       v-btn(icon, color='black', @click='$router.go(-1)')
         v-icon fas fa-arrow-left
-    v-layout.px-6.mt-4(align-center)
-      v-avatar(size='80', color='primary')
+    v-layout.mt-4(justify-center)
+      v-avatar(size='160', color='primary')
         v-img(:src='user.profile_picture')
+    v-layout.px-6.mt-4(align-center)
       div
         .font-weight-bold.ml-2(style='font-size: 1.2em') {{ user.name }}
         span.ml-1 @{{ user.username }}
@@ -88,7 +89,7 @@
     .mt-4.ml-4.font-weight-black {{ user.followers }} seguidores
     p.ma-4 {{ user.description }}
     .ma-4
-      .overline PARTICIPANDO EN:
+      .overline(v-if='user.groups.length !== 0') PARTICIPANDO EN:
       v-layout(wrap)
         v-chip.pl-0.pr-2.mb-1.mr-1(
           v-for='(group, i) in user.groups',

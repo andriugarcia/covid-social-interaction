@@ -159,6 +159,7 @@ export default {
       const coordinates = {
         lng: position.coords.longitude,
         lat: position.coords.latitude,
+        direction: position.heading,
       }
 
       // if (!onlyUser) {

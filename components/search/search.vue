@@ -1,18 +1,20 @@
 <template lang="pug">
-#search.pa-4
-  v-layout(align-center)
+#search
+  v-layout(flat, dark)
     v-btn(
       v-if='!$vuetify.breakpoint.mdAndUp',
       icon,
+      dark,
       @blur='searchText = ""',
       @click='$router.replace({ hash: "" })'
     )
-      v-icon.black--text fas fa-arrow-left
+      v-icon fas fa-arrow-left
     v-text-field.ml-2(
       solo,
       outlined,
       flat,
       dense,
+      light,
       rounded,
       v-model='searchText',
       @keydown.enter='select(0)',

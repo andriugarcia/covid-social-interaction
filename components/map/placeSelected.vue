@@ -1,17 +1,18 @@
 <template lang="pug">
 v-card.px-4.pt-3(style='border-radius: 24px 24px 0 0')
-  v-toolbar
-    v-btn(icon, color='primary', @click='$emit("back")')
+  v-toolbar(dark, flat, color='primary', extended)
+    v-btn(icon, @click='$emit("back")')
       v-icon fas fa-times
-    v-toolbar-title.font-weight-black.primary--text En esta zona
-  v-tabs(fixed-tabs)
-    v-tab
-      v-icon.mr-1(small) fas fa-map-pin
-      div Posts
-    v-tab
-      v-icon.mr-1(small) fas fa-flag
-      div Eventos
-  .masonry.pa-2(style='overflow-y: scroll; height: 80vh')
+    v-toolbar-title.font-weight-black En esta zona
+    template(#extension)
+      v-tabs(fixed-tabs)
+        v-tab
+          v-icon.mr-1(small) fas fa-map-pin
+          div Posts
+        v-tab
+          v-icon.mr-1(small) fas fa-flag
+          div Eventos
+  .masonry.pa-2(style='overflow-y: scroll; height: calc(100vh - 32px)')
     post.mb-2(
       v-for='(post, i) in nearbyPosts',
       :key='i',

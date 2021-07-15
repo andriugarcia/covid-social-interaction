@@ -2,7 +2,7 @@
 #expanded(
   :style='$vuetify.breakpoint.mdAndUp ? "height: 90vh" : "height: 100%"'
 )
-  v-sheet.rounded-lg(
+  v-sheet(
     color='black',
     style='height: 100%; position: relative',
     @click='likeDoubleTap()'
@@ -11,9 +11,9 @@
     short-map(v-else-if='type == "short"', :content='content', expanded)
     video-map(v-else-if='type == "video"', expanded, :content='content')
     audio-map(v-else-if='type == "audio"', expanded, :content='content')
-    v-fade-transition
+    transition(name='fadescale')
       v-icon.red--text(
-        v-if='heart.rendered',
+        v-show='heart.rendered',
         size='120',
         style='position: absolute; top: calc(50% - 60px); left: calc(50% - 60px)'
       ) fas fa-heart
@@ -197,7 +197,7 @@ export default {
       this.heart.rendered = true
       setTimeout(() => {
         this.heart.rendered = false
-      }, 800)
+      }, 500)
     },
     async replyMessage() {
       if (this.openLoginIfNotAuthenticated()) return
@@ -236,5 +236,23 @@ export default {
 <style lang="scss" scoped>
 .letter-shadow {
   text-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.fadescale-enter {
+  transition: all 0.05s ease-in;
+  opacity: 0;
+  transform: scale(0.9);
+}
+.fadescale-enter-to {
+  opacity: 100;
+  transform: scale(1);
+}
+
+.fadescale-leave {
+  opacity: 100;
+  transform: scale(1);
+}
+.fadescale-leave-to {
+  opacity: 0;
 }
 </style>
