@@ -115,6 +115,7 @@ export default {
         function (position) {
           console.log('GET CURRENT POSITION')
           self.updatePosition(position)
+          self.$store.dispatch('chat/joinNearby')
         },
         (error) => {
           self.$store.commit('map/setDefaultPosition')
@@ -166,7 +167,6 @@ export default {
       //   this.$store.commit('map/setMapPosition', coordinates)
       // }
       this.$store.commit('map/setUserPosition', coordinates)
-      this.$store.dispatch('chat/joinNearby')
       this.$store.dispatch('chat/getCloseChats')
       this.$store.dispatch('event/getEvents')
     },
@@ -207,5 +207,16 @@ a {
   width: 60px;
   background-color: white;
   border-radius: 4px;
+}
+
+@media (max-width: 1264px) {
+  #main-map .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl,
+  #main-map .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl {
+    margin-bottom: 72px !important;
+  }
+}
+
+.letter-spacing-none {
+  letter-spacing: 0;
 }
 </style>

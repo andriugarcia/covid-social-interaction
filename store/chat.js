@@ -92,7 +92,7 @@ export const actions = {
       coordinates: rootState.map.userPosition,
     })
 
-    socket.once('message', (message) => {
+    socket.on('message', (message) => {
       console.log('MENSAJE RECIBIDO')
       commit('pushNearbyMessage', message)
     })
@@ -110,6 +110,7 @@ export const actions = {
     console.log("SEND NEARBY MESSAGE")
     socket.emit('send-nearby', {
       ...message,
+      coordinates: rootState.map.userPosition,
       created_at: Date.now(),
       profile: rootState.auth.user,
       author: rootState.auth.user.profile_id

@@ -41,6 +41,32 @@ v-sheet#contacts(
       v-tabs-items(v-model='tab')
         v-tab-item(key='chats')
           v-list(color='white')
+            v-layout.mb-4(justify-center)
+              v-card(
+                width='120px',
+                outlined,
+                color='white',
+                @click='newGroup = true'
+              )
+                v-layout(column, align-center)
+                  v-avatar(color='primary')
+                    v-icon(dark, small) fas fa-user-friends
+                  .mt-2.font-weight-bold(style='font-size: 0.7em') Nuevo Grupo
+              v-card(width='120px', outlined, color='white')
+                v-layout(column, align-center)
+                  v-avatar(color='primary')
+                    v-icon(dark, small) fas fa-user
+                  .mt-2.font-weight-bold(style='font-size: 0.7em') Nuevo Chat
+              v-card(
+                width='120px',
+                outlined,
+                color='white',
+                @click='$router.push({ path: "/nearby" })'
+              )
+                v-layout(column, align-center)
+                  v-avatar(color='primary')
+                    v-icon(dark, small) fas fa-street-view
+                  .mt-2.font-weight-bold(style='font-size: 0.7em') Gente Cerca
             v-list-item(
               v-for='(chat, i) in chats',
               :key='i',
@@ -95,13 +121,6 @@ v-sheet#contacts(
                 v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} miembros
               v-list-item-action
                 //- v-chip(v-if="chat.unread != 0", color="primary") {{ chat.unread }}
-  v-speed-dial(v-model='dial', absolute, bottom, right, direction='left')
-    template(#activator)
-      v-btn(fab, color='primary', dark)
-        v-icon {{ dial ? "fas fa-times" : "fas fa-pen" }}
-    v-btn(@click='newGroup = true', rounded)
-      v-icon(small) fas fa-user-friends
-      span.text-capitalize.ml-2(style='letter-spacing: 0') Nuevo grupo
 create-group(v-else, @back='newGroup = false')
 </template>
 

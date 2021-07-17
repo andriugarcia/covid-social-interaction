@@ -1,5 +1,5 @@
 <template lang="pug">
-#activity
+#activity(style='height: 100%')
   v-toolbar(color='primary', dark)
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left

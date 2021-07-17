@@ -119,6 +119,7 @@ export const actions = {
         `${process.env.SERVER_URL}/user/me`
       )
       commit('setUser', user)
+      console.dir("USER", user)
       dispatch('chat/getChats', {}, { root: true })
       dispatch('getPortals')
 

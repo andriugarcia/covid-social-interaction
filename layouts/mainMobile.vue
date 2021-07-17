@@ -38,7 +38,7 @@
       span.text-capitalize Crear Cuenta
 
   div(style='position: fixed; bottom: 0; left: 0; right: 0')
-    portals.pl-2
+    portals.pl-2.mb-8
     v-card.ma-2.rounded-xl(outlined, tile)
       v-layout(justify-space-around, align-center)
         v-flex.mx-2.rounded-lg.text-center(
@@ -169,6 +169,7 @@ export default {
           function (position) {
             console.log('GET CURRENT POSITION')
             self.updatePosition(position)
+            self.$store.dispatch('chat/joinNearby')
           },
           (error) => {
             console.error(error)

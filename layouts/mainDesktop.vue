@@ -12,7 +12,7 @@
           v-card.py-1.my-2.text-center(
             flat,
             :dark='!$route.name.startsWith("events")',
-            :color='$route.name.startsWith("events") ? "#ffffff" : "text"',
+            :color='$route.name.startsWith("events") ? "white" : "text"',
             @click='$router.push({ path: "/events" })',
             style='border-radius: 8px 0 0 8px; width: 100%'
           )
@@ -21,7 +21,7 @@
           v-card.py-1.my-2.text-center(
             flat,
             :dark='$route.name != "activity"',
-            :color='$route.name == "activity" ? "#ffffff" : "text"',
+            :color='$route.name == "activity" ? "white" : "text"',
             @click='openActivity',
             style='border-radius: 8px 0 0 8px; width: 100%'
           )
@@ -36,7 +36,7 @@
           v-card.py-1.my-2.text-center(
             flat,
             :dark='!$route.name.startsWith("chat") && !$route.name.startsWith("group")',
-            :color='$route.name.startsWith("chat") || $route.name.startsWith("group") ? "#ffffff" : "text"',
+            :color='$route.name.startsWith("chat") || $route.name.startsWith("group") ? "white" : "text"',
             @click='openChat',
             style='border-radius: 8px 0 0 8px; width: 100%'
           )

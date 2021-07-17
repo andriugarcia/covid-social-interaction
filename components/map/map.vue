@@ -1,10 +1,10 @@
 <template lang="pug">
 #map
-  MglMap(
+  MglMap#main-map(
     v-if='mapPosition',
     :accessToken='accessToken',
     :mapStyle='mapStyle',
-    logoPosition='top-left',
+    logoPosition='bottom-left',
     :minZoom='3',
     :center.sync='mapPosition',
     @load='onLoad',

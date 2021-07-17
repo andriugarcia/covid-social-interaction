@@ -8,7 +8,7 @@
     v-icon.mr-4(color='primary') fas fa-street-view
     .white--text
       .font-weight-bold Close to you
-      span 30 personas cerca
+      span(v-if='participants') {{ participants }} personas cerca
   v-sheet(color='white')
     messages(nearby)
   div(style='position: absolute; bottom: 0px; left: 0; right: 0')
@@ -29,6 +29,15 @@ export default {
       if (!this.$store.getters['auth/authenticated'])
         this.$router.replace({ path: '/' })
       return this.$store.state.auth.user
+    },
+    participants() {
+      if (this.$store.state.chat.nearbyMessages.length > 0) {
+        return this.$store.state.chat.nearbyMessages[
+          this.$store.state.chat.nearbyMessages.length - 1
+        ].neighbours
+      } else {
+        return null
+      }
     },
   },
 }

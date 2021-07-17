@@ -69,39 +69,54 @@
     )
       v-icon fas fa-times
   div(style='position: absolute; bottom: 0; left: 0; right: 0')
+    v-btn.ml-3.mb-2.rounded-lg(
+      v-if='currentEvent',
+      :outlined='!eventSelected',
+      depressed,
+      :color='eventSelected ? "primary" : "grey lighten-3"',
+      @click='eventSelected = !eventSelected',
+      style='display: block'
+    )
+      span.mr-2(style='font-size: 1.7em') {{ currentEvent.event.emoji }}
+      span.text-capitalize.letter-spacing-none(
+        :class='{ "black--text": !eventSelected, "white--text": eventSelected }'
+      ) {{ currentEvent.event.title }}
     v-btn.px-2.ml-3.rounded-lg(
       outlined,
       color='grey lighten-3',
       @click='locationSelectorOpened = true'
     )
       v-icon.text--text fas fa-globe-europe
-      .ml-2.text--text.font-weight-bold.text-capitalize(
-        style='letter-spacing: 0'
-      ) {{ locationMessage }}
+      .ml-2.text--text.font-weight-bold.text-capitalize.letter-spacing-none {{ locationMessage }}
     v-divider.my-2
-    v-layout.pa-4(justify-space-between)
-      v-layout
-        audio-input(@update='audioUpdated')
-        v-divider.mx-2(vertical)
-        v-btn.mx-1(v-if='!$vuetify.breakpoint.mdAndUp', icon)
-          v-icon.text--text fas fa-camera
-          input(
-            type='file',
-            @change='imageUpdated',
-            accept='image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm',
-            capture='camera',
-            style='opacity: 0; position: absolute; top: 0; bottom: 0; left: 0; right: 0'
-          )
-        v-btn.mx-1(icon)
-          v-icon.text--text fas fa-image
-          input(
-            type='file',
-            @change='imageUpdated',
-            accept='image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm',
-            style='opacity: 0; position: absolute; top: 0; bottom: 0; left: 0; right: 0'
-          )
-        //- v-btn.mx-1(icon)
-        //-   v-icon.text--text fas fa-image
+    v-layout.pa-4(justify-space-between, align-center)
+      //- audio-input(@update='audioUpdated')
+      v-btn.mr-2(
+        v-if='!$vuetify.breakpoint.mdAndUp',
+        fab,
+        small,
+        depressed,
+        dark,
+        color='text'
+      )
+        v-icon(small) fas fa-camera
+        input(
+          type='file',
+          @change='imageUpdated',
+          accept='image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm',
+          capture='camera',
+          style='opacity: 0; position: absolute; top: 0; bottom: 0; left: 0; right: 0'
+        )
+      v-btn(icon)
+        v-icon.text--text fas fa-image
+        input(
+          type='file',
+          @change='imageUpdated',
+          accept='image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm',
+          style='opacity: 0; position: absolute; top: 0; bottom: 0; left: 0; right: 0'
+        )
+      //- v-btn.mx-1(icon)
+      //-   v-icon.text--text fas fa-image
       v-spacer
       v-btn(
         rounded,
@@ -161,12 +176,15 @@ export default {
       currentPosition: true,
       uploading: false,
       limit: 250,
+      currentEvent: null,
+      eventSelected: true,
       post: {
         type: 'short',
         coordinates: this.$store.state.map.userPosition,
         createdAt: Date.now().toString(),
         text: '',
         src: '',
+        event: null,
       },
       locationSelectorOpened: false,
       permanentOpened: false,
@@ -204,6 +222,16 @@ export default {
         )}, ${this.post.coordinates.lat.toFixed(6)}`
       }
     },
+  },
+
+  mounted() {
+    const event = this.$store.getters['event/currentEvent']
+
+    if (typeof event === 'undefined') {
+      this.currentEvent = null
+    } else {
+      this.currentEvent = event
+    }
   },
 
   methods: {
@@ -266,6 +294,9 @@ export default {
       this.post.src = null
     },
     async publish() {
+      if (this.currentEvent && this.eventSelected) {
+        this.post.event = this.currentEvent.event.event_id
+      }
       if (await this.$store.dispatch('post/createPost', this.post)) {
         this.$router.replace({ path: '/' })
       }

@@ -291,6 +291,17 @@ export const mutations = {
   },
 }
 
+export const getters = {
+  currentEvent(_, __, rootState) {
+    const now = new Date()
+    return rootState.auth.user.participation.find(participation => {
+      const start = new Date(participation.event.start_date)
+      const end = new Date(participation.event.end_date)
+      return (start <= now && end >= now)
+    })
+  }
+}
+
 export const actions = {
   async getEvents({ commit, rootState }) {
     try {

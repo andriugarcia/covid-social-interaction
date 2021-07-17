@@ -13,8 +13,8 @@
         style='font-size: 0.7em'
       )
         v-layout(align-center, style='height: 100%')
-          v-avatar.mr-2.rounded-xl(tile)
-            v-img(:src='participation.event.profile.profile_picture')
+          v-avatar.mr-2.rounded-xl(tile, color="white")
+            span(style='font-size: 2em') {{ participation.event.emoji }}
           .pr-1
             .text-uppercase.font-weight-bold(style='white-space: nowrap') {{ participation.event.start_date | toDateShort }}
             span(style='white-space: nowrap') A 700 metros
@@ -68,7 +68,7 @@ export default {
       this.$store.commit('downloadApp')
     },
     getColor(emoji) {
-      return (this.$store.state.event.colors[emoji] || 'gray') + ' lighten-3'
+      return this.$store.state.event.colors[emoji] || 'gray'
     },
   },
   computed: {

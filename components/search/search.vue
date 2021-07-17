@@ -1,10 +1,9 @@
 <template lang="pug">
 #search
-  v-layout(flat, dark)
+  v-layout.pa-4(flat, dark)
     v-btn(
       v-if='!$vuetify.breakpoint.mdAndUp',
       icon,
-      dark,
       @blur='searchText = ""',
       @click='$router.replace({ hash: "" })'
     )

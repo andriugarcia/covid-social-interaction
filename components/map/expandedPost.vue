@@ -17,7 +17,7 @@
         size='120',
         style='position: absolute; top: calc(50% - 60px); left: calc(50% - 60px)'
       ) fas fa-heart
-    .pb-4(
+    div(
       style='position: absolute; bottom: 0px; left: 0; right: 0; z-index: 300000000'
     )
       v-layout(justify-space-between, style='width: 100%', align-end)
@@ -27,6 +27,12 @@
               :class='{ "letter-shadow": type != "short" }'
             ) {{ content.username || content.profile.username }}
             span(:class='{ "letter-shadow": type != "short" }') {{ content.created_at | toRelativeDate }}
+          v-card.px-3.py-1.mt-2.rounded-lg(
+            v-if='getEvent()',
+            outlined,
+            @click='$router.push({ path: "/events/" + getEvent().event_id })'
+          )
+            span {{ getEvent().emoji }} {{ getEvent().title }}
           p.pa-2.py-2(
             v-if='type != "short" && content.text.length != 0',
             :class='{ "letter-shadow": type != "short" }',
@@ -69,7 +75,7 @@
             v-layout(column, align-center)
               v-icon(style='display: block') {{ content.is_saved === true ? "fas" : "far" }} fa-bookmark
               span {{ content.saved }}
-      v-layout.px-2(
+      v-layout.px-2.pb-2(
         v-if='!authenticated || content.profile_id != user.profile_id',
         align-center,
         justify-space-between
@@ -80,6 +86,7 @@
           rounded,
           outlined,
           @keydown.enter='replyMessage',
+          @focus='focused = true',
           :dark='type != "short"',
           placeholder='Contesta este post',
           color='primary',
@@ -99,6 +106,27 @@
     //- v-layout(justify-center)
       v-btn.pb-6.pt-8(color="yellow", @click="closePost", style="border-radius: 0 0 48px 48px;")
         v-icon.black--text.mb-4 fas fa-times
+    v-overlay(absolute, :value='focused', :z-index='100')
+      v-layout(justify-center, align-center)
+        v-card.pa-2.rounded-xl(outlined, style='width: 260px', light)
+          .font-weight-bold.text-center Reacción Rápida
+          v-layout(wrap, justify-center)
+            v-btn.ma-2(icon, @click='replyMessage("😍")')
+              span(style='font-size: 2em') 😍
+            v-btn.ma-2(icon, @click='replyMessage("😂")')
+              span(style='font-size: 2em') 😂
+            v-btn.ma-2(icon, @click='replyMessage("😎")')
+              span(style='font-size: 2em') 😎
+            v-btn.ma-2(icon, @click='replyMessage("👏🏻")')
+              span(style='font-size: 2em') 👏🏻
+            v-btn.ma-2(icon, @click='replyMessage("💪🏼")')
+              span(style='font-size: 2em') 💪🏼
+            v-btn.ma-2(icon, @click='replyMessage("🧐")')
+              span(style='font-size: 2em') 🧐
+            v-btn.ma-2(icon, @click='replyMessage("😏")')
+              span(style='font-size: 2em') 😏
+            v-btn.ma-2(icon, @click='replyMessage("🥳")')
+              span(style='font-size: 2em') 🥳
   v-bottom-sheet(v-model='shareDialog', :inset='$vuetify.breakpoint.mdAndUp')
     share(:post='content', @back='shareDialog = false')
 </template>
@@ -138,6 +166,7 @@ export default {
     return {
       taps: 0,
       shareDialog: false,
+      focused: false,
       message: {
         userId: '',
         src: null,
@@ -199,7 +228,10 @@ export default {
         this.heart.rendered = false
       }, 500)
     },
-    async replyMessage() {
+    async replyMessage(text) {
+      if (typeof text === 'string') {
+        this.message.text = text
+      }
       if (this.openLoginIfNotAuthenticated()) return
       this.message.userId = this.content.profile_id
       this.message.post_ref = this.content.post_id
@@ -208,6 +240,7 @@ export default {
       this.message.userId = ''
       this.message.post_ref = ''
       this.message.text = ''
+      this.focused = false
 
       this.$refs.replyTextField.blur()
     },
@@ -221,6 +254,19 @@ export default {
         this.$store.dispatch('post/like', this.content.post_id)
         this.content.likes += 1
         this.content.is_liked = true
+      }
+    },
+    getEvent() {
+      if (this.content.event_id) {
+        return {
+          event_id: this.content.event_id,
+          emoji: this.content.emoji,
+          title: this.content.title,
+        }
+      } else if (typeof this.content.event_eventTopost_event !== 'undefined') {
+        return this.content.event_eventTopost_event
+      } else {
+        return null
       }
     },
     openShare() {

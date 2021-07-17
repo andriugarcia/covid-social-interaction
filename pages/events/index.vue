@@ -1,5 +1,5 @@
 <template lang="pug">
-#events(style='position: relative')
+#events(style='position: relative; height: 100%')
   v-toolbar(
     color='primary',
     dark,
@@ -20,20 +20,7 @@
       icon='fas fa-glass-cheers'
     ) No tienes eventos próximamente
     v-layout.my-2(style='overflow-x: scroll')
-      v-card.rounded-xl.pa-1.mr-2(
-        v-for='(participation, i) in user.participation',
-        :key='i',
-        :color='getColor(participation.event.emoji)',
-        @click='$router.push({ path: `/events/${participation.event.event_id}` })',
-        dark,
-        style='font-size: 0.7em'
-      )
-        v-layout(align-center, style='height: 100%')
-          v-avatar.mr-2.rounded-xl(tile)
-            v-img(:src='participation.event.profile.profile_picture')
-          .pr-1
-            .text-uppercase.font-weight-bold(style='white-space: nowrap') {{ participation.event.start_date | toDateShort }}
-            span(style='white-space: nowrap') A 700 metros
+      event.mb-2(v-for='(event, i) in events', :key='i', :event='event', small)
     .font-weight-black.mt-6(style='font-size: 1.4em') Eventos cerca
     v-alert(
       v-if='events.length === 0',
