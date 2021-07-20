@@ -86,7 +86,8 @@
           rounded,
           outlined,
           @keydown.enter='replyMessage',
-          @focus='focused = true',
+          @focus='$emit("focused")',
+          @blur='$emit("blured")',
           :dark='type != "short"',
           placeholder='Contesta este post',
           color='primary',
@@ -106,27 +107,6 @@
     //- v-layout(justify-center)
       v-btn.pb-6.pt-8(color="yellow", @click="closePost", style="border-radius: 0 0 48px 48px;")
         v-icon.black--text.mb-4 fas fa-times
-    v-overlay(absolute, :value='focused', :z-index='100')
-      v-layout(justify-center, align-center)
-        v-card.pa-2.rounded-xl(outlined, style='width: 260px', light)
-          .font-weight-bold.text-center Reacción Rápida
-          v-layout(wrap, justify-center)
-            v-btn.ma-2(icon, @click='replyMessage("😍")')
-              span(style='font-size: 2em') 😍
-            v-btn.ma-2(icon, @click='replyMessage("😂")')
-              span(style='font-size: 2em') 😂
-            v-btn.ma-2(icon, @click='replyMessage("😎")')
-              span(style='font-size: 2em') 😎
-            v-btn.ma-2(icon, @click='replyMessage("👏🏻")')
-              span(style='font-size: 2em') 👏🏻
-            v-btn.ma-2(icon, @click='replyMessage("💪🏼")')
-              span(style='font-size: 2em') 💪🏼
-            v-btn.ma-2(icon, @click='replyMessage("🧐")')
-              span(style='font-size: 2em') 🧐
-            v-btn.ma-2(icon, @click='replyMessage("😏")')
-              span(style='font-size: 2em') 😏
-            v-btn.ma-2(icon, @click='replyMessage("🥳")')
-              span(style='font-size: 2em') 🥳
   v-bottom-sheet(v-model='shareDialog', :inset='$vuetify.breakpoint.mdAndUp')
     share(:post='content', @back='shareDialog = false')
 </template>
@@ -166,7 +146,6 @@ export default {
     return {
       taps: 0,
       shareDialog: false,
-      focused: false,
       message: {
         userId: '',
         src: null,
@@ -240,7 +219,6 @@ export default {
       this.message.userId = ''
       this.message.post_ref = ''
       this.message.text = ''
-      this.focused = false
 
       this.$refs.replyTextField.blur()
     },

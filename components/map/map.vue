@@ -1,6 +1,6 @@
 <template lang="pug">
 #map
-  MglMap#main-map(
+  MglMap(
     v-if='mapPosition',
     :accessToken='accessToken',
     :mapStyle='mapStyle',
@@ -9,6 +9,7 @@
     :center.sync='mapPosition',
     @load='onLoad',
     @moveend='onMove',
+    :class='{ "logo-up": hasPortals, "logo-down": !hasPortals }',
     :zoom.sync='zoom',
     :pitch='20',
     style='position: absolute; top: 0; left: 0; right: 0; bottom: 0',
@@ -54,6 +55,10 @@ export default {
   computed: {
     locationEnabled() {
       return this.$store.state.map.locationEnabled
+    },
+    hasPortals() {
+      console.log('hasPortals:', this.$store.getters['auth/hasPortals'])
+      return this.$store.getters['auth/hasPortals']
     },
     zoom: {
       get() {

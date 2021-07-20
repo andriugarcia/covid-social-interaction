@@ -17,7 +17,7 @@
         v-if='i == 0 || !hasSameDay(messages[i - 1], message)',
         color='blue-grey lighten-3'
       ) {{ message.created_at | toDate }}
-    v-layout.my-2(align-end, :justify-end='isMe(message.author)')
+    v-layout.my-1(align-end, :justify-end='isMe(message.author)')
       div(v-if='!isMe(message.author)', style='width: 60px')
         v-avatar(
           v-if='i + 1 >= messages.length || messages[i + 1].author != message.author',
@@ -25,10 +25,10 @@
           @click='$router.push({ path: "/" + message.profile.username })'
         )
           v-img(:src='message.profile.profile_picture')
-      v-card.pa-4.rounded-xl(
+      v-card.pa-3.rounded-xl(
         flat,
         :color='isMe(message.author) ? "secondary" : "background"',
-        style='min-width: 200px; max-width: 80vw'
+        style='min-width: 200px; max-width: 80%'
       ) 
         v-layout(
           v-if='!isMe(message.author) && (i - 1 < 0 || messages[i - 1].author != message.author)',
@@ -52,6 +52,8 @@
         )
         post.my-2(
           v-else-if='message.type == "post"',
+          grid,
+          style='width: 100%',
           :content='{ ...message.post, profile: message.profile }'
         )
         audio-player(v-else-if='message.type == "audio"', :src='message.src')

@@ -1,126 +1,140 @@
 <template lang="pug">
 v-sheet#contacts(
   v-if='!newGroup',
-  style='height: 100%; position: relative',
+  style='height: 100vh; position: relative',
   color='white'
 )
-  v-card(flat, color='primary', tile, dark)
-    v-toolbar.px-2(v-if='!searchEnabled', color='primary', extended)
-      v-btn(icon, small, @click='$router.go(-1)')
-        v-icon fas fa-arrow-left
-      v-toolbar-title Mensajes
-      v-spacer
-      v-btn(icon, @click='searchEnabled = true')
-        v-icon fas fa-search
-      template(#extension)
-        v-tabs(v-model='tab', fixed-tabs, background-color='transparent')
-          v-tab(key='chats') 
-            div Chats
-            v-chip.primary--text.ml-2(
-              v-show='total != 0',
-              small,
-              color='white'
-            ) {{ total }}
-          v-tab(key='close') 
-            div Grupos Cerca
-            v-chip.primary--text.ml-2(
-              v-show='totalClose != 0',
-              small,
-              color='white'
-            ) {{ totalClose }}
-    v-toolbar(v-else, color='primary')
-      v-text-field(
-        prepend-icon='fas fa-arrow-left',
-        placeholder='Buscar',
-        hide-details,
-        v-model='textFilter',
-        @click:prepend='disableSearch'
-      )
-    v-sheet(color='white')
-      push-alert
-      v-tabs-items(v-model='tab')
-        v-tab-item(key='chats')
-          v-list(color='white')
-            v-layout.mb-4(justify-center)
-              v-card(
-                width='120px',
-                outlined,
-                color='white',
-                @click='newGroup = true'
-              )
-                v-layout(column, align-center)
-                  v-avatar(color='primary')
-                    v-icon(dark, small) fas fa-user-friends
-                  .mt-2.font-weight-bold(style='font-size: 0.7em') Nuevo Grupo
-              v-card(width='120px', outlined, color='white')
-                v-layout(column, align-center)
-                  v-avatar(color='primary')
-                    v-icon(dark, small) fas fa-user
-                  .mt-2.font-weight-bold(style='font-size: 0.7em') Nuevo Chat
-              v-card(
-                width='120px',
-                outlined,
-                color='white',
-                @click='$router.push({ path: "/nearby" })'
-              )
-                v-layout(column, align-center)
+  v-toolbar.px-2(
+    v-if='!searchEnabled',
+    color='primary',
+    absolute,
+    extended,
+    flat,
+    dark,
+    style='left: 0; right: 0'
+  )
+    v-btn(icon, small, @click='$router.go(-1)')
+      v-icon fas fa-arrow-left
+    v-toolbar-title Mensajes
+    v-spacer
+    v-btn(icon, @click='searchEnabled = true')
+      v-icon fas fa-search
+    template(#extension)
+      v-tabs(v-model='tab', fixed-tabs, background-color='transparent')
+        v-tab(key='chats') 
+          div Chats
+          v-chip.primary--text.ml-2(v-show='total != 0', small, color='white') {{ total }}
+        v-tab(key='close') 
+          div Grupos Cerca
+          v-chip.primary--text.ml-2(
+            v-show='totalClose != 0',
+            small,
+            color='white'
+          ) {{ totalClose }}
+  v-toolbar(v-else, color='primary', flat)
+    v-text-field(
+      prepend-icon='fas fa-arrow-left',
+      placeholder='Buscar',
+      hide-details,
+      v-model='textFilter',
+      @click:prepend='disableSearch'
+    )
+  v-sheet(
+    color='white',
+    style='overflow-y: scroll; height: 100vh; padding-top: 112px'
+  )
+    push-alert
+    v-tabs-items(
+      v-model='tab',
+      style='background-color: transparent; min-height: calc(100vh - 104px)'
+    )
+      v-tab-item(key='chats')
+        v-list(color='white')
+          v-layout.mb-4(justify-center)
+            v-card(
+              width='120px',
+              outlined,
+              color='white',
+              @click='newGroup = true'
+            )
+              v-layout(column, align-center)
+                v-avatar(color='primary')
+                  v-icon(dark, small) fas fa-user-friends
+                .mt-2.font-weight-bold(style='font-size: 0.7em') Nuevo Grupo
+            v-card(width='120px', outlined, color='white')
+              v-layout(column, align-center)
+                v-avatar(color='primary')
+                  v-icon(dark, small) fas fa-user
+                .mt-2.font-weight-bold(style='font-size: 0.7em') Nuevo Chat
+            v-card(
+              width='120px',
+              outlined,
+              color='white',
+              @click='$router.push({ path: "/nearby" })'
+            )
+              v-layout(column, align-center)
+                v-badge(
+                  overlap,
+                  :value='nearbyTotal > 0',
+                  :content='nearbyTotal'
+                )
                   v-avatar(color='primary')
                     v-icon(dark, small) fas fa-street-view
-                  .mt-2.font-weight-bold(style='font-size: 0.7em') Gente Cerca
-            v-list-item(
-              v-for='(chat, i) in chats',
-              :key='i',
-              @click='openChat(chat)'
-            )
-              v-list-item-avatar
-                v-img(
-                  :src='chat.chat.cover || getMember(chat).profile_picture'
-                )
-              v-list-item-content
-                v-list-item-title.font-weight-bold {{ chat.chat.title || getMember(chat).username }}
-                v-list-item-subtitle.text-truncate(
-                  v-if='chat.chat.message_chatTomessage_channel.length != 0',
-                  :class='{ "font-weight-bold": chat.unread != 0 }',
-                  style='max-width: 260px',
-                  v-html='getLastMessage(chat.chat)'
-                )
-              v-list-item-action
-                span(
-                  v-if='chat.chat.message_chatTomessage_channel.length != 0',
-                  style='font-size: 0.8em'
-                ) {{ chat.chat.message_chatTomessage_channel[0].created_at | toRelativeDate }}
-                v-chip(v-if='chat.unread != 0', color='primary') {{ chat.unread }}
-        v-tab-item(key='close')
+                .mt-2.font-weight-bold(style='font-size: 0.7em') Gente Cerca
+          v-list-item(
+            v-for='(chat, i) in chats',
+            :key='i',
+            @click='openChat(chat)'
+          )
+            v-list-item-avatar
+              v-img(:src='chat.chat.cover || getMember(chat).profile_picture')
+            v-list-item-content
+              v-list-item-title.font-weight-bold {{ chat.chat.title || getMember(chat).username }}
+              v-list-item-subtitle.text-truncate(
+                v-if='chat.chat.message_chatTomessage_channel.length != 0',
+                :class='{ "font-weight-bold": chat.unread != 0 }',
+                style='max-width: 260px',
+                v-html='getLastMessage(chat.chat)'
+              )
+            v-list-item-action
+              span(
+                v-if='chat.chat.message_chatTomessage_channel.length != 0',
+                style='font-size: 0.8em'
+              ) {{ chat.chat.message_chatTomessage_channel[0].created_at | toRelativeDate }}
+              v-chip(v-if='chat.unread != 0', color='primary') {{ chat.unread }}
+      v-tab-item(key='close', style='height: 100%')
+        v-card.ma-2.rounded-xl(v-if='!userPosition', outlined)
           v-layout.pa-6.text-center(
-            v-if='!userPosition',
             column,
             justify-center,
             align-center,
+            color='white',
             style='height: 100%'
           )
-            v-icon(color='primary', x-large) fas fa-map-marker-alt
+            v-badge(color='error', bottom, overlap, icon='fas fa-exclamation')
+              v-icon(color='grey lighten-1', x-large) fas fa-map-marker-alt
             .mt-4.black--text La geolocalización está desactivada
             .black--text Activa la geolocalización para poder ver los grupos cerca
-          v-list(v-else, color='white')
-            v-list-item
-              v-list-item-avatar
-                v-icon(color='primary') fas fa-street-view
-              v-list-item-content
-                v-list-item-title.font-weight-bold Cerca de ti
-              v-list-item-action
-                v-chip(color='primary') 15
-            v-list-item(
-              v-for='(chat, i) in closeChats',
-              :key='i',
-              @click='joinChat(chat)'
-            )
-              v-list-item-avatar
-                v-img(:src='chat.cover')
-              v-list-item-content
-                v-list-item-title.font-weight-bold {{ chat.title }}
-                v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} miembros
-              v-list-item-action
-                //- v-chip(v-if="chat.unread != 0", color="primary") {{ chat.unread }}
+        v-list(v-else, color='white')
+          v-list-item
+            v-list-item-avatar
+              v-icon(color='primary') fas fa-street-view
+            v-list-item-content
+              v-list-item-title.font-weight-bold Cerca de ti
+            v-list-item-action
+              v-chip(color='primary') {{ nearbyTotal }}
+          v-list-item(
+            v-for='(chat, i) in closeChats',
+            :key='i',
+            @click='joinChat(chat)'
+          )
+            v-list-item-avatar
+              v-img(:src='chat.cover')
+            v-list-item-content
+              v-list-item-title.font-weight-bold {{ chat.title }}
+              v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} miembros
+            v-list-item-action
+              //- v-chip(v-if="chat.unread != 0", color="primary") {{ chat.unread }}
 create-group(v-else, @back='newGroup = false')
 </template>
 
@@ -153,6 +167,9 @@ export default {
           .toLowerCase()
           .includes(this.textFilter.toLowerCase())
       )
+    },
+    nearbyTotal() {
+      return this.$store.state.chat.nearbyTotal
     },
     closeChats() {
       return this.$store.state.chat.closeChats

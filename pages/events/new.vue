@@ -3,6 +3,7 @@
   v-toolbar(
     color='primary',
     dark,
+    flat,
     style='position: absolute; top: 0; width: 100%; z-index: 20'
   )
     v-btn(icon, @click='$router.go(-1)')
@@ -290,6 +291,8 @@
           :allowed-minutes='allowedStep'
         )
       v-alert(v-if='badDayOrder', text, type='error') La hora de finalización no puede ocurrir antes que la de inicio
+      v-alert(v-else-if='hasPassed', text, type='error') No se puede crear un evento en el pasado
+      v-alert(v-else-if='tooEarly', text, type='error') No se puede crear un evento 2 horas antes de que comience
     v-btn(
       v-if='step > 1',
       fab,
@@ -337,6 +340,8 @@ export default {
       min: new Date().toISOString().substr(0, 10),
       minEnd: new Date().toISOString().substr(0, 10),
       badDayOrder: false,
+      tooEarly: false,
+      hasPassed: false,
       menuDay: false,
       menuTime: false,
       menuDayEnd: false,
@@ -417,6 +422,14 @@ export default {
         this.badDayOrder =
           new Date(this.date.replace(/-/g, '/') + ' ' + this.time) >
           new Date(this.dateEnd.replace(/-/g, '/') + ' ' + this.timeEnd)
+      } else if (this.time) {
+        const now = new Date()
+        this.tooEarly =
+          new Date(this.date.replace(/-/g, '/') + ' ' + this.time) <=
+          new Date(now.getTime() + 7200000)
+        this.hasPassed =
+          new Date(this.date.replace(/-/g, '/') + ' ' + this.time) <=
+          new Date(now.getTime())
       } else {
         this.badDayOrder = false
       }

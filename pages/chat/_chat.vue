@@ -7,14 +7,15 @@
   )
     v-btn.mr-2(icon, dark, small, @click='$router.replace({ path: "/chat" })')
       v-icon fas fa-chevron-left
-    v-avatar(
-      @click='$router.push({ path: "/" + member.username })',
-      color='primary'
-    )
-      v-img(:src='member.profile_picture')
-    .ml-2.background--text.font-weight-bold(
-      @click='$router.push({ path: "/" + member.username })'
-    ) {{ member.username }}
+    v-btn.px-0.text-capitalize(text, dark)
+      v-avatar(
+        @click='$router.push({ path: "/" + member.username })',
+        color='primary'
+      )
+        v-img(:src='member.profile_picture')
+      .ml-2.background--text.font-weight-bold(
+        @click='$router.push({ path: "/" + member.username })'
+      ) {{ member.username }}
     v-spacer
     v-menu(offset-y)
       template(v-slot:activator='{ on }')

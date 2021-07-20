@@ -1,8 +1,9 @@
 <template lang="pug">
-#events(style='position: relative; height: 100%')
+#events(style='position: relative; height: 100vh')
   v-toolbar(
     color='primary',
     dark,
+    flat,
     style='position: absolute; top: 0; width: 100%; z-index: 20'
   )
     v-btn(icon, @click='$router.go(-1)')
@@ -11,7 +12,11 @@
     v-spacer
     v-btn(color='white', rounded, depressed, dark, small, @click='createEvent')
       .primary--text.text-capitalize Nuevo Evento
-  v-sheet.pa-4(v-if='authenticated', color='white', height='100%')
+  v-sheet.pa-4(
+    v-if='authenticated',
+    color='white',
+    style='height: 100vh; overflow-y: scroll'
+  )
     .font-weight-black(style='font-size: 1.4em; margin-top: 60px') Próximos Eventos
     v-alert(
       v-if='user.participation.length === 0',

@@ -137,7 +137,7 @@ export default {
   },
   props: {
     // Si username existe se crea el chat
-    username: {
+    userId: {
       type: String,
       default: null,
     },
@@ -172,9 +172,14 @@ export default {
     async sendMessage() {
       if (this.nearby) {
         await this.$store.dispatch('chat/createNearbyMessage', this.message)
-      } else if (this.username) {
-        this.message.userId = this.username
-        await this.$store.dispatch('chat/createMessage', this.message)
+      } else if (this.userId) {
+        this.message.userId = this.userId
+        console.log('Sending to', this.userId)
+        const { data: chat_id } = await this.$store.dispatch(
+          'chat/createMessage',
+          this.message
+        )
+        this.$router.push('/chat/' + chat_id)
       } else {
         this.message.chatId = this.chat.chat_id
         await this.$store.dispatch('chat/createMessage', this.message)

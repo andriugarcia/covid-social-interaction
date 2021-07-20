@@ -15,7 +15,7 @@
         v-avatar(small, :color="getColor()", :size="32", style="font-size: 2em") {{ content.emoji }}
     div(v-else)
       transition(name="scale")
-        v-card.card.rounded-lg(v-show="visible", outlined, @click.stop="expand")
+        v-card.card.rounded-lg(v-show="visible", outlined, @click.stop="expand", width="100%")
           image-map(v-if="type == 'image'", :content="content", :grid="grid")
           short-map(v-else-if="type == 'short'", :content="content", :grid="grid")
           video-map(v-else-if="type == 'video'", muted, :content="content", :grid="grid")

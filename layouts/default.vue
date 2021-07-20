@@ -132,7 +132,7 @@ export default {
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker
           .register('firebase-messaging-sw.js')
-          .then(function (registration) {
+          .then((registration) => {
             console.log(
               'Registration successful, scope is:',
               registration.scope
@@ -210,9 +210,17 @@ a {
 }
 
 @media (max-width: 1264px) {
-  #main-map .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl,
-  #main-map .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl {
+  .logo-down .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl,
+  .logo-down .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl {
     margin-bottom: 72px !important;
+    margin-left: 14px !important;
+    margin-right: 14px !important;
+  }
+  .logo-up .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl,
+  .logo-up .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl {
+    margin-bottom: 148px !important;
+    margin-left: 14px !important;
+    margin-right: 14px !important;
   }
 }
 

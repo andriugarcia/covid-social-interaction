@@ -1,6 +1,12 @@
 <template lang="pug">
-v-card.px-4.pt-3(style='border-radius: 24px 24px 0 0')
-  v-toolbar(dark, flat, color='primary', extended)
+v-card(style='border-radius: 24px 24px 0 0')
+  v-toolbar(
+    dark,
+    flat,
+    color='primary',
+    extended,
+    style='position: absolute; top: 0; left: 0; right: 0'
+  )
     v-btn(icon, @click='$emit("back")')
       v-icon fas fa-times
     v-toolbar-title.font-weight-black En esta zona

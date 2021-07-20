@@ -33,7 +33,7 @@ $textPadding: 0 23px;
 .hashtag-textarea {
   position: relative;
   overflow: auto;
-  background: white;
+  background: transparent;
   min-height: 20px;
   font-weight: lighter;
   height: 100%;
@@ -166,6 +166,7 @@ export default {
       const style = {}
       style.fontSize = this.size
       style['z-index'] = this.option.isEditMode ? 2 : -2
+      style.backgroundColor = 'transparent'
       return style
     },
     placeholderTextStyle() {

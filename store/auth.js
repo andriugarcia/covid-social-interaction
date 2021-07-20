@@ -22,6 +22,7 @@ export const mutations = {
     state.user.notifications.unshift(newNotification)
     state.newNotification = newNotification
 
+    console.log("showing notification")
     setTimeout(() => {
       state.newNotification = null
     }, 8000)
@@ -42,6 +43,9 @@ export const getters = {
     if (!getters.authenticated) return 0
     return state.user.notifications.reduce((a, b) => a + (b.read ? 0 : 1), 0)
   },
+  hasPortals(state) {
+    return state.portals.length > 0 || state.user.participation.length > 0
+  }
 }
 
 export const actions = {
@@ -127,11 +131,12 @@ export const actions = {
       //   profile_id: user.profile_id,
       // })
 
-      socket.once('chatnotification', (message) => {
+      socket.on('chatnotification', (message) => {
         commit('chat/chatNotification', message, { root: true })
       })
 
-      socket.once('notification', (notification) => {
+      socket.on('notification', (notification) => {
+        console.log('Notificacion recibida')
         commit('setNotification', notification)
       })
 

@@ -33,7 +33,8 @@ export default {
 
 <style scoped>
 .shortGrid {
-  width: 100vw;
+  /* width: 100vw; */
+  width: 100%;
   font-size: 0.8em;
   display: block;
   height: auto;

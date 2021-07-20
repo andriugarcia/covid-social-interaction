@@ -119,6 +119,12 @@
             grid
           )
       v-tab-item(key='events')
+    v-dialog(:value='sendMessage', fullscreen, transition='fade-transition')
+      v-sheet(
+        color='#1e1e1eE0',
+        style='position: relative; width: 100%; height: 100%'
+      )
+        new-chat(:user='user', @back='sendMessage = false')
   viewer(v-model='editingProfile')
     edit-profile(@back='editFinished')
 </template>
@@ -129,6 +135,7 @@ import Post from '../components/map/post'
 export default {
   components: {
     Post,
+    NewChat: () => import('@/layouts/newChat'),
     editProfile: () => import('@/components/profile/editProfile'),
   },
   data() {
@@ -137,6 +144,7 @@ export default {
       posts: [],
       editingProfile: false,
       tab: 'posts',
+      sendMessage: false,
     }
   },
   computed: {
@@ -164,8 +172,12 @@ export default {
         this.$route.params.profile
       )
 
+      console.log(chatId)
+
       if (chatId !== null) {
         this.$router.push({ path: `chat/${chatId}` })
+      } else {
+        this.sendMessage = true
       }
     },
     follow() {

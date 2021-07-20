@@ -3,7 +3,7 @@
   v-layout(style='height: 100vh; position: relative')
     v-sheet(color='text')
       v-layout(column, align-center)
-        v-btn.mb-2.mt-5(icon, nuxt, to='/')
+        v-btn.mb-2.mt-5(icon, @click='$router.replace({ path: "/" })')
           v-avatar
             v-img(:src='require("../assets/olimaps-logo.png")')
         v-btn.my-2(fab, depressed, color='primary', @click='openEditor')
@@ -57,16 +57,13 @@
         )
           v-icon fas fa-arrow-circle-down
     v-flex(v-if='$route.name != "index"', md5)
-      v-sheet(style='height: 100%')
+      v-sheet(style='height: 100%; width: 100%')
         slot(style='position: relative')
     Map(
       @click='morePosts',
       style='position: relative; width: 100%; height: 100%'
     )
-  v-layout.pa-4(
-    style='position: absolute; top: 0px; right: 0; left: 0',
-    align-center
-  )
+  v-layout.pa-4(style='position: absolute; top: 0px; right: 0', align-center)
     //- img(src="@/assets/olimaps-logo.png", style="width: 36px; height: 36px;")
     //- img(src="@/assets/olimaps-logo-light.png", style="height: 30px")
     v-spacer

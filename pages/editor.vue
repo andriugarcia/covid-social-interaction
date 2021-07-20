@@ -1,6 +1,6 @@
 <template lang="pug">
-#editor(style='position: relative; height: 100%')
-  v-toolbar(color='primary', dark)
+v-sheet#editor(style='position: relative; height: 100vh', color='white')
+  v-toolbar(color='primary', dark, flat, absolute, style='left: 0; right: 0')
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left
     v-toolbar-title Nuevo Post
@@ -8,66 +8,67 @@
     //- v-btn.text-capitalize(rounded, depressed, small, dark, color="text", @click="permanentOpened = true") 
       span Hacer permanente
       v-icon.ml-2(small) far fa-snowflake
-  v-layout.px-4
-    v-avatar.mr-2.mt-6(size='48', style='border: 3px solid #f0134d')
-      v-img(:src='user.profile_picture')
-    div(style='width: 100%')
-      texteditor.mt-6.pb-2(
-        v-model='post.text',
-        style='max-height: 30vh; overflow-y: auto',
-        placeholder='¿Qué quieres contar a tu alrededor?'
-      )
-      v-divider(color='grey')
-      v-layout(justify-space-between, align-center)
-        span.red--text(v-if='removeHTML(post.text).length > limit') Límite excedido
-        v-spacer
-        span.pt-2(
-          :class='{ "red--text": removeHTML(post.text).length > limit }'
-        ) {{ removeHTML(post.text).length }} / {{ limit }}
-    //- v-textarea(placeholder="Escribe tu post", :counter="limit", v-model="post.text", auto-grow, persistent-hint, :hint="post.text.length > 80 ? 'Solo se verá en el mapa los primeros 80 carácteres' : ''", rows="1")
+  .content.pt-15(style='height: 100vh; overflow-y: scroll')
+    v-layout.px-4
+      v-avatar.mr-2.mt-6(size='48', style='border: 3px solid #f0134d')
+        v-img(:src='user.profile_picture')
+      div(style='width: 100%')
+        texteditor.mt-6.pb-2(
+          v-model='post.text',
+          style='max-height: 30vh; overflow-y: auto',
+          placeholder='¿Qué quieres contar a tu alrededor?'
+        )
+        v-divider(color='grey')
+        v-layout(justify-space-between, align-center)
+          span.red--text(v-if='removeHTML(post.text).length > limit') Límite excedido
+          v-spacer
+          span.pt-2(
+            :class='{ "red--text": removeHTML(post.text).length > limit }'
+          ) {{ removeHTML(post.text).length }} / {{ limit }}
+      //- v-textarea(placeholder="Escribe tu post", :counter="limit", v-model="post.text", auto-grow, persistent-hint, :hint="post.text.length > 80 ? 'Solo se verá en el mapa los primeros 80 carácteres' : ''", rows="1")
 
-  v-card.pa-2.rounded-xl.mt-2(v-if='post.type == "audio"', outlined)
-    v-progress-circular(v-if='uploading', indeterminate, color='primary')
-    audio-player(v-else, :src='post.src')
-  v-card.pa-1.rounded-xl(
-    v-if='post.type == "image" || post.type == "video"',
-    flat,
-    color='primary',
-    style='position: relative'
-  )
-    .rounded-xl(style='overflow: hidden')
-      v-img.rounded-xl(
-        v-if='post.type == "image"',
-        :src='post.src',
-        max-width='500',
-        max-height='300',
-        :class='{ blured: uploading }'
-      )
-      video.rounded-xl(
-        v-else-if='post.type == "video"',
-        :src='post.src',
-        preload='metadata',
-        :controls='!loading',
-        style='width: 100%; height: 100%; max-height: 400px; object-fit: contain',
-        :class='{ blured: uploading }'
-      )
-    v-row.fill-height.ma-0(
-      v-if='uploading',
-      align='center',
-      justify='center',
-      style='position: absolute; top: 0px; right: 0px; left: 0; bottom: 0'
+    v-card.pa-2.rounded-xl.mt-2(v-if='post.type == "audio"', outlined)
+      v-progress-circular(v-if='uploading', indeterminate, color='primary')
+      audio-player(v-else, :src='post.src')
+    v-card.pa-1.rounded-xl(
+      v-if='post.type == "image" || post.type == "video"',
+      flat,
+      color='primary',
+      style='position: relative'
     )
-      v-progress-circular(indeterminate, color='grey lighten-5')
-    v-btn(
-      v-if='!uploading',
-      fab,
-      depressed,
-      small,
-      dark,
-      @click='removeImage',
-      style='position: absolute; top: 8px; right: 8px'
-    )
-      v-icon fas fa-times
+      .rounded-xl(style='overflow: hidden')
+        v-img.rounded-xl(
+          v-if='post.type == "image"',
+          :src='post.src',
+          max-width='500',
+          max-height='300',
+          :class='{ blured: uploading }'
+        )
+        video.rounded-xl(
+          v-else-if='post.type == "video"',
+          :src='post.src',
+          preload='metadata',
+          :controls='!loading',
+          style='width: 100%; height: 100%; max-height: 400px; object-fit: contain',
+          :class='{ blured: uploading }'
+        )
+      v-row.fill-height.ma-0(
+        v-if='uploading',
+        align='center',
+        justify='center',
+        style='position: absolute; top: 0px; right: 0px; left: 0; bottom: 0'
+      )
+        v-progress-circular(indeterminate, color='grey lighten-5')
+      v-btn(
+        v-if='!uploading',
+        fab,
+        depressed,
+        small,
+        dark,
+        @click='removeImage',
+        style='position: absolute; top: 8px; right: 8px'
+      )
+        v-icon fas fa-times
   div(style='position: absolute; bottom: 0; left: 0; right: 0')
     v-btn.ml-3.mb-2.rounded-lg(
       v-if='currentEvent',
@@ -107,7 +108,7 @@
           capture='camera',
           style='opacity: 0; position: absolute; top: 0; bottom: 0; left: 0; right: 0'
         )
-      v-btn(icon)
+      v-btn.mr-2(icon)
         v-icon.text--text fas fa-image
         input(
           type='file',
@@ -115,6 +116,8 @@
           accept='image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm',
           style='opacity: 0; position: absolute; top: 0; bottom: 0; left: 0; right: 0'
         )
+      v-btn(icon, @click='$router.push({ path: "/events/new" })')
+        v-icon.text--text fas fa-flag
       //- v-btn.mx-1(icon)
       //-   v-icon.text--text fas fa-image
       v-spacer

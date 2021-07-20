@@ -8,13 +8,14 @@ export const state = () => ({
   messages: [],
   nearbyMessages: [],
   newMessages: 0,
+  nearbyTotal: 0,
   allMessagesLoaded: false,
   nearbyEnabled: false,
 })
 
 export const getters = {
   total(state) {
-    return state.chats.reduce((a, b) => a + (b.unread || 0), 0)
+    return state.chats.reduce((a, b) => a + (b.unread || 0), 0) + state.nearbyTotal
   },
   totalClose(state) {
     return state.closeChats.length
@@ -33,7 +34,7 @@ export const getters = {
   },
   getChatIdFromUsername: (state) => (username) => {
     const index = state.chats.findIndex(
-      (chat) => chat.chat.member[0].profile.username === username
+      (chat) => chat.chat.member[0].profile.username === username || chat.chat.member[1].profile.username === username
     )
 
     if (index !== -1) {
@@ -64,6 +65,7 @@ export const mutations = {
   },
   pushNearbyMessage(state, message) {
     state.nearbyMessages.push(message)
+    state.nearbyTotal += 1
   },
   closeChat(state) {
     state.chat = {}
@@ -82,6 +84,9 @@ export const mutations = {
       if (index !== -1) state.chats[index].unread += 1
     }
   },
+  readNearby(state) {
+    state.nearbyTotal = 0
+  }
 }
 
 export const actions = {
