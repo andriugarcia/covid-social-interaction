@@ -358,6 +358,7 @@ export default {
         coordinates: null,
         group_id: null,
         cover: null,
+        members: [],
         date: {
           start: null,
           end: null,
@@ -403,6 +404,17 @@ export default {
     },
   },
   methods: {
+    selectMember(member_id) {
+      const index = this.event.members.findIndex(
+        (member) => member == member_id
+      )
+
+      if (index == -1) {
+        this.event.members.push(member_id)
+      } else {
+        this.event.members.unshift(index, 1)
+      }
+    },
     updateLocation(coordinates) {
       this.event.coordinates = coordinates
     },

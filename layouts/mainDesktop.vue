@@ -58,7 +58,7 @@
           v-icon fas fa-arrow-circle-down
     v-flex(v-if='$route.name != "index"', md5)
       v-sheet(style='height: 100%; width: 100%')
-        slot(style='position: relative')
+        slot(style='position: relative; width: 100%')
     Map(
       @click='morePosts',
       style='position: relative; width: 100%; height: 100%'

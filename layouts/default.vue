@@ -118,7 +118,6 @@ export default {
           self.$store.dispatch('chat/joinNearby')
         },
         (error) => {
-          self.$store.commit('map/setDefaultPosition')
           console.error(error)
         },
         { timeout: 10000 }
@@ -226,5 +225,30 @@ a {
 
 .letter-spacing-none {
   letter-spacing: 0;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #025275 transparent;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 4px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #025275;
+  border-radius: 20px;
+  // border: 1px solid transparent;
 }
 </style>

@@ -1,9 +1,9 @@
 export const state = () => ({
   userPosition: null,
   userDirection: null,
-  mapPosition: null,
+  mapPosition: { lat: 40, lng: -5 },
   locationEnabled: false,
-  zoom: 14,
+  zoom: 2,
   eventActions: null,
 })
 
@@ -14,6 +14,11 @@ export const mutations = {
   },
   setUserPosition(state, coordinates) {
     state.userPosition = { ...coordinates }
+    state.zoom = 14
+    state.eventActions.jumpTo({
+      center: coordinates,
+      zoom: 14
+    })
     if (!state.mapPosition)
       state.mapPosition = { ...coordinates }
     state.locationEnabled = true

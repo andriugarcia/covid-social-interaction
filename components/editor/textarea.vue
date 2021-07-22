@@ -64,8 +64,9 @@ $textPadding: 0 23px;
     font-size: 18px;
     padding: $textPadding;
     position: absolute;
-    top: 0;
+    top: 11px;
     font-weight: lighter;
+    line-height: 0;
     color: #505050;
   }
 }

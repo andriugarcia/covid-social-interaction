@@ -6,6 +6,7 @@ export const state = () => ({
   portals: {},
   newNotification: null,
   pushEnabled: false,
+  pushAvailable: false,
 })
 
 export const mutations = {
@@ -17,6 +18,9 @@ export const mutations = {
   },
   setPushEnabled(state, pushEnabled) {
     state.pushEnabled = pushEnabled
+  },
+  setPushAvailable(state, pushAvailable) {
+    state.pushAvailable = pushAvailable
   },
   setNotification(state, newNotification) {
     state.user.notifications.unshift(newNotification)

@@ -1,13 +1,13 @@
 <template lang="pug">
-#event(v-if='event', style='position: relative')
-  v-app-bar(absolute, color='primary', dark)
+#event(v-if='event', style='position: relative; height: 100vh')
+  v-toolbar(absolute, color='primary', dark, flat, style='left: 0; right: 0')
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left
     span {{ event.title }}
     v-spacer
     v-btn(icon, @click='')
       v-icon fas fa-share-alt
-  v-sheet(color='white')
+  v-sheet(color='white', style='height: 100vh')
     div(style='height: 64px')
     div(v-if='event.image')
       img(

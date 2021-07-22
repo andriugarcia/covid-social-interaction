@@ -138,6 +138,17 @@ export const actions = {
       return false
     }
   },
+  async searchGroups({ rootState }, search) {
+    try {
+      const { data } = await axios.get(
+        `${process.env.SERVER_URL}/chats/search?search=${search}&lat=${rootState.map.userPosition.lat}&lng=${rootState.map.userPosition.lng}`
+      )
+      return data
+    } catch (err) {
+      console.error(err)
+      return []
+    }
+  },
   async getCloseChats({ commit, rootState }) {
     try {
       const { data } = await axios.get(

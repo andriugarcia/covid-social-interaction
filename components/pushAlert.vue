@@ -1,6 +1,6 @@
 <template lang="pug">
-v-alert(
-  v-if='!pushEnabled',
+v-alert.pointer(
+  v-if='pushAvailable && !pushEnabled',
   color='primary',
   dark,
   text,
@@ -16,6 +16,9 @@ export default {
   computed: {
     pushEnabled() {
       return this.$store.state.auth.pushEnabled
+    },
+    pushAvailable() {
+      return this.$store.state.auth.pushAvailable
     },
   },
 }

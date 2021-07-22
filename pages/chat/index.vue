@@ -17,7 +17,7 @@ v-sheet#contacts(
       v-icon fas fa-arrow-left
     v-toolbar-title Mensajes
     v-spacer
-    v-btn(icon, @click='searchEnabled = true')
+    v-btn(icon, @click='enableSearch')
       v-icon fas fa-search
     template(#extension)
       v-tabs(v-model='tab', fixed-tabs, background-color='transparent')
@@ -31,7 +31,14 @@ v-sheet#contacts(
             small,
             color='white'
           ) {{ totalClose }}
-  v-toolbar(v-else, color='primary', flat)
+  v-toolbar(
+    v-else,
+    color='primary',
+    flat,
+    absolute,
+    dark,
+    style='left: 0; right: 0'
+  )
     v-text-field(
       prepend-icon='fas fa-arrow-left',
       placeholder='Buscar',
@@ -41,7 +48,8 @@ v-sheet#contacts(
     )
   v-sheet(
     color='white',
-    style='overflow-y: scroll; height: 100vh; padding-top: 112px'
+    style='overflow-y: scroll; height: 100vh',
+    :class='{ "pt-16": searchEnabled, "pt-17": !searchEnabled }'
   )
     push-alert
     v-tabs-items(
@@ -50,7 +58,7 @@ v-sheet#contacts(
     )
       v-tab-item(key='chats')
         v-list(color='white')
-          v-layout.mb-4(justify-center)
+          v-layout.mb-4(v-if='!searchEnabled', justify-center)
             v-card(
               width='120px',
               outlined,
@@ -67,6 +75,7 @@ v-sheet#contacts(
                   v-icon(dark, small) fas fa-user
                 .mt-2.font-weight-bold(style='font-size: 0.7em') Nuevo Chat
             v-card(
+              v-if='userPosition',
               width='120px',
               outlined,
               color='white',
@@ -102,6 +111,18 @@ v-sheet#contacts(
                 style='font-size: 0.8em'
               ) {{ chat.chat.message_chatTomessage_channel[0].created_at | toRelativeDate }}
               v-chip(v-if='chat.unread != 0', color='primary') {{ chat.unread }}
+          div(v-if='searchEnabled')
+            v-subheader GRUPOS
+            v-list-item(
+              v-for='(chat, i) in groupsSearched',
+              :key='i',
+              @click='joinChat(chat)'
+            )
+              v-list-item-avatar
+                v-img(:src='chat.cover')
+              v-list-item-content
+                v-list-item-title.font-weight-bold {{ chat.title }}
+                v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} miembros
       v-tab-item(key='close', style='height: 100%')
         v-card.ma-2.rounded-xl(v-if='!userPosition', outlined)
           v-layout.pa-6.text-center(
@@ -156,7 +177,20 @@ export default {
       tab: 'chat',
       searchEnabled: false,
       textFilter: '',
+      groupsSearched: [],
+      searchingGroups: false,
     }
+  },
+  watch: {
+    async textFilter(value) {
+      if (!this.userPosition || this.searchingGroups) return
+      this.searchingGroups = true
+      this.groupsSearched = await this.$store.dispatch(
+        'chat/searchGroups',
+        value
+      )
+      this.searchingGroups = false
+    },
   },
   computed: {
     chats() {
@@ -237,6 +271,10 @@ export default {
       this.textFilter = ''
       this.searchEnabled = false
     },
+    enableSearch() {
+      this.searchEnabled = true
+      this.tab = 0
+    },
     openChat({ chat }) {
       if (typeof chat.type !== 'undefined' && chat.type === 'group') {
         this.$router.push({ path: `/group/${chat.chat_id}` })
@@ -250,3 +288,12 @@ export default {
   },
 }
 </script>
+
+<style lang="css" scoped>
+.pt-16 {
+  padding-top: 72px;
+}
+.pt-17 {
+  padding-top: 108px;
+}
+</style>

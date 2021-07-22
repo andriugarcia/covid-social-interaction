@@ -4,7 +4,7 @@
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left
     v-toolbar-title Actividad
-  v-list.pt-15(color='white', style='height: 100vh')
+  v-list.pt-15(color='white', style='height: 100vh; overflow-y: scroll')
     push-alert
     v-list-item.px-6(
       v-for='(notification, i) in notifications',
