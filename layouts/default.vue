@@ -100,6 +100,7 @@ export default {
     },
   },
   mounted() {
+    window.scrollTo(0, 1)
     this.$store.dispatch('auth/initAuthError', this.$router) // Si recibe un 405 cierra sesion
 
     this.registerMessagingSw()
@@ -114,7 +115,7 @@ export default {
       navigator.geolocation.getCurrentPosition(
         function (position) {
           console.log('GET CURRENT POSITION')
-          self.updatePosition(position)
+          self.updatePosition(position, true)
           self.$store.dispatch('chat/joinNearby')
         },
         (error) => {
@@ -124,7 +125,7 @@ export default {
       )
       navigator.geolocation.watchPosition(function (position) {
         console.log('POSITION UPDATED')
-        self.updatePosition(position, true)
+        self.updatePosition(position, false)
       })
     },
     registerMessagingSw() {
@@ -155,16 +156,16 @@ export default {
         this.$store.state.appNotInstalled = false
       })
     },
-    updatePosition(position, onlyUser = false) {
+    updatePosition(position, updateMapPosition = false) {
       const coordinates = {
         lng: position.coords.longitude,
         lat: position.coords.latitude,
         direction: position.heading,
       }
 
-      // if (!onlyUser) {
-      //   this.$store.commit('map/setMapPosition', coordinates)
-      // }
+      if (updateMapPosition) {
+        this.$store.commit('map/jumpTo', coordinates)
+      }
       this.$store.commit('map/setUserPosition', coordinates)
       this.$store.dispatch('chat/getCloseChats')
       this.$store.dispatch('event/getEvents')

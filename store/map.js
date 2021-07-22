@@ -14,19 +14,14 @@ export const mutations = {
   },
   setUserPosition(state, coordinates) {
     state.userPosition = { ...coordinates }
-    state.zoom = 14
-    state.eventActions.jumpTo({
-      center: coordinates,
-      zoom: 14
-    })
-    if (!state.mapPosition)
-      state.mapPosition = { ...coordinates }
     state.locationEnabled = true
     console.log(coordinates.direction)
     state.userDirection = coordinates.direction
   },
   setMapPosition(state, coordinates) {
+    console.trace('set map position')
     state.mapPosition = { ...coordinates }
+    state.zoom = 14
   },
   setZoom(state, zoom) {
     state.zoom = zoom
@@ -34,10 +29,16 @@ export const mutations = {
   setEventActions(state, eventActions) {
     state.eventActions = eventActions
   },
+  jumpTo(state, coordinates) {
+    state.eventActions.jumpTo({
+      center: coordinates,
+      zoom: 15
+    })
+  },
   flyTo(state, coordinates) {
     state.eventActions.flyTo({
       center: coordinates,
-      zoom: 13,
+      zoom: 15,
       speed: 2,
     })
   },
