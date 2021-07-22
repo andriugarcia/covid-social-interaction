@@ -15,16 +15,20 @@
       v-icon.mr-4(color='primary') {{ getIcon(notification.type) }}
       v-avatar(size='40')
         v-img(:src='notification.image') 
-      .ml-2.mt-2.text--text.font-weight-bold
-        span {{ notification.title }}
+      .ml-2.mt-2(style='width: 100%')
+        v-layout(justify-space-between, align-center)
+          span.text--text.font-weight-bold {{ notification.title }}
+          span(style='font-size: 0.8em') {{ notification.created_at | toRelativeDate }}
         p {{ notification.text }}
 </template>
 
 <script>
 import iconNotificationMixin from '@/mixins/iconNotification'
 import pushAlert from '@/components/pushAlert'
+import date from '@/mixins/date'
+
 export default {
-  mixins: [iconNotificationMixin],
+  mixins: [iconNotificationMixin, date],
   components: {
     pushAlert,
   },

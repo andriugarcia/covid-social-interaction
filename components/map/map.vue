@@ -142,7 +142,7 @@ export default {
         this.timer = setTimeout(() => {
           this.$emit('click', map.mapboxEvent.lngLat)
           this.taps = 0
-        }, 300)
+        }, 500)
       } else {
         clearTimeout(this.timer)
         this.taps = 0

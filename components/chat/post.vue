@@ -1,5 +1,5 @@
 <template lang="pug">
-v-card#chatPost.py-1.rounded-lg(
+v-card#chatPost.px-1.py-2.rounded-xl(
   v-if='content',
   color='primary',
   flat,

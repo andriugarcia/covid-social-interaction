@@ -1,5 +1,5 @@
 <template lang="pug">
-#messages.px-4(
+#messages.px-2(
   ref='chat',
   style='padding-top: 100px; height: 100vh; overflow-y: scroll; overflow-x: hidden; padding-bottom: 82px'
 )
@@ -12,16 +12,17 @@
       span.mx-2 Esto está muy vacío por aquí
       v-btn.mt-2(small, depressed, rounded, color='white', light, block) Invitar Usuarios
   div(v-for='(message, i) in messages', :key='i')
-    v-layout.my-4(justify-center)
+    v-layout.my-2(justify-center)
       v-chip.font-weight-bold(
         v-if='i == 0 || !hasSameDay(messages[i - 1], message)',
         color='blue-grey lighten-3'
       ) {{ message.created_at | toDate }}
     v-layout.my-1(align-end, :justify-end='isMe(message.author)')
-      div(v-if='!isMe(message.author)', style='width: 60px')
+      .mr-2(v-if='!isMe(message.author)')
         v-avatar(
           v-if='i + 1 >= messages.length || messages[i + 1].author != message.author',
           color='primary',
+          size='36px',
           @click='$router.push({ path: "/" + message.profile.username })'
         )
           v-img(:src='message.profile.profile_picture')
@@ -69,7 +70,7 @@
           v-list-item-action
             v-btn(small, rounded, depressed, color='black') 
               .white--text Ver Grupo
-        p(v-html='message.text')
+        p.mb-1(v-html='message.text')
         v-layout(justify-end, align-end)
           .mx-2.font-weight-bold(style='font-size: 0.8em') {{ message.created_at | toHour }}
   v-badge(
