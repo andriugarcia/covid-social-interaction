@@ -100,7 +100,9 @@ export default {
     },
   },
   mounted() {
-    window.scrollTo(0, document.body.scrollHeight)
+    let vh = window.innerHeight * 0.01
+    document.documentElement.style.setProperty('--vh', `${vh}px`)
+
     this.$store.dispatch('auth/initAuthError', this.$router) // Si recibe un 405 cierra sesion
 
     this.registerMessagingSw()
@@ -262,5 +264,10 @@ a {
 /* Hide scrollbar for Chrome, Safari and Opera */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+.device-height {
+  //height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+  height: calc(var(--vh, 1vh) * 100);
 }
 </style>
