@@ -19,7 +19,7 @@ v-app
         v-layout(justify-center)
           #holder.mb-2
     main-mobile(v-if='$route.name == "index"')
-    nuxt(v-else, style='height: 100%')
+    nuxt(v-else, style='position: fixed; inset: 0')
   #desktop(v-else)
     mainDesktop
       nuxt
