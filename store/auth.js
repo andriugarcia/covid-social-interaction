@@ -1,9 +1,34 @@
 import axios from 'axios'
 import socket from '../socket'
 
+const defaultPortal = {
+  audience: 0,
+  coordinates: null,
+  created_at: Date.now(),
+  event: null,
+  is_liked: false,
+  is_saved: false,
+  likes: 0,
+  opened: 0,
+  permanent: false,
+  post_id: null,
+  profile_id: null,
+  profile_picture: "https://olimaps.com/icon.png",
+  score: null,
+  shared: 0,
+  src: "",
+  text: "Esto es un post por defecto, cambiar por un video",
+  type: "short",
+  info: true,
+  url: null,
+  username: "olimaps"
+}
+
 export const state = () => ({
   user: {},
-  portals: {},
+  portals: [
+    defaultPortal,
+  ],
   newNotification: null,
   pushEnabled: false,
   pushAvailable: false,
@@ -12,9 +37,14 @@ export const state = () => ({
 export const mutations = {
   setUser(state, user) {
     state.user = user
+
   },
   setPortals(state, portals) {
-    state.portals = Object.values(portals)
+    console.log(portals)
+    state.portals = [
+      defaultPortal,
+      ...Object.values(portals),
+    ]
   },
   setPushEnabled(state, pushEnabled) {
     state.pushEnabled = pushEnabled
@@ -47,8 +77,10 @@ export const getters = {
     if (!getters.authenticated) return 0
     return state.user.notifications.reduce((a, b) => a + (b.read ? 0 : 1), 0)
   },
-  hasPortals(state) {
-    return state.portals.length > 0 || state.user.participation.length > 0
+  hasPortals(state, getters) {
+    return true
+    // return getters.authenticated
+    // return state.portals.length > 0 || state.user.participation.length > 0
   }
 }
 
@@ -127,7 +159,7 @@ export const actions = {
         `${process.env.SERVER_URL}/user/me`
       )
       commit('setUser', user)
-      console.dir("USER", user)
+      console.log("USER", user)
       dispatch('chat/getChats', {}, { root: true })
       dispatch('getPortals')
 

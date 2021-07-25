@@ -211,13 +211,13 @@ a {
 @media (max-width: 1264px) {
   .logo-down .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl,
   .logo-down .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl {
-    margin-bottom: 72px !important;
+    margin-bottom: 80px !important;
     margin-left: 14px !important;
     margin-right: 14px !important;
   }
   .logo-up .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl,
   .logo-up .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl {
-    margin-bottom: 148px !important;
+    margin-bottom: 156px !important;
     margin-left: 14px !important;
     margin-right: 14px !important;
   }
@@ -250,5 +250,16 @@ a {
   background-color: #025275;
   border-radius: 20px;
   // border: 1px solid transparent;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 </style>

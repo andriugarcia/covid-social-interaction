@@ -1,6 +1,6 @@
 <template lang="pug">
 #portals
-  v-layout(style='overflow-x: scroll')
+  v-row.flex-nowrap.px-4.pb-5.hide-scrollbar(style='overflow-x: scroll')
     v-btn.mr-2.rounded-xl(
       v-if='appNotInstalled',
       fab,
@@ -25,15 +25,18 @@
           .text-uppercase.font-weight-bold(style='white-space: nowrap') {{ participation.event.start_date | toDateShort }}
           span(style='white-space: nowrap') Ahora
     v-avatar.mr-2.rounded-xl(
-      v-if='authenticated',
       v-for='(portal, i) in portals',
       :key='i',
       @click='openPortals(i)',
+      color="primary"
       tile,
       size='62',
       style='border: 3px solid #f0134d'
     )
       v-img(:src='portal.profile_picture')
+        template(#placeholder)
+          v-row.fill-height.ma-0(align='center', justify='center')
+            v-progress-circular(indeterminate, color='grey lighten-5')
   viewer(v-model='portalsOpened')
     v-sheet(color="black", style="height: 100%")
       v-carousel(v-if='portalsOpened', v-model="portalIndex", v-touch="{ down: () => portalsOpened = false }", :touchless="focused", :show-arrows="!focused", hide-delimiters, height='100%', cycle, continuous, light)

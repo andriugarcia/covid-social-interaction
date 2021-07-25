@@ -38,7 +38,7 @@
             :class='{ "letter-shadow": type != "short" }',
             v-html='content.text'
           )
-        .mr-2
+        .mr-2(v-if='!content.info')
           v-btn.mb-4(
             fab,
             color='primary',

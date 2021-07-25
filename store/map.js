@@ -27,15 +27,19 @@ export const mutations = {
     state.zoom = zoom
   },
   setEventActions(state, eventActions) {
+    console.log('%cIniciando mapa', 'color: blue;')
     state.eventActions = eventActions
   },
   jumpTo(state, coordinates) {
+    if (!state.eventActions) return
+    console.log('%cSalto', 'color: blue;')
     state.eventActions.jumpTo({
       center: coordinates,
       zoom: 15
     })
   },
   flyTo(state, coordinates) {
+    if (!state.eventActions) return
     state.eventActions.flyTo({
       center: coordinates,
       zoom: 15,

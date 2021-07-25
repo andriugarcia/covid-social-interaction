@@ -1,7 +1,6 @@
 <template lang="pug">
 #map
   MglMap(
-    v-if='mapPosition',
     :accessToken='accessToken',
     :mapStyle='mapStyle',
     logoPosition='bottom-left',
@@ -104,6 +103,7 @@ export default {
 
   created() {
     // We need to set mapbox-gl library here in order to use it in template
+    console.log('CREATED MAP', { ...this.mapPosition })
     this.mapbox = Mapbox
     this.map = null
   },
@@ -149,6 +149,7 @@ export default {
       }
     },
     onLoad(ev) {
+      console.log('%cCargando mapa', 'background-color: blue; color: white')
       this.map = ev.map
       this.$store.commit('map/setEventActions', ev.component.actions)
       this.$store.dispatch('post/getPosts', ev.map.getBounds())
