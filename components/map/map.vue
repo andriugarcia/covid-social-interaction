@@ -145,6 +145,7 @@ export default {
         }, 500)
       } else {
         clearTimeout(this.timer)
+        this.timer = null
         this.taps = 0
       }
     },

@@ -9,14 +9,22 @@
     align-center,
     color='white'
   )
-    img(src='@/assets/olimaps-logo.png', style='width: 36px; height: 36px')
-    img(src='@/assets/olimaps-logo-light.png', style='height: 30px')
+    img(
+      src='@/assets/olimaps-logo.png',
+      style='width: 36px; height: 36px',
+      @click.prevent=''
+    )
+    img(
+      src='@/assets/olimaps-logo-light.png',
+      style='height: 30px',
+      @click.prevent=''
+    )
     v-spacer
     v-btn.mr-2(
       x-small,
       fab,
       color='white',
-      @click='flyToMe',
+      @click.prevent='flyToMe',
       style='border: 1px solid black'
     )
       v-icon(x-small, color='grey darken-2') fas fa-crosshairs
@@ -27,15 +35,17 @@
             v-img(:src='user.profile_picture')
       v-card(outlined)
         v-list
-          v-list-item(@click='$router.push({ path: "/" + user.username })') Mi perfil
-          v-list-item(@click='$router.push({ path: "/saved" })') Post Guardados
-          v-list-item(@click='logout') Cerrar Sesión
+          v-list-item(
+            @click.prevent='$router.push({ path: "/" + user.username })'
+          ) Mi perfil
+          v-list-item(@click.prevent='$router.push({ path: "/saved" })') Post Guardados
+          v-list-item(@click.prevent='logout') Cerrar Sesión
     v-btn(
       v-else,
       depressed,
       rounded,
       color='primary',
-      @click='$store.commit("setLogin", true)'
+      @click.prevent='$store.commit("setLogin", true)'
     )
       v-icon.mr-2(small) fas fa-user
       span.text-capitalize Crear Cuenta
@@ -43,7 +53,7 @@
   div(style='position: fixed; bottom: 12px; left: 0; right: 0')
     portals.pl-2
     v-card.mx-2.mb-2.rounded-xl(outlined, tile)
-      v-layout(justify-space-around, align-center)
+      v-layout(justify-space-around, align-center, @click.prevent='')
         v-flex.mx-2.rounded-lg.text-center(
           depressed,
           @click='$router.push({ path: "/events" })',
@@ -105,7 +115,11 @@
     hide-overlay,
     transition='dialog-bottom-transition'
   )
-    place-selected(@back='closePosts', :coordinates='coordinatesSelected')
+    place-selected(
+      v-if='placeOpened',
+      @back='closePosts',
+      :coordinates='coordinatesSelected'
+    )
 </template>
 
 <script>

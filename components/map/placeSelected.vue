@@ -18,14 +18,28 @@ v-card(style='border-radius: 24px 24px 0 0')
         v-tab
           v-icon.mr-1(small) fas fa-flag
           div Eventos
-  .masonry.pa-2(style='overflow-y: scroll; height: calc(100vh - 32px)')
-    post.mb-2(
-      v-for='(post, i) in nearbyPosts',
-      :key='i',
-      :type='post.type',
-      :content='post',
-      grid
-    )
+  v-sheet.px-2(
+    color='white',
+    style='overflow-y: scroll; height: 100vh; padding-top: 120px'
+  )
+    .masonry(v-if='nearbyPosts.length !== 0')
+      post.mb-2(
+        v-for='(post, i) in nearbyPosts',
+        :key='i',
+        :type='post.type',
+        :content='post',
+        grid
+      )
+    v-card.ma-2.rounded-xl(v-else, outlined)
+      v-layout.pa-6.text-center(
+        column,
+        justify-center,
+        align-center,
+        color='white',
+        style='height: 100%'
+      )
+        v-icon(color='primary', x-large) far fa-sad-cry
+        .mt-4.black--text No hay posts en esta zona
 </template>
 
 <script>

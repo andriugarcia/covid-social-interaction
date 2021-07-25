@@ -14,7 +14,7 @@
       v-for='(participation, i) in user.participation',
       :key='i',
       :color='getColor(participation.event.emoji)',
-      @click='$router.push({ path: `/events/${participation.event.event_id}` })',
+      @click.prevent='$router.push({ path: `/events/${participation.event.event_id}` })',
       dark,
       style='font-size: 0.7em'
     )
@@ -27,7 +27,7 @@
     v-avatar.mr-2.rounded-xl(
       v-for='(portal, i) in portals',
       :key='i',
-      @click='openPortals(i)',
+      @click.prevent='openPortals(i)',
       color="primary"
       tile,
       size='62',

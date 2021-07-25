@@ -13,7 +13,7 @@ const defaultPortal = {
   permanent: false,
   post_id: null,
   profile_id: null,
-  profile_picture: "https://olimaps.com/icon.png",
+  profile_picture: "https://olimaps.com/olimaps.gif",
   score: null,
   shared: 0,
   src: "",

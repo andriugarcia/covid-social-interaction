@@ -100,6 +100,7 @@ export default {
     },
   },
   mounted() {
+    window.scrollTo(0, document.body.scrollHeight)
     this.$store.dispatch('auth/initAuthError', this.$router) // Si recibe un 405 cierra sesion
 
     this.registerMessagingSw()
