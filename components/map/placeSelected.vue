@@ -1,5 +1,5 @@
 <template lang="pug">
-v-card(style='border-radius: 24px 24px 0 0')
+v-card(style='border-radius: 24px 24px 0 0', color="white", v-touch="{ down: () => closePlaceSelected() }",)
   v-toolbar(
     dark,
     flat,
@@ -18,8 +18,8 @@ v-card(style='border-radius: 24px 24px 0 0')
         v-tab
           v-icon.mr-1(small) fas fa-flag
           div Eventos
-  v-sheet.px-2(
-    color='white',
+  .px-2(
+    ref="postcontent",
     style='overflow-y: scroll; height: 100vh; padding-top: 120px'
   )
     .masonry(v-if='nearbyPosts.length !== 0')
@@ -30,6 +30,7 @@ v-card(style='border-radius: 24px 24px 0 0')
         :content='post',
         grid
       )
+      .mb-15
     v-card.ma-2.rounded-xl(v-else, outlined)
       v-layout.pa-6.text-center(
         column,
@@ -69,6 +70,15 @@ export default {
     this.nearbyPosts = nearbyPosts
     console.log(this.nearbyPosts)
     this.nearbyEvents = nearbyEvents
+  },
+
+  methods: {
+    closePlaceSelected() {
+      console.log('DOWN', this.$refs.postcontent.scrollTop)
+      if (this.$refs.postcontent.scrollTop <= 50) {
+        this.$emit('back')
+      }
+    },
   },
 }
 </script>

@@ -40,6 +40,24 @@
   viewer(v-model='portalsOpened')
     v-sheet(color="black", style="height: 100%")
       v-carousel(v-if='portalsOpened', v-model="portalIndex", v-touch="{ down: () => portalsOpened = false }", :touchless="focused", :show-arrows="!focused", hide-delimiters, height='100%', cycle, continuous, light)
+        template(v-slot:prev="{ on, attrs }")
+          v-btn(
+            fab,
+            small,
+            depressed,
+            color="primary",
+            v-bind="attrs"
+            v-on="on") 
+            v-icon fas fa-chevron-left
+        template(v-slot:next="{ on, attrs }")
+          v-btn(
+            fab,
+            small,
+            depressed,
+            color="primary",
+            v-bind="attrs"
+            v-on="on") 
+            v-icon fas fa-chevron-right
         v-carousel-item(
           v-for='(portal, i) in portals',
           :key='portal.post_id',

@@ -173,10 +173,12 @@ export default {
   },
   mounted() {
     const self = this
-    setTimeout(() => {
-      self.$refs.chat.scrollTop = self.$refs.chat.scrollHeight
-      self.$refs.chat.addEventListener('scroll', this.handleScroll)
-    }, 0)
+    // setTimeout(() => {
+    //   self.$refs.chat.scrollTop = self.$refs.chat.scrollHeight
+    //   self.$refs.chat.addEventListener('scroll', this.handleScroll)
+    // }, 0)
+    self.$refs.chat.scrollTop = self.$refs.chat.scrollHeight
+    self.$refs.chat.addEventListener('scroll', this.handleScroll)
   },
   methods: {
     isMe(userId) {
@@ -195,7 +197,6 @@ export default {
       this.$refs.chat.scrollTop = this.$refs.chat.scrollHeight
     },
     async handleScroll() {
-      if (!this.nearby) return
       this.isBottom =
         this.$refs.chat.scrollTop > this.$refs.chat.scrollHeight - 1000
       if (
