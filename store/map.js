@@ -19,9 +19,7 @@ export const mutations = {
     state.userDirection = coordinates.direction
   },
   setMapPosition(state, coordinates) {
-    console.trace('set map position')
     state.mapPosition = { ...coordinates }
-    state.zoom = 14
   },
   setZoom(state, zoom) {
     state.zoom = zoom
@@ -29,6 +27,15 @@ export const mutations = {
   setEventActions(state, eventActions) {
     console.log('%cIniciando mapa', 'color: blue;')
     state.eventActions = eventActions
+  },
+  fitBounds(state, bbox) {
+    if (!state.eventActions) return
+    state.eventActions.fitBounds([
+      [bbox[0], bbox[1]],
+      [bbox[2], bbox[3]],
+    ], {
+      speed: 2
+    })
   },
   jumpTo(state, coordinates) {
     if (!state.eventActions) return

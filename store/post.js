@@ -13,10 +13,11 @@ export const mutations = {
 export const actions = {
   async getPosts({ commit }, bbox) {
     try {
+      console.log('GETTING POSTS')
       const { data } = await axios.get(
         `${process.env.SERVER_URL}/posts?xmin=${bbox._sw.lng}&ymin=${bbox._sw.lat}&xmax=${bbox._ne.lng}&ymax=${bbox._ne.lat}`
       )
-      console.log(data.map(post => post.is_liked))
+      console.log('GETTED POSTS', data)
       commit('setPosts', data)
     } catch (err) {
       console.error(err)

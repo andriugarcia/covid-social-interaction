@@ -150,7 +150,7 @@ export default {
       }
     },
     onLoad(ev) {
-      console.log('%cCargando mapa', 'background-color: blue; color: white')
+      console.log('Cargando mapa', this.mapPosition)
       this.map = ev.map
       this.$store.commit('map/setEventActions', ev.component.actions)
       this.$store.dispatch('post/getPosts', ev.map.getBounds())

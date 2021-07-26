@@ -40,7 +40,7 @@
       v-icon.mr-2(small) fas fa-user
       span.text-capitalize Crear Cuenta
 
-  div(style='position: fixed; bottom: 12px; left: 0; right: 0')
+  div(style='position: fixed; bottom: 0; left: 0; right: 0')
     portals.pl-2
     v-card.mx-2.mb-2.rounded-xl(outlined, tile)
       v-layout(justify-space-around, align-center)

@@ -53,6 +53,7 @@
           fab,
           depressed,
           color='primary',
+          @click='downloadApp',
           style='position: absolute; bottom: 0'
         )
           v-icon fas fa-arrow-circle-down

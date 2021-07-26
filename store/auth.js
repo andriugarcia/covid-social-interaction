@@ -113,8 +113,10 @@ export const actions = {
     localStorage.removeItem('pushToken')
     commit('setPushEnabled', false)
     commit('setUser', {})
+    commit('setPortals', [])
   },
   async login({ dispatch }, body) {
+    console.log('LOGIN');
     try {
       const { data: token } = await axios.post(
         `${process.env.SERVER_URL}/login`,

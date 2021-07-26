@@ -39,7 +39,7 @@
             v-progress-circular(indeterminate, color='grey lighten-5')
   viewer(v-model='portalsOpened')
     v-sheet(color="black", style="height: 100%")
-      v-carousel(v-if='portalsOpened', v-model="portalIndex", v-touch="{ down: () => portalsOpened = false }", :touchless="focused", :show-arrows="!focused", hide-delimiters, height='100%', cycle, continuous, light)
+      v-carousel(v-if='portalsOpened', v-model="portalIndex", v-touch="{ down: () => portalsOpened = false }", :touchless="focused", :show-arrows="!focused", hide-delimiters, height='100%', continuous, light)
         template(v-slot:prev="{ on, attrs }")
           v-btn(
             fab,

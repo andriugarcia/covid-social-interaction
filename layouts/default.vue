@@ -61,6 +61,7 @@ export default {
   },
   data: () => ({
     centre: [0, 0],
+    firstMapPositionUpdated: false,
   }),
   computed: {
     loginOpened() {
@@ -117,7 +118,7 @@ export default {
       navigator.geolocation.getCurrentPosition(
         function (position) {
           console.log('GET CURRENT POSITION')
-          self.updatePosition(position, true)
+          self.updatePosition(position)
           self.$store.dispatch('chat/joinNearby')
         },
         (error) => {
@@ -127,7 +128,7 @@ export default {
       )
       navigator.geolocation.watchPosition(function (position) {
         console.log('POSITION UPDATED')
-        self.updatePosition(position, false)
+        self.updatePosition(position)
       })
     },
     registerMessagingSw() {
@@ -158,14 +159,22 @@ export default {
         this.$store.state.appNotInstalled = false
       })
     },
-    updatePosition(position, updateMapPosition = false) {
+    updatePosition(position) {
+      console.log(
+        '%cActualizando posicion',
+        'background-color: red; color: white'
+      )
       const coordinates = {
         lng: position.coords.longitude,
         lat: position.coords.latitude,
         direction: position.heading,
       }
 
-      if (updateMapPosition) {
+      if (!this.firstMapPositionUpdated) {
+        console.log('%cPrimera vez', 'background-color: orange; color: white')
+        this.firstMapPositionUpdated = true
+        this.$store.commit('map/setZoom', 14)
+        this.$store.commit('map/setMapPosition', coordinates)
         this.$store.commit('map/jumpTo', coordinates)
       }
       this.$store.commit('map/setUserPosition', coordinates)
@@ -214,13 +223,13 @@ a {
 @media (max-width: 1264px) {
   .logo-down .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl,
   .logo-down .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl {
-    margin-bottom: 80px !important;
+    margin-bottom: 68px !important;
     margin-left: 14px !important;
     margin-right: 14px !important;
   }
   .logo-up .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl,
   .logo-up .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl {
-    margin-bottom: 156px !important;
+    margin-bottom: 142px !important;
     margin-left: 14px !important;
     margin-right: 14px !important;
   }

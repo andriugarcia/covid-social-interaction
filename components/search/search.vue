@@ -88,11 +88,13 @@ export default {
       ])
 
       this.users = users
+      console.log(places.features)
       this.places = places.features
         .map((place) => {
           return {
             name: place.place_name,
             coordinates: place.center,
+            bbox: place.bbox,
             distance: this.haversineDistance(
               [this.userPosition.lng, this.userPosition.lat],
               place.center,
@@ -107,7 +109,11 @@ export default {
   methods: {
     select(index) {
       console.log(this.places[index])
-      this.$store.commit('map/flyTo', this.places[index].coordinates)
+      if (typeof this.places[index].bbox !== 'undefined') {
+        this.$store.commit('map/fitBounds', this.places[index].bbox)
+      } else {
+        this.$store.commit('map/flyTo', this.places[index].coordinates)
+      }
       this.$router.replace({ hash: '' })
     },
   },
