@@ -1,5 +1,8 @@
 <template lang="pug">
-#chat(v-if='chatLoaded', style='position: relative; width: 100%; height: 100%')
+#chat(
+  v-if='chatLoaded && member',
+  style='position: relative; width: 100%; height: 100%'
+)
   v-toolbar(
     flat,
     color='text',
@@ -7,15 +10,27 @@
   )
     v-btn.mr-2(icon, dark, small, @click='$router.replace({ path: "/chat" })')
       v-icon fas fa-chevron-left
-    v-btn.px-0.text-capitalize(text, dark)
+    v-list-item.px-0.text-capitalize(
+      v-if='!loading',
+      text,
+      dark,
+      style='width: 100%'
+    )
       v-avatar(
         @click='$router.push({ path: "/" + member.username })',
         color='primary'
       )
         v-img(:src='member.profile_picture')
+          template(#placeholder)
+            v-row.fill-height.ma-0(align='center', justify='center')
+              v-progress-circular(indeterminate, color='grey lighten-5')
       .ml-2.background--text.font-weight-bold(
         @click='$router.push({ path: "/" + member.username })'
       ) {{ member.username }}
+
+    .d-flex(v-else)
+      v-skeleton-loader(type='avatar')
+      v-skeleton-loader.ml-2(type='chip')
     v-spacer
     v-menu(offset-y)
       template(v-slot:activator='{ on }')
@@ -36,7 +51,14 @@
               v-icon fas fa-ban
             v-list-item-content Bloquear Usuario
   v-sheet(color='white')
-    messages
+    v-row#loadBar.my-12.pt-12(
+      v-if='loading',
+      justify='center',
+      align='center',
+      size='64'
+    )
+      v-progress-circular(indeterminate, color='primary')
+    messages(v-else)
   div(style='position: absolute; bottom: 0px; left: 0; right: 0')
     chat-bar(:chat='chat')
 </template>
@@ -57,6 +79,7 @@ export default {
   data() {
     return {
       chatLoaded: false,
+      loading: false,
     }
   },
   computed: {
@@ -68,6 +91,7 @@ export default {
     },
     member() {
       if (!this.chatLoaded) return {}
+      if (typeof this.$store.state.chat.chat.member === 'undefined') return null
       if (
         this.$store.state.chat.chat.member[0].profile.profile_id !==
         this.$store.state.auth.user.profile_id
@@ -91,11 +115,13 @@ export default {
     },
   },
   async mounted() {
+    this.loading = true
     await this.$store.dispatch('chat/getChat', this.$route.params.chat)
     this.chatLoaded = true
     await this.$store.dispatch('chat/getMessages', {
       chatId: this.$store.state.chat.chat.chat_id,
     })
+    this.loading = false
   },
 }
 </script>

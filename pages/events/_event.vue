@@ -1,5 +1,5 @@
 <template lang="pug">
-#event(v-if='event', style='position: relative; height: 100vh')
+#event(v-if='event', style='position: relative; inset: 0')
   v-toolbar(absolute, color='primary', dark, flat, style='left: 0; right: 0')
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left
@@ -154,11 +154,14 @@ export default {
       const start = new Date(this.event.start_date)
       const end = new Date(this.event.end_date)
 
-      if (start <= now && end >= now) {
+      if (start.getTime() <= now.getTime() && end.getTime() >= now.getTime()) {
+        console.log('Started')
         return this.states.STARTED
-      } else if (start <= now) {
+      } else if (start.getTime() >= now.getTime()) {
+        console.log('Promotion', start, now)
         return this.states.PROMOTION
-      } else if (end >= now) {
+      } else if (end.getTime() <= now.getTime()) {
+        console.log('End')
         return this.states.END
       }
     },

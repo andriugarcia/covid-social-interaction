@@ -76,7 +76,7 @@
               v-icon(style='display: block') {{ content.is_saved === true ? "fas" : "far" }} fa-bookmark
               span {{ content.saved }}
       v-layout.px-2.pb-2(
-        v-if='!authenticated || content.profile_id != user.profile_id',
+        v-if='(!authenticated || content.profile_id != user.profile_id) && !content.info',
         align-center,
         justify-space-between
       )

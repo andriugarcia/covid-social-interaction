@@ -25,7 +25,7 @@ v-sheet#contacts(
           div Chats
           v-chip.primary--text.ml-2(v-show='total != 0', small, color='white') {{ total }}
         v-tab(key='close') 
-          div Grupos Cerca
+          div Cerca
           v-chip.primary--text.ml-2(
             v-show='totalClose != 0',
             small,
@@ -40,7 +40,7 @@ v-sheet#contacts(
     style='left: 0; right: 0'
   )
     v-text-field(
-      prepend-icon='fas fa-arrow-left',
+      prepend-icon='fas fa-times',
       placeholder='Buscar',
       hide-details,
       v-model='textFilter',
@@ -97,6 +97,9 @@ v-sheet#contacts(
           )
             v-list-item-avatar
               v-img(:src='chat.chat.cover || getMember(chat).profile_picture')
+                template(#placeholder)
+                  v-row.fill-height.ma-0(align='center', justify='center')
+                    v-progress-circular(indeterminate, color='primary')
             v-list-item-content
               v-list-item-title.font-weight-bold {{ chat.chat.title || getMember(chat).username }}
               v-list-item-subtitle.text-truncate(
@@ -111,7 +114,7 @@ v-sheet#contacts(
                 style='font-size: 0.8em'
               ) {{ chat.chat.message_chatTomessage_channel[0].created_at | toRelativeDate }}
               v-chip(v-if='chat.unread != 0', color='primary') {{ chat.unread }}
-          div(v-if='searchEnabled')
+          div(v-if='searchEnabled && groupsSearched.length > 0')
             v-subheader GRUPOS
             v-list-item(
               v-for='(chat, i) in groupsSearched',
@@ -120,6 +123,12 @@ v-sheet#contacts(
             )
               v-list-item-avatar
                 v-img(:src='chat.cover')
+                  template(#placeholder)
+                    v-row.fill-height.ma-0(align='center', justify='center')
+                      v-progress-circular(
+                        indeterminate,
+                        color='grey lighten-5'
+                      )
               v-list-item-content
                 v-list-item-title.font-weight-bold {{ chat.title }}
                 v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} miembros
@@ -137,7 +146,7 @@ v-sheet#contacts(
             .mt-4.black--text La geolocalización está desactivada
             .black--text Activa la geolocalización para poder ver los grupos cerca
         v-list(v-else, color='white')
-          v-list-item
+          v-list-item(@click='$router.push({ path: "/nearby" })')
             v-list-item-avatar
               v-icon(color='primary') fas fa-street-view
             v-list-item-content
@@ -151,6 +160,9 @@ v-sheet#contacts(
           )
             v-list-item-avatar
               v-img(:src='chat.cover')
+                template(#placeholder)
+                  v-row.fill-height.ma-0(align='center', justify='center')
+                    v-progress-circular(indeterminate, color='primary')
             v-list-item-content
               v-list-item-title.font-weight-bold {{ chat.title }}
               v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} miembros

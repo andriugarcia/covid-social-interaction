@@ -12,13 +12,13 @@
       span.mx-2 Esto está muy vacío por aquí
       v-btn.mt-2(small, depressed, rounded, color='white', light, block) Invitar Usuarios
   div(v-for='(message, i) in messages', :key='i')
-    v-layout.my-2(justify-center)
-      v-chip.font-weight-bold(
+    v-layout.my-1(justify-center)
+      v-chip.my-4.font-weight-bold(
         v-if='i == 0 || !hasSameDay(messages[i - 1], message)',
         color='blue-grey lighten-3'
       ) {{ message.created_at | toDate }}
-    v-layout.my-1(align-end, :justify-end='isMe(message.author)')
-      .mr-2(v-if='!isMe(message.author)')
+    v-layout(align-end, :justify-end='isMe(message.author)')
+      div(v-if='!isMe(message.author)', style='min-width: 42px')
         v-avatar(
           v-if='i + 1 >= messages.length || messages[i + 1].author != message.author',
           color='primary',
@@ -70,7 +70,10 @@
           v-list-item-action
             v-btn(small, rounded, depressed, color='black') 
               .white--text Ver Grupo
-        p.mb-1(v-html='message.text')
+        p.mb-1(
+          v-html='message.text',
+          :style='isEmoji(message.text) ? "font-size: 3em" : ""'
+        )
         v-layout(justify-end, align-end)
           .mx-2.font-weight-bold(style='font-size: 0.8em') {{ message.created_at | toHour }}
   v-badge(
@@ -181,6 +184,12 @@ export default {
     self.$refs.chat.addEventListener('scroll', this.handleScroll)
   },
   methods: {
+    isEmoji(text) {
+      return (
+        (text.length === 1 || text.length === 2) &&
+        /\p{Extended_Pictographic}/u.test(text)
+      )
+    },
     isMe(userId) {
       return this.$store.state.auth.user.profile_id === userId
     },

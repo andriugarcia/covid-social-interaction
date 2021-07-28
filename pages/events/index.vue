@@ -1,5 +1,5 @@
 <template lang="pug">
-#events(style='position: relative; height: 100vh')
+#events(style='position: relative; inset: 0')
   v-toolbar(
     color='primary',
     dark,
@@ -27,6 +27,8 @@
     v-layout.my-2(style='overflow-x: scroll')
       event.mb-2(v-for='(event, i) in events', :key='i', :event='event', small)
     .font-weight-black.mt-6(style='font-size: 1.4em') Eventos cerca
+    //- v-row#loadBar.my-12(justify='center', align='center')
+    //-   v-progress-circular(indeterminate, color='primary')
     v-alert(
       v-if='events.length === 0',
       type='error',
@@ -55,6 +57,7 @@ export default {
   data() {
     return {
       categories: this.$store.state.event.categories,
+      loading: false,
     }
   },
   computed: {

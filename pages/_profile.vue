@@ -11,6 +11,9 @@
     v-layout.mt-4(justify-center)
       v-avatar(size='160', color='primary')
         v-img(:src='user.profile_picture')
+          template(#placeholder)
+            v-row.fill-height.ma-0(align='center', justify='center')
+              v-progress-circular(indeterminate, color='grey lighten-5')
     v-layout.px-6.mt-4(align-center)
       div
         .font-weight-bold.ml-2(style='font-size: 1.2em') {{ user.name }}
@@ -118,7 +121,8 @@
             :content='publication',
             grid
           )
-      v-tab-item(key='events')
+      v-tab-item.pa-4(key='events')
+        event.mb-2(v-for='(event, i) in events', :key='i', :event='event')
     v-dialog(:value='sendMessage', fullscreen, transition='fade-transition')
       v-sheet(
         color='#1e1e1eE0',
@@ -131,10 +135,12 @@
 
 <script>
 import Post from '../components/map/post'
+import Event from '@/components/event/item'
 
 export default {
   components: {
     Post,
+    Event,
     NewChat: () => import('@/layouts/newChat'),
     editProfile: () => import('@/components/profile/editProfile'),
   },
@@ -142,6 +148,7 @@ export default {
     return {
       user: null,
       posts: [],
+      events: [],
       editingProfile: false,
       tab: 'posts',
       sendMessage: false,
@@ -161,11 +168,13 @@ export default {
         'user/getUser',
         this.$route.params.profile
       )
-
+      console.log(this.user.event)
       this.posts = this.user.post.map((post) => ({
         ...post,
         profile: this.user,
       }))
+
+      this.events = this.user.event
     },
     openChat() {
       const chatId = this.$store.getters['chat/getChatIdFromUsername'](

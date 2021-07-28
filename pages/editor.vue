@@ -1,5 +1,5 @@
 <template lang="pug">
-v-sheet#editor(style='position: relative; height: 100vh', color='white')
+v-sheet#editor(style='position: relative; inset: 0', color='white')
   v-toolbar(color='primary', dark, flat, absolute, style='left: 0; right: 0')
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left
@@ -16,7 +16,7 @@ v-sheet#editor(style='position: relative; height: 100vh', color='white')
         texteditor.mt-6.pb-2(
           v-model='post.text',
           style='max-height: 30vh; overflow-y: auto',
-          placeholder='¿Qué quieres contar a tu alrededor?'
+          placeholder='Cuentale a tu alrededor...'
         )
         v-divider(color='grey')
         v-layout(justify-space-between, align-center)
@@ -87,7 +87,7 @@ v-sheet#editor(style='position: relative; height: 100vh', color='white')
       color='grey lighten-3',
       @click='locationSelectorOpened = true'
     )
-      v-icon.text--text fas fa-globe-europe
+      v-icon.text--text(small) fas fa-crosshairs
       .ml-2.text--text.font-weight-bold.text-capitalize.letter-spacing-none {{ locationMessage }}
     v-divider.my-2
     v-layout.pa-4(justify-space-between, align-center)
