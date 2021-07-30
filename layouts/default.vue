@@ -109,10 +109,14 @@ export default {
     this.registerMessagingSw()
     this.checkIfNotificationsEnabled()
     this.checkIfAppIsInstalled()
+    this.loadNearbyMessages()
 
     this.enableLocation()
   },
   methods: {
+    loadNearbyMessages() {
+      this.$store.commit('chat/loadNearbyMessages')
+    },
     enableLocation() {
       const self = this
       navigator.geolocation.getCurrentPosition(

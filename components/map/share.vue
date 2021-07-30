@@ -44,7 +44,7 @@ v-card.pa-4(color='primary', dark)
   )
     v-list-item(
       v-for='(member, i) in peopleFiltered',
-      :key='i',
+      :key='member',
       @click='selectMember(member)'
     )
       v-list-item-avatar(color='white')
@@ -57,6 +57,7 @@ v-card.pa-4(color='primary', dark)
     style='position: absolute; left: 0; right: 0; bottom: 0'
   )
     v-text-field.mb-2(
+      v-if='post',
       v-model='message',
       hide-details,
       light,
@@ -79,8 +80,12 @@ v-card.pa-4(color='primary', dark)
 export default {
   props: {
     post: {
-      type: String,
-      default: '',
+      type: Object,
+      default: null,
+    },
+    event: {
+      type: Object,
+      default: null,
     },
   },
   data() {
@@ -121,14 +126,20 @@ export default {
       }
     },
     share(channel) {
+      let url = ''
+      if (this.post) {
+        url = `http://olimaps.com/post/${this.post.post_id}`
+      } else if (this.event) {
+        url = `http://olimaps.com/event/${this.event.event_id}`
+      }
       switch (channel) {
         case 'whatsapp':
           return window.open(
-            `whatsapp://send?text=Echale un vistazo a lo que he encontrado! http://olimaps.com/post/${this.post.post_id}`
+            `whatsapp://send?text=Echale un vistazo a lo que he encontrado! ${url}`
           )
         case 'twitter':
           return window.open(
-            `https://twitter.com/intent/tweet?text=Echale un vistazo a lo que he encontrado! http://olimaps.com/post/${this.post.post_id}`
+            `https://twitter.com/intent/tweet?text=Echale un vistazo a lo que he encontrado! ${url}`
           )
       }
     },
@@ -144,11 +155,18 @@ export default {
     },
     async send() {
       this.loading = true
-      await this.$store.dispatch('post/share', {
-        post: this.post.post_id,
-        message: this.message,
-        targets: this.selectedList,
-      })
+      if (this.post) {
+        await this.$store.dispatch('post/share', {
+          post: this.post.post_id,
+          message: this.message,
+          targets: this.selectedList,
+        })
+      } else if (this.event) {
+        await this.$store.dispatch('event/share', {
+          event: this.event.event_id,
+          targets: this.selectedList,
+        })
+      }
       this.loading = false
       this.$emit('back')
     },
@@ -157,11 +175,19 @@ export default {
       return typeof navigator.share !== 'undefined'
     },
     openShare() {
-      navigator.share({
-        title: this.post.profile.username,
-        text: this.post.text,
-        url: `http://olimaps.com/#${this.post.post_id}`,
-      })
+      if (this.post) {
+        navigator.share({
+          title: this.post.profile.username,
+          text: this.post.text,
+          url: `http://olimaps.com/#${this.post.post_id}`,
+        })
+      } else if (this.event) {
+        navigator.share({
+          title: 'Échale un vistazo a este evento',
+          text: this.event.title,
+          url: `http://olimaps.com/event/${this.event.event_id}`,
+        })
+      }
     },
   },
 }

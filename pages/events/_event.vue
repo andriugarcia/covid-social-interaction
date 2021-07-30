@@ -5,9 +5,9 @@
       v-icon fas fa-arrow-left
     span {{ event.title }}
     v-spacer
-    v-btn(icon, @click='')
+    v-btn(icon, @click='shareDialog = true')
       v-icon fas fa-share-alt
-  v-sheet(color='white', style='height: 100vh')
+  v-sheet(color='white', style='height: 100vh; overflow-y: scroll')
     div(style='height: 64px')
     div(v-if='event.image')
       img(
@@ -116,6 +116,8 @@
           v-layout(justify-space-between)
             v-btn(rounded, text) ATRÁS
             v-btn(rounded, dark, depressed, color='red', @click='unjoinEvent') CANCELAR
+  v-bottom-sheet(v-model='shareDialog', :inset='$vuetify.breakpoint.mdAndUp')
+    share(:event='event', @back='shareDialog = false')
 </template>
 
 <script>
@@ -128,11 +130,13 @@ export default {
   components: {
     AvatarGroup,
     StaticMap,
+    share: () => import('@/components/map/share.vue'),
   },
   mixins: [date, loginMixin],
   data() {
     return {
       event: null,
+      shareDialog: false,
       states: {
         PROMOTION: 0,
         STARTED: 1,

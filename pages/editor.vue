@@ -271,12 +271,13 @@ export default {
         this.post.type = 'image'
 
         data = await this.$store.dispatch('storage/uploadFile', file)
+        console.log(file)
       } else if (file.type.startsWith('video')) {
         this.post.type = 'video'
 
         data = await this.$store.dispatch('storage/uploadVideo', file)
       }
-
+      console.log(data.location)
       this.post.src = data.location
       this.uploading = false
     },

@@ -28,6 +28,7 @@
             v-badge(
               overlap,
               color='primary',
+              style='z-index: 2',
               :value='authenticated',
               :content='formatNumber(3)'
             )
@@ -43,6 +44,7 @@
             v-badge(
               overlap,
               color='primary',
+              style='z-index: 2',
               :value='authenticated && total',
               :content='formatNumber(total)'
             )

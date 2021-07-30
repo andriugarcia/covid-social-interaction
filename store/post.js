@@ -13,7 +13,6 @@ export const mutations = {
 export const actions = {
   async getPosts({ commit }, bbox) {
     try {
-      console.log('GETTING POSTS')
       const { data } = await axios.get(
         `${process.env.SERVER_URL}/posts?xmin=${bbox._sw.lng}&ymin=${bbox._sw.lat}&xmax=${bbox._ne.lng}&ymax=${bbox._ne.lat}`
       )

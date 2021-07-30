@@ -6,12 +6,10 @@
     color='primary',
     style='position: relative; width: 300px'
   )
-    .rounded-xl(style='overflow: hidden')
+    .rounded-xl(style='overflow: hidden; width: 300px; height: 200px')
       v-img.rounded-xl(
         v-if='message.type == "image"',
         :src='message.src',
-        width='300',
-        max-height='200',
         :class='{ blured: uploading }'
       )
       video.rounded-xl(

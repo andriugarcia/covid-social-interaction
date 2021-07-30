@@ -303,10 +303,22 @@ export const getters = {
 }
 
 export const actions = {
-  async getEvents({ commit, rootState }) {
+  async share({ commit }, event) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/events/share/${event.event}`, {
+        targets: event.targets,
+      })
+      commit('setShareCreated', true, { root: true })
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async getEvents({ commit, rootState }, page = 0) {
     try {
       const { data } = await axios.get(
-        `${process.env.SERVER_URL}/events?lat=${rootState.map.userPosition.lat}&lng=${rootState.map.userPosition.lng}`
+        `${process.env.SERVER_URL}/events?lat=${rootState.map.userPosition.lat}&lng=${rootState.map.userPosition.lng}&page=${page}`
       )
       console.log('EVENTS', data)
       commit('setEvents', data)

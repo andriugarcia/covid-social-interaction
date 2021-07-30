@@ -66,12 +66,16 @@ export const mutations = {
   pushNearbyMessage(state, message) {
     state.nearbyMessages.push(message)
     state.nearbyTotal += 1
+    localStorage.setItem('nearbyMessages', JSON.stringify(state.nearbyMessages))
   },
   closeChat(state) {
     state.chat = {}
     state.messages.length = 0
     state.offset = 0
     state.allMessagesLoaded = false
+  },
+  loadNearbyMessages(state) {
+    state.nearbyMessages = JSON.parse(localStorage.getItem('nearbyMessages')) || []
   },
   chatNotification(state, notificationMessage) {
     if (state.chat.chat_id === notificationMessage.channel) {

@@ -7,6 +7,8 @@ export default {
         case 'event':
           return 'fas fa-flag'
         case 'follow':
+          return 'fas fa-glass-cheers'
+        case 'like':
           return 'fas fa-heart'
       }
     },

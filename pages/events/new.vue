@@ -138,12 +138,13 @@
         dense,
         filled,
         placeholder='Buscar',
+        v-model='textFilter',
         prepend-inner-icon='fas fa-search'
       )
       v-list(color='white')
         v-list-item(
-          v-for='(person, i) in people',
-          :key='i',
+          v-for='(person, i) in peopleFiltered',
+          :key='person.profile_id',
           @click='selectMember(person)'
         )
           v-list-item-avatar(color='white')
@@ -153,7 +154,7 @@
             v-checkbox(
               :value='person.selected',
               small,
-              color='white',
+              color='primary',
               outlined
             )
       //- v-textarea(auto-grow, :rows="1", label="Descripción")
@@ -350,6 +351,7 @@ export default {
       selectGroupDialog: false,
       categories: this.$store.state.event.categories,
       people: [],
+      textFilter: '',
       event: {
         title: '',
         description: '',
@@ -368,9 +370,26 @@ export default {
     }
   },
   async fetch() {
-    this.people = await this.$store.dispatch('user/getPeople')
+    this.people = (await this.$store.dispatch('user/getPeople')).map(
+      (person) => ({
+        ...person,
+        selected: false,
+      })
+    )
   },
   computed: {
+    peopleFiltered() {
+      if (this.textFilter.length === 0) {
+        return [...this.people]
+      }
+      const pf = this.people.filter((member) => {
+        const name = member.username
+
+        return name.toLowerCase().includes(this.textFilter.toLowerCase())
+      })
+
+      return pf
+    },
     disabled() {
       switch (this.step) {
         case 1:

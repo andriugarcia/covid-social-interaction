@@ -12,31 +12,35 @@
     v-spacer
     v-btn(color='white', rounded, depressed, dark, small, @click='createEvent')
       .primary--text.text-capitalize Nuevo Evento
-  v-sheet.pa-4(
-    v-if='authenticated',
-    color='white',
-    style='height: 100vh; overflow-y: scroll'
-  )
-    .font-weight-black(style='font-size: 1.4em; margin-top: 60px') Próximos Eventos
-    v-alert(
-      v-if='user.participation.length === 0',
-      color='purple',
-      text,
-      icon='fas fa-glass-cheers'
-    ) No tienes eventos próximamente
-    v-layout.my-2(style='overflow-x: scroll')
-      event.mb-2(v-for='(event, i) in events', :key='i', :event='event', small)
-    .font-weight-black.mt-6(style='font-size: 1.4em') Eventos cerca
-    //- v-row#loadBar.my-12(justify='center', align='center')
-    //-   v-progress-circular(indeterminate, color='primary')
-    v-alert(
-      v-if='events.length === 0',
-      type='error',
-      text,
-      icon='far fa-sad-tear',
-      prominent
-    ) No hay eventos cerca
-    event.mb-2(v-for='(event, i) in events', :key='i', :event='event')
+  div(ref='scrollarea', style='height: 100vh; overflow-y: scroll')
+    v-sheet.pa-4(v-if='authenticated', color='white', style='height: 100%')
+      .font-weight-black(style='font-size: 1.4em; margin-top: 60px') Próximos Eventos
+      v-alert(
+        v-if='user.participation.length === 0',
+        color='purple',
+        text,
+        icon='fas fa-glass-cheers'
+      ) No tienes eventos próximamente
+      v-layout.my-2(style='overflow-x: scroll')
+        event.mb-2(
+          v-for='(event, i) in events',
+          :key='i',
+          :event='event',
+          small
+        )
+      .font-weight-black.mt-6(style='font-size: 1.4em') Eventos cerca
+      //- v-row#loadBar.my-12(justify='center', align='center')
+      //-   v-progress-circular(indeterminate, color='primary')
+      v-alert(
+        v-if='events.length === 0',
+        type='error',
+        text,
+        icon='far fa-sad-tear',
+        prominent
+      ) No hay eventos cerca
+      event.mb-2(v-for='(event, i) in events', :key='i', :event='event')
+      .text-center.py-4(v-if='loading')
+        v-progress-circular(indeterminate, color='primary')
 </template>
 
 <script>
@@ -57,7 +61,10 @@ export default {
   data() {
     return {
       categories: this.$store.state.event.categories,
+      events: [],
+      page: 1,
       loading: false,
+      finished: false,
     }
   },
   computed: {
@@ -70,9 +77,9 @@ export default {
     authenticated() {
       return this.$store.getters['auth/authenticated']
     },
-    events() {
-      return this.$store.state.event.events
-    },
+  },
+  mounted() {
+    this.events = this.$store.state.event.events
   },
   methods: {
     createEvent() {
@@ -81,6 +88,21 @@ export default {
     },
     getColor(emoji) {
       return this.$store.state.event.colors[emoji] || 'gray'
+    },
+    async handleScroll() {
+      if (
+        !this.finished &&
+        this.$refs.scrollarea.scrollTop + 1000 >=
+          this.$refs.scrollarea.scrollHeight &&
+        !this.loading
+      ) {
+        this.loading = true
+        const newEvents = this.$store.dispatch('event/getEvents', this.page)
+        this.events = [...this.events, ...newEvents]
+        this.page++
+        this.finished = true
+        this.loading = false
+      }
     },
   },
 }

@@ -58,18 +58,20 @@
           :content='{ ...message.post, profile: message.profile }'
         )
         audio-player(v-else-if='message.type == "audio"', :src='message.src')
-        v-list-item(
-          v-else-if='message.type == "chat"',
-          nuxt,
-          :to='"/group/" + message.chat.chat_id'
-        )
-          v-list-item-avatar
-            v-img(:src='message.chat.cover')
-          v-list-item-content
-            v-list-item-title {{ message.chat.title }}
-          v-list-item-action
-            v-btn(small, rounded, depressed, color='black') 
-              .white--text Ver Grupo
+        div(v-else-if='message.type == "event"')
+          v-subheader EVENTO
+          v-list-item(nuxt, :to='"/events/" + message.event.event_id')
+            v-list-item-avatar(color='white')
+              span(style='font-size: 2em') {{ message.event.emoji }}
+            v-list-item-content
+              v-list-item-title {{ message.event.title }}
+        div(v-else-if='message.type == "chat"')
+          v-subheader GRUPO
+          v-list-item(nuxt, :to='"/group/" + message.chat.chat_id')
+            v-list-item-avatar
+              v-img(:src='message.chat.cover')
+            v-list-item-content
+              v-list-item-title {{ message.chat.title }}
         p.mb-1(
           v-html='message.text',
           :style='isEmoji(message.text) ? "font-size: 3em" : ""'
@@ -139,6 +141,7 @@ export default {
   computed: {
     messages() {
       if (this.nearby) return this.$store.state.chat.nearbyMessages
+      console.log(this.$store.state.chat.messages)
       return this.$store.state.chat.messages
     },
     chat() {

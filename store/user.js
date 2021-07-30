@@ -12,6 +12,17 @@ export const actions = {
       return []
     }
   },
+  async getNotifications(_, page) {
+    try {
+      const { data } = await axios.get(
+        `${process.env.SERVER_URL}/user/notifications/${page}`
+      )
+      return data
+    } catch (err) {
+      console.error(err)
+      return []
+    }
+  },
   async getPeople(_) {
     try {
       const { data } = await axios.get(`${process.env.SERVER_URL}/people`)
