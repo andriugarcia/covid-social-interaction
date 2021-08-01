@@ -17,8 +17,10 @@
 
 <script>
 import messages from '@/components/chat/messages'
+import loginMixin from '@/mixins/login'
 
 export default {
+  mixins: [loginMixin],
   components: {
     messages,
   },
@@ -44,12 +46,16 @@ export default {
 
     this.chatLoaded = true
 
-    if (this.isParticipant()) {
+    if (this.isAuthenticated() && this.isParticipant()) {
       this.$router.push({ path: `/group/${this.chat.chat_id}` })
     }
   },
   methods: {
+    isAuthenticated() {
+      return this.$store.getters['auth/authenticated']
+    },
     async joinChat() {
+      if (this.openLoginIfNotAuthenticated()) return
       await this.$store.dispatch('chat/joinChat', this.$route.params.group)
       this.$router.replace({ path: `/group/${this.$route.params.group}` })
     },

@@ -58,20 +58,24 @@
     div(style='position: absolute; bottom: 0px; left: 0; right: 0')
       chat-bar(v-if='isParticipant', :chat='chat')
       v-btn(v-else, block, tile, large, color='primary', @click='joinChat') UNIRME
-  #chat-settings.px-6(v-else-if='settingsOpened')
+  v-sheet#chat-settings.px-6(
+    v-else-if='settingsOpened',
+    color='white',
+    style='height: 100%'
+  )
     v-layout.pa-4(
       justify-space-between,
       align-center,
       @click='settingsOpened = false'
     )
-      v-btn(small, outlined) Cancelar
+      v-btn(small, outlined, @click='settingsOpened = false') Cancelar
       v-btn(small, outlined, @click='updateChat()') Hecho
     avatar-input(@update='updateCover', :preview='chat.cover')
     .overline.mt-4 Nombre
     v-text-field(v-model='chat.title', filled, rounded)
     .overline Descripción
     v-text-field(v-model='chat.description', filled, rounded)
-  #chat-info(v-else)
+  v-sheet#chat-info(v-else, color='white', style='height: 100vh')
     v-layout.pa-4(justify-space-between, align-center)
       v-btn(icon)
         v-icon fas fa-arrow-left
@@ -90,6 +94,7 @@
     v-tabs(
       v-model='tab',
       fixed-tabs,
+      background-color='transparent',
       style='position: sticky; top: 0; left: 0; right: 0; z-index: 10',
       next-icon='fas fa-chevron-right',
       prev-icon='fas fa-chevron-left'
@@ -98,9 +103,9 @@
       v-tab(key='events') Eventos
       v-tab(key='posts') Posts
       v-tab(key='media') Media
-    v-tabs-items.pa-4(v-model='tab')
+    v-tabs-items(v-model='tab')
       v-tab-item(key='members')
-        v-list
+        v-list.pa-4(color='white')
           v-list-item(v-if='isAdmin')
             v-list-item-avatar
               v-icon fas fa-plus
@@ -204,23 +209,26 @@
                         @click='removeParticipant(i)'
                       ) Expulsar
       v-tab-item(key='events')
-        event.mb-2(v-for='(event, i) in events', :key='i', :event='event')
+        v-sheet(color='white')
+          event.mb-2(v-for='(event, i) in events', :key='i', :event='event')
       v-tab-item(key='posts')
-        masonry.pa-2(:cols='2', :gutter='10')
-          post.mb-2(
-            v-for='(publication, i) in posts',
-            :key='i',
-            :type='publication.type',
-            :content='publication',
-            grid
-          )
+        v-sheet(color='white')
+          masonry.pa-2(:cols='2', :gutter='10')
+            post.mb-2(
+              v-for='(publication, i) in posts',
+              :key='i',
+              :type='publication.type',
+              :content='publication',
+              grid
+            )
       v-tab-item(key='media')
-        v-layout(wrap)
-          v-flex(xs4, v-for='(mediaMessage, i) in media', :key='i')
-            v-img.grey.lighten-2(:src='mediaMessage.src', aspect-ratio='1')
-              template(#placeholder)
-                v-row.fill-height.ma-0(align='center', justify='center')
-                  v-progress-circular(indeterminate, color='grey lighten-5')
+        v-sheet(color='white')
+          v-layout(wrap)
+            v-flex(xs4, v-for='(mediaMessage, i) in media', :key='i')
+              v-img.grey.lighten-2(:src='mediaMessage.src', aspect-ratio='1')
+                template(#placeholder)
+                  v-row.fill-height.ma-0(align='center', justify='center')
+                    v-progress-circular(indeterminate, color='grey lighten-5')
 </template>
 
 <script>

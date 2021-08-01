@@ -22,27 +22,36 @@
       hide-details,
       autofocus
     )
-  v-card(flat, :style='$vuetify.breakpoint.mdAndUp ? "width: 400px;" : ""')
-    v-list(v-if='places.length > 0')
-      div(v-if='!onlyPlaces')
+  v-card(
+    v-if='searchText.length > 0 && places.length > 0',
+    flat,
+    :style='$vuetify.breakpoint.mdAndUp ? "width: 400px; position: absolute; top: 82px; border: 1px solid #F0134D;" : ""'
+  )
+    v-list
+      div(v-if='!onlyPlaces && users.length > 0')
         v-subheader USUARIOS
         v-list-item(
           v-for='(user, i) in users',
           :key='i',
-          @click='$router.push({ path: "/" + user.username })'
+          @click='selectUser(user)'
         )
           v-list-item-avatar
             v-img(:src='user.profile_picture')
           v-list-item-content
             v-list-item-title {{ user.username }}
-      v-subheader(v-if='!onlyPlaces') SITIOS
+      v-subheader(v-if='places.length != 0') SITIOS
       v-list-item(v-for='(place, i) in places', :key='i', @click='select(i)')
         v-list-item-avatar
           v-icon.black--text fas fa-map-marker-alt
         v-list-item-content
           v-list-item-title {{ place.name }}
           v-list-item-subtitle.font-italic {{ place.distance }} km
-    .pa-4(v-else-if='searchText != ""') No hemos encontrado ningún lugar con este nombre
+  v-card(
+    v-else-if='searchText != ""',
+    flat,
+    :style='$vuetify.breakpoint.mdAndUp ? "width: 400px; position: absolute; top: 82px; border: 1px solid #F0134D;" : ""'
+  )
+    .pa-4 No hemos encontrado ningún lugar con este nombre
 </template>
 
 <script>
@@ -110,11 +119,24 @@ export default {
     select(index) {
       console.log(this.places[index])
       if (typeof this.places[index].bbox !== 'undefined') {
-        this.$store.commit('map/fitBounds', this.places[index].bbox)
+        if (this.onlyPlaces) {
+          this.$emit('updateByBbox', this.places[index].bbox)
+        } else {
+          this.$store.commit('map/fitBounds', this.places[index].bbox)
+        }
       } else {
-        this.$store.commit('map/flyTo', this.places[index].coordinates)
+        if (this.onlyPlaces) {
+          this.$emit('updateByCoordinates', this.places[index].coordinates)
+        } else {
+          this.$store.commit('map/flyTo', this.places[index].coordinates)
+        }
       }
       this.$router.replace({ hash: '' })
+      this.searchText = ''
+    },
+    selectUser(user) {
+      this.$router.push({ path: '/' + user.username })
+      this.searchText = ''
     },
   },
 }

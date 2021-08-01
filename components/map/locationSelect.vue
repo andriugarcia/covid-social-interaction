@@ -38,7 +38,8 @@
       v-card
         search(
           @back='searchOpened = false',
-          @updated='updateCentre',
+          @updateByBbox='updateByBbox',
+          @updateByCoordinates='updateByCoordinates',
           onlyPlaces
         )
   v-layout(
@@ -93,6 +94,7 @@ export default {
       searchOpened: false,
       currentPosition: true,
       moving: false,
+      eventActions: null,
     }
   },
 
@@ -115,6 +117,7 @@ export default {
 
     onLoad(ev) {
       this.map = ev.map
+      this.eventActions = ev.component.actions
       const self = this
       setTimeout(() => {
         console.log('RESIZING')
@@ -122,8 +125,25 @@ export default {
       }, 600)
     },
 
-    updateCentre(coordinates) {
-      this.centre = coordinates
+    updateByBbox(bbox) {
+      this.eventActions.fitBounds(
+        [
+          [bbox[0], bbox[1]],
+          [bbox[2], bbox[3]],
+        ],
+        {
+          speed: 2,
+        }
+      )
+      this.searchOpened = false
+    },
+    updateByCoordinates(coordinates) {
+      this.eventActions.flyTo({
+        center: coordinates,
+        zoom: 15,
+        speed: 2,
+      })
+      this.searchOpened = false
     },
   },
 }

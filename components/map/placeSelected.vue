@@ -22,7 +22,9 @@ v-card(style='border-radius: 24px 24px 0 0', color="white", v-touch="{ down: () 
     ref="postcontent",
     style='overflow-y: scroll; height: 100vh; padding-top: 120px'
   )
-    .masonry(v-if='nearbyPosts.length !== 0')
+    .text-center.py-4(v-if='loading')
+      v-progress-circular(indeterminate, color='primary')
+    .masonry(v-else-if='nearbyPosts.length !== 0')
       post.mb-2(
         v-for='(post, i) in nearbyPosts',
         :key='i',
@@ -59,9 +61,11 @@ export default {
     return {
       nearbyPosts: [],
       nearbyEvents: [],
+      loading: false,
     }
   },
   async mounted() {
+    this.loading = true
     const [nearbyPosts, nearbyEvents] = await Promise.all([
       this.$store.dispatch('post/getNearbyPosts', this.coordinates),
       this.$store.dispatch('event/getNearbyEvents', this.coordinates),
@@ -70,6 +74,7 @@ export default {
     this.nearbyPosts = nearbyPosts
     console.log(this.nearbyPosts)
     this.nearbyEvents = nearbyEvents
+    this.loading = false
   },
 
   methods: {

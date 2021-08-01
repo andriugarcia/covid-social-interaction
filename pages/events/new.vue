@@ -1,5 +1,5 @@
 <template lang="pug">
-#createActivity(style='position: relative')
+#createActivity(style='position: relative; inset: 0')
   v-toolbar(
     color='primary',
     dark,
@@ -12,7 +12,7 @@
   v-sheet(
     flat,
     color='white',
-    style='height: 100vh; overflow-y: scroll; position: relative; padding-top: 160px'
+    style='height: 100%; overflow-y: scroll; position: relative; padding-top: 160px'
   )
     v-layout.pa-6.mt-12(
       justify-space-around,

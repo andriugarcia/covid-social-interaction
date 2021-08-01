@@ -22,17 +22,17 @@
     )
       v-layout(justify-space-between, style='width: 100%', align-end)
         .mb-4.ml-4(:class='{ "white--text": type != "short" }')
-          .ml-2
-            span.font-weight-bold.mr-2(
-              :class='{ "letter-shadow": type != "short" }'
-            ) {{ content.username || content.profile.username }}
-            span(:class='{ "letter-shadow": type != "short" }') {{ content.created_at | toRelativeDate }}
-          v-card.px-3.py-1.mt-2.rounded-lg(
+          v-card.px-3.py-1.my-2.rounded-lg(
             v-if='getEvent()',
             outlined,
             @click='$router.push({ path: "/events/" + getEvent().event_id })'
           )
             span {{ getEvent().emoji }} {{ getEvent().title }}
+          .ml-2
+            span.font-weight-bold.mr-2(
+              :class='{ "letter-shadow": type != "short" }'
+            ) {{ content.username || content.profile.username }}
+            span(:class='{ "letter-shadow": type != "short" }') {{ content.created_at | toRelativeDate }}
           p.pa-2.py-2(
             v-if='type != "short" && content.text.length != 0',
             :class='{ "letter-shadow": type != "short" }',

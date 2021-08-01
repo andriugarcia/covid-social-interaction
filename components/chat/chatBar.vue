@@ -109,9 +109,16 @@
     )
     v-btn.mx-1(v-else, fab, color='primary', @click='sendMessage')
       v-icon far fa-paper-plane
-  viewer(v-model='shareGroup')
-    v-card
-      v-toolbar(color='primary', dark) Compartir Grupo
+  v-dialog(
+    v-model='shareGroup',
+    :fullscreen='!$vuetify.breakpoint.mdAndUp',
+    :width='500'
+  )
+    v-card(style='min-height: 600px')
+      v-toolbar(color='primary', dark) 
+        v-btn(icon, @click='shareGroup = false')
+          v-icon fas fa-arrow-left
+        v-toolbar-title Compartir Grupo
       v-list
         v-list-item(
           v-for='(group, i) in groups',

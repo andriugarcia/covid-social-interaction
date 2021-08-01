@@ -1,7 +1,22 @@
 <template lang="pug">
 #profile(v-if='user')
-  v-card.rounded-xl(
+  v-app-bar(
+    absolute,
     flat,
+    color='primary',
+    dark,
+    inverted-scroll,
+    scroll-target='#profile-scroll'
+  )
+    v-btn(icon, @click='$router.go(-1)')
+      v-icon fas fa-arrow-left
+    v-avatar.mr-2(:size='36')
+      v-img(:src='user.profile_picture')
+        template(#placeholder)
+          v-row.fill-height.ma-0(align='center', justify='center')
+            v-progress-circular(indeterminate, color='grey lighten-5')
+    v-toolbar-title {{ user.username }}
+  v-sheet#profile-scroll(
     color='white',
     style='height: 100vh; overflow-y: scroll'
   )
@@ -107,7 +122,7 @@
       v-model='tab',
       fixed-tabs,
       background-color='white',
-      style='position: sticky; top: 0; left: 0; right: 0; z-index: 10'
+      style='position: sticky; top: 54px; left: 0; right: 0; z-index: 10'
     )
       v-tab(key='posts') Posts
       v-tab(key='events') Eventos

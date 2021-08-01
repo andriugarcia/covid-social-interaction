@@ -189,6 +189,7 @@ export default {
   methods: {
     isEmoji(text) {
       return (
+        typeof text === 'string' &&
         (text.length === 1 || text.length === 2) &&
         /\p{Extended_Pictographic}/u.test(text)
       )

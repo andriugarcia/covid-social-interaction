@@ -137,17 +137,21 @@ export default {
       this.$store.dispatch('event/getEvents')
     },
     mapClick(map) {
-      this.taps++
-      if (this.taps === 1) {
+      console.log(this.taps)
+      if (this.taps === 0) {
+        console.log('Generate timeout')
         this.timer = setTimeout(() => {
+          console.log('Timeout resolved, opening closeplace')
           this.taps = 0
           this.$emit('click', map.mapboxEvent.lngLat)
         }, 500)
       } else {
+        console.log('Timeout removed, double tap')
         this.taps = 0
         clearTimeout(this.timer)
         this.timer = null
       }
+      this.taps++
     },
     onLoad(ev) {
       console.log('Cargando mapa', this.mapPosition)

@@ -30,7 +30,7 @@
       p.font-weight-light.mt-4 {{ event.description }}
       v-layout.my-4(
         align-center,
-        @click='$router.push({ path: "/" + event.profile.username })'
+        @click='$router.push({ path: "/" + event.username })'
       )
         v-avatar(style='border: 3px solid #f0134d')
           v-img(:src='event.profile_picture')
