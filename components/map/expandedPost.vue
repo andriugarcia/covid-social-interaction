@@ -17,6 +17,13 @@
         size='120',
         style='position: absolute; top: calc(50% - 60px); left: calc(50% - 60px)'
       ) fas fa-heart
+    v-btn(
+      icon,
+      :dark='type != "short"',
+      style='position: absolute; top: 18px; right: 18px',
+      @click='$emit("back")'
+    )
+      v-icon fas fa-chevron-down
     div(
       style='position: absolute; bottom: 0px; left: 0; right: 0; z-index: 300000000'
     )

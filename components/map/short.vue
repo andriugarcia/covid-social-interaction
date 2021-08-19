@@ -4,7 +4,7 @@
     v-if='expanded',
     v-html='content.text'
   )
-  p.pb-4.font-weight-light(
+  p.font-weight-light(
     v-else,
     :class='{ shortGrid: grid, short: !grid }',
     v-html='content.text'
@@ -44,7 +44,8 @@ export default {
 .short {
   font-size: 0.8em;
   display: block;
-  width: 120px;
+  min-width: 64px;
+  max-width: 120px;
   min-height: 20px;
   height: auto;
   padding: 8px;
@@ -60,7 +61,7 @@ export default {
 
   /* max-width: 400px;
   min-width: 480px; */
-  padding: 32px;
+  padding: 56px 32px;
   font-size: 1.2em;
 }
 </style>

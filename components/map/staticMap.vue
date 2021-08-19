@@ -33,5 +33,12 @@ export default {
     // We need to set mapbox-gl library here in order to use it in template
     this.mapbox = Mapbox
   },
+  methods: {
+    goToMaps() {
+      window.open(
+        `https://www.google.com/maps/@${this.coordinates.lat},${this.coordinates.lng},15z`
+      )
+    },
+  },
 }
 </script>

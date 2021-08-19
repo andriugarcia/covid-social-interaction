@@ -145,6 +145,12 @@ v-sheet#editor(style='position: relative; inset: 0', color='white')
         @updated='updateLocation',
         @back='locationSelectorOpened = false'
       )
+  image-editor(
+    v-if='imageBeforeEdit',
+    :image='imageBeforeEdit',
+    @confirm='imageUpdated',
+    style='position: absolute; inset: 0; z-index: 20'
+  )
   v-bottom-sheet(v-model='permanentOpened')
     v-card.pa-4.rounded-lg
       v-subheader POST PERMANENTE
@@ -162,6 +168,7 @@ v-sheet#editor(style='position: relative; inset: 0', color='white')
 <script>
 import audioInput from '@/components/editor/audioInput'
 import texteditor from '@/components/editor/textarea'
+// import imageEditor from '@/layouts/imageEditor'
 
 // import imageCompression from 'browser-image-compression';
 
@@ -170,6 +177,7 @@ export default {
     locationSelect: () => import('../components/map/locationSelect'),
     groupSelect: () => import('../components/editor/groupSelect'),
     audioPlayer: () => import('../components/chat/audioPlayer'),
+    // imageEditor,
     audioInput,
     texteditor,
   },
@@ -192,6 +200,7 @@ export default {
       locationSelectorOpened: false,
       permanentOpened: false,
       bidValue: 1,
+      imageBeforeEdit: null,
     }
   },
 
@@ -235,9 +244,22 @@ export default {
     } else {
       this.currentEvent = event
     }
+
+    this.checkCoordinates(this.$route.query)
   },
 
   methods: {
+    checkCoordinates(query) {
+      if (
+        typeof query.lng !== 'undefined' &&
+        typeof query.lat !== 'undefined'
+      ) {
+        this.updateLocation({
+          lat: parseFloat(query.lat),
+          lng: parseFloat(query.lng),
+        })
+      }
+    },
     updateLocation(coordinates) {
       this.currentPosition = false
       this.post.coordinates = coordinates
@@ -261,8 +283,19 @@ export default {
     //     console.error(error)
     //   }
     // },
+    editImage(ev) {
+      const file = ev.target.files[0]
+
+      this.imageBeforeEdit = file
+
+      return
+    },
     async imageUpdated(ev) {
       const file = ev.target.files[0]
+      this.uploading = true
+      console.log(file)
+      this.imageBeforeEdit = null
+
       this.uploading = true
 
       let data

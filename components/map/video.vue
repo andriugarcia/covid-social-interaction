@@ -1,6 +1,14 @@
 <template lang="pug">
-  v-layout#videoMap(column, justify-center, style="height: 100%")
-    video.rounded-lg(:class="{'videoGrid': grid, 'videoPost': !expanded && !grid, 'videoPostExpanded': expanded, 'mt-8': content.text.length != 0 && expanded}", autoplay, playsinline, :muted="muted", loop, :src="content.src")
+v-layout#videoMap(column, justify-center, style='height: 100%')
+  video.rounded-lg(
+    onclick='this.paused ? this.play() : this.pause();',
+    :class='{ videoGrid: grid, videoPost: !expanded && !grid, videoPostExpanded: expanded, "mt-8": content.text.length != 0 && expanded }',
+    autoplay,
+    playsinline,
+    :muted='muted',
+    loop,
+    :src='content.src'
+  )
 </template>
 
 <script>

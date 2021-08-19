@@ -2,7 +2,7 @@
   #postMap
     #group(v-if="type == 'group'")
       .text-center(@click.stop="$router.push({ path: `/group/${content.chat_id}` })")
-        v-avatar(size="40")
+        v-avatar.elevation-2(size="40")
           img(:src="content.cover")
         v-card.px-1.rounded-pill(outlined)
           span.mx-1.font-weight-bold {{ content.title }}
@@ -23,7 +23,7 @@
           group-map(v-else-if="type == 'group'", :content="content", :grid="grid")
           span(v-else) Format Not Found
           bottom-avatar.bottomalign(v-if="!grid", :src="content.profile_picture || content.profile.profile_picture")
-      viewer.rounded-lg(v-model="expanded", @click:outside="closePost")
+      viewer(v-model="expanded", @click:outside="closePost")
         expanded-post(v-if="expanded", :type="type", v-touch="{ down: () => closePost() }", :content="content", @back="closePost")
 </template>
 

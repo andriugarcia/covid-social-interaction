@@ -105,7 +105,11 @@
     hide-overlay,
     transition='dialog-bottom-transition'
   )
-    place-selected(@back='closePosts', :coordinates='coordinatesSelected')
+    place-selected(
+      v-if='placeOpened',
+      @back='closePosts',
+      :coordinates='coordinatesSelected'
+    )
 </template>
 
 <script>

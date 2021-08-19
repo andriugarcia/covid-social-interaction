@@ -5,51 +5,69 @@ v-card(style='border-radius: 24px 24px 0 0', color="white", v-touch="{ down: () 
     flat,
     color='primary',
     extended,
-    style='position: absolute; top: 0; left: 0; right: 0'
+    style='position: absolute; top: 0; left: 0; right: 0; z-index: 20'
   )
     v-btn(icon, @click='$emit("back")')
-      v-icon fas fa-times
+      v-icon fas fa-chevron-down
     v-toolbar-title.font-weight-black En esta zona
     template(#extension)
-      v-tabs(fixed-tabs)
-        v-tab
+      v-tabs(v-model='tab', fixed-tabs)
+        v-tab(key='posts')
           v-icon.mr-1(small) fas fa-map-pin
           div Posts
-        v-tab
+        v-tab(key='events')
           v-icon.mr-1(small) fas fa-flag
           div Eventos
-  .px-2(
-    ref="postcontent",
-    style='overflow-y: scroll; height: 100vh; padding-top: 120px'
-  )
-    .text-center.py-4(v-if='loading')
-      v-progress-circular(indeterminate, color='primary')
-    .masonry(v-else-if='nearbyPosts.length !== 0')
-      post.mb-2(
-        v-for='(post, i) in nearbyPosts',
-        :key='i',
-        :type='post.type',
-        :content='post',
-        grid
-      )
-      .mb-15
-    v-card.ma-2.rounded-xl(v-else, outlined)
-      v-layout.pa-6.text-center(
-        column,
-        justify-center,
-        align-center,
-        color='white',
-        style='height: 100%'
-      )
-        v-icon(color='primary', x-large) far fa-sad-cry
-        .mt-4.black--text No hay posts en esta zona
+  .px-2(ref="postcontent",
+      style='padding-top: 116px; min-height: calc(100vh - 104px)')
+    v-tabs-items.px-2(
+      v-model='tab', style='background-color: transparent;'
+    )
+      v-tab-item(key='posts')
+        v-btn(rounded, color='primary', block, depressed, @click='openEditor')
+          v-icon.mr-2(small) fas fa-plus
+          span.text-capitalize Publicar Aquí
+        .text-center.pt-2(v-if='loading')
+          v-progress-circular(indeterminate, color='primary')
+        .masonry.mt-4(v-else-if='nearbyPosts.length !== 0')
+          post.mb-2(
+            v-for='(post, i) in nearbyPosts',
+            :key='i',
+            :type='post.type',
+            :content='post',
+            grid
+          )
+          .mb-15
+        v-card.my-2.rounded-xl(v-else, outlined)
+          v-layout.pa-6.text-center(
+            column,
+            justify-center,
+            align-center,
+            color='white',
+            style='height: 100%'
+          )
+            v-icon(color='primary', x-large) far fa-sad-cry
+            .mt-4.black--text No hay posts en esta zona
+      v-tab-item(key='events')
+        .text-center.pt-2(v-if='loading')
+          v-progress-circular(indeterminate, color='primary')
+        v-alert(
+          v-else-if='nearbyEvents.length === 0',
+          type='error',
+          text,
+          icon='far fa-sad-tear',
+          prominent
+        ) No hay eventos cerca
+        event.mb-2(v-for='(event, i) in nearbyEvents', :key='i', :event='event')
 </template>
 
 <script>
 import Post from '@/components/map/post'
+import Event from '@/components/event/item'
 export default {
   components: {
     Post,
+    Event,
   },
   props: {
     coordinates: {
@@ -62,6 +80,7 @@ export default {
       nearbyPosts: [],
       nearbyEvents: [],
       loading: false,
+      tab: 'posts',
     }
   },
   async mounted() {
@@ -83,6 +102,12 @@ export default {
       if (this.$refs.postcontent.scrollTop <= 50) {
         this.$emit('back')
       }
+    },
+    openEditor() {
+      this.$router.push({
+        name: 'editor',
+        query: this.coordinates,
+      })
     },
   },
 }

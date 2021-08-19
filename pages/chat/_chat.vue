@@ -52,7 +52,7 @@
             v-list-item-content Bloquear Usuario
   v-sheet(
     color='white',
-    style='padding-top: 100px; height: 100vh; overflow-y: scroll; overflow-x: hidden'
+    style='padding-top: 52px; height: 100vh; overflow-y: scroll; overflow-x: hidden'
   )
     v-row#loadBar.my-12.pt-12(
       v-if='loading',

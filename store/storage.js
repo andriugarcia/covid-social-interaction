@@ -10,7 +10,7 @@ export const actions = {
       initialQuality: 0.7,
     }
 
-    const imageCompressed = await imageCompression(file, options)
+    // const imageCompressed = await imageCompression(file, options)
 
     const formData = new FormData()
 
@@ -21,7 +21,7 @@ export const actions = {
 
     formData.append(
       'profileImage',
-      imageCompressed,
+      file,
       file.name || 'photo.' + ext
     )
     const { data } = await axios.post(

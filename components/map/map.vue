@@ -147,7 +147,7 @@ export default {
         }, 500)
       } else {
         console.log('Timeout removed, double tap')
-        this.taps = 0
+        this.taps = -1
         clearTimeout(this.timer)
         this.timer = null
       }
