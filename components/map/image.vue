@@ -1,6 +1,18 @@
 <template lang="pug">
-v-layout#imageMap(column, justify-center, style='height: 100%')
+v-layout#imageMap.black-bottom-gradient(
+  column,
+  justify-center,
+  style='height: 100%'
+)
+  v-img(
+    v-if='expanded',
+    contain,
+    gradient='to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 15%, rgba(255,255,255,0) 50%',
+    :class='{ imageGrid: grid, "rounded-lg": !expanded, imagePost: !expanded && !grid, imagePostExpanded: expanded }',
+    :src='content.src'
+  )
   img(
+    v-else,
     :class='{ imageGrid: grid, "rounded-lg": !expanded, imagePost: !expanded && !grid, imagePostExpanded: expanded }',
     :src='content.src'
   )
@@ -41,9 +53,5 @@ export default {
   max-height: 100%;
   width: 100%;
   height: auto;
-}
-
-.black-bottom-gradient {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
 }
 </style>

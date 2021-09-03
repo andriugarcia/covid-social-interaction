@@ -43,6 +43,7 @@ v-card.pa-4(color='primary', dark)
     style='max-height: 50vh; overflow-y: scroll; padding-bottom: 100px'
   )
     v-list-item(
+      v-if='getMember(member)',
       v-for='(member, i) in peopleFiltered',
       :key='member',
       @click='selectMember(member)'
@@ -87,6 +88,10 @@ export default {
       type: Object,
       default: null,
     },
+    group: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
@@ -108,7 +113,11 @@ export default {
       const pf = this.people.filter((member) => {
         const name = member.chat.title || this.getMember(member).username
 
-        return name.toLowerCase().includes(this.textFilter.toLowerCase())
+        if (typeof name == 'string') {
+          return name.toLowerCase().includes(this.textFilter.toLowerCase())
+        } else {
+          return false
+        }
       })
 
       return pf
@@ -116,28 +125,47 @@ export default {
   },
   methods: {
     getMember({ chat }) {
+      if (!chat.member) return null
       if (
         chat.member[0].profile.profile_id !==
         this.$store.state.auth.user.profile_id
       ) {
         return chat.member[0].profile
-      } else {
+      } else if (chat.member[1]) {
         return chat.member[1].profile
+      } else {
+        return null
       }
     },
     share(channel) {
       let url = ''
+      let type = 'unknown'
       if (this.post) {
+        type = 'post'
         url = `http://olimaps.com/post/${this.post.post_id}`
       } else if (this.event) {
+        type = 'event'
         url = `http://olimaps.com/event/${this.event.event_id}`
+      } else if (this.group) {
+        type = 'group'
+        url = `http://olimaps.com/event/${this.group.chat_id}`
       }
       switch (channel) {
         case 'whatsapp':
+          this.$fire.analytics.logEvent('share', {
+            content_type: type,
+            item_id: url,
+            method: 'Whatsapp',
+          })
           return window.open(
             `whatsapp://send?text=Echale un vistazo a lo que he encontrado! ${url}`
           )
         case 'twitter':
+          this.$fire.analytics.logEvent('share', {
+            content_type: type,
+            item_id: url,
+            method: 'Twitter',
+          })
           return window.open(
             `https://twitter.com/intent/tweet?text=Echale un vistazo a lo que he encontrado! ${url}`
           )
@@ -166,12 +194,16 @@ export default {
           event: this.event.event_id,
           targets: this.selectedList,
         })
+      } else if (this.group) {
+        await this.$store.dispatch('chat/share', {
+          chat: this.group.chat_id,
+          targets: this.selectedList,
+        })
       }
       this.loading = false
       this.$emit('back')
     },
     navigatorShareExists() {
-      console.log(navigator.share)
       return typeof navigator.share !== 'undefined'
     },
     openShare() {
@@ -186,6 +218,12 @@ export default {
           title: 'Échale un vistazo a este evento',
           text: this.event.title,
           url: `http://olimaps.com/event/${this.event.event_id}`,
+        })
+      } else if (this.group) {
+        navigator.share({
+          title: 'Échale un vistazo a este grupo',
+          text: this.group.title,
+          url: `http://olimaps.com/event/${this.group.chat_id}`,
         })
       }
     },

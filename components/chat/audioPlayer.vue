@@ -2,21 +2,27 @@
 #player
   audio(ref='audio', :src='src', preload='auto')
   div(v-if='!circular')
-    v-layout.px-2
-      v-btn(fab, dark, depressed, color='primary', small, @click='play')
-        v-icon(small) {{ playing ? "fas fa-pause" : "fas fa-play" }}
-      v-slider.ml-2.mt-1(
-        v-if='audio',
-        v-model='counter',
-        step='0.1',
-        min='0',
-        :max='audio.duration',
-        style='width: 200px'
-      )
-    v-layout.mb-2(v-if='duration != 0', justify-end, align-end)
-      span.ml-2(v-if='!isNaN(counter)') {{ counter | getMinutes }}:{{ counter | getSeconds }} /
-      span.ml-2(v-else) 00:00/
-      span.mr-2 {{ Math.floor(duration) | getMinutes }}:{{ Math.floor(duration) | getSeconds }}
+    audio(
+      :src='src',
+      controls,
+      controlsList='nodownload | novolume',
+      style='width: 250px'
+    )
+    //- v-layout.px-2
+    //-   v-btn(fab, dark, depressed, color='primary', small, @click='play')
+    //-     v-icon(small) {{ playing ? "fas fa-pause" : "fas fa-play" }}
+    //-   v-slider.ml-2.mt-1(
+    //-     v-if='audio',
+    //-     v-model='counter',
+    //-     step='0.1',
+    //-     min='0',
+    //-     :max='audio.duration',
+    //-     style='width: 200px'
+    //-   )
+    //- v-layout.mb-2(v-if='duration != 0', justify-end, align-end)
+    //-   span.ml-2(v-if='!isNaN(counter)') {{ counter | getMinutes }}:{{ counter | getSeconds }} /
+    //-   span.ml-2(v-else) 00:00/
+    //-   span.mr-2 {{ Math.floor(duration) | getMinutes }}:{{ Math.floor(duration) | getSeconds }}
   .rounded-circle(v-else, @click='play', v-ripple)
     v-progress-circular(
       v-if='duration != 0',
@@ -70,6 +76,7 @@ export default {
     },
   },
   mounted() {
+    return
     // this.audio = new Audio()
     this.audio = this.$refs.audio
     // this.audio.preload = "auto"

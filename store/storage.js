@@ -1,5 +1,18 @@
-import axios from 'axios'
+import axios from '../axios'
 import imageCompression from 'browser-image-compression'
+
+function iOS() {
+  return [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+    // iPad on iOS 13 detection
+    || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+}
 
 export const actions = {
   async uploadFile(_, file) {
@@ -10,7 +23,12 @@ export const actions = {
       initialQuality: 0.7,
     }
 
-    // const imageCompressed = await imageCompression(file, options)
+    let imageCompressed = file
+
+    // En iOS produce un bug
+    if (!iOS()) {
+      imageCompressed = await imageCompression(file, options)
+    }
 
     const formData = new FormData()
 
@@ -21,7 +39,7 @@ export const actions = {
 
     formData.append(
       'profileImage',
-      file,
+      imageCompressed,
       file.name || 'photo.' + ext
     )
     const { data } = await axios.post(

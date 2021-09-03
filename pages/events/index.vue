@@ -6,7 +6,7 @@
     flat,
     style='position: absolute; top: 0; width: 100%; z-index: 20'
   )
-    v-btn(icon, @click='$router.go(-1)')
+    v-btn(icon, @click='$router.replace({ path: "/" })')
       v-icon fas fa-arrow-left
     v-toolbar-title Eventos
     v-spacer
@@ -21,8 +21,8 @@
         text,
         icon='fas fa-glass-cheers'
       ) No tienes eventos próximamente
-      v-layout.my-2(style='overflow-x: scroll')
-        event.mb-2(
+      v-layout.hide-scrollbar.my-2(style='overflow-x: scroll')
+        event.mb-2.mr-2(
           v-for='(event, i) in events',
           :key='i',
           :event='event',
@@ -52,6 +52,9 @@ import date from '@/mixins/date'
 import Event from '@/components/event/item'
 
 export default {
+  head: {
+    title: 'Eventos | Olimaps',
+  },
   components: {
     AvatarGroup,
     Category,

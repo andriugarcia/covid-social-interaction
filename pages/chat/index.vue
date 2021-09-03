@@ -1,6 +1,6 @@
 <template lang="pug">
 v-sheet#contacts(
-  v-if='!newGroup',
+  v-if='!newGroup && !newChat',
   style='height: 100vh; position: relative',
   color='white'
 )
@@ -13,7 +13,7 @@ v-sheet#contacts(
     dark,
     style='left: 0; right: 0'
   )
-    v-btn(icon, small, @click='$router.go(-1)')
+    v-btn(icon, small, @click='$router.replace({ path: "/" })')
       v-icon fas fa-arrow-left
     v-toolbar-title Mensajes
     v-spacer
@@ -69,7 +69,12 @@ v-sheet#contacts(
                 v-avatar(color='primary')
                   v-icon(dark, small) fas fa-user-friends
                 .mt-2.font-weight-bold(style='font-size: 0.7em') Nuevo Grupo
-            v-card(width='120px', outlined, color='white')
+            v-card(
+              width='120px',
+              outlined,
+              color='white',
+              @click='newChat = true'
+            )
               v-layout(column, align-center)
                 v-avatar(color='primary')
                   v-icon(dark, small) fas fa-user
@@ -95,11 +100,22 @@ v-sheet#contacts(
             :key='i',
             @click='openChat(chat)'
           )
-            v-list-item-avatar
-              v-img(:src='chat.chat.cover || getMember(chat).profile_picture')
-                template(#placeholder)
-                  v-row.fill-height.ma-0(align='center', justify='center')
-                    v-progress-circular(indeterminate, color='primary')
+            //- v-list-item-avatar(color='primary')
+            v-badge.mr-4(
+              overlap,
+              top,
+              color='primary',
+              :value='chat.type == "chat" && getMember(chat).active',
+              offset-x='18',
+              offset-y='18'
+            )
+              v-avatar(color='primary', :size='42')
+                v-img(
+                  :src='chat.chat.cover || getMember(chat).profile_picture'
+                )
+                  template(#placeholder)
+                    v-row.fill-height.ma-0(align='center', justify='center')
+                      v-progress-circular(indeterminate, color='primary')
             v-list-item-content
               v-list-item-title.font-weight-bold {{ chat.chat.title || getMember(chat).username }}
               v-list-item-subtitle.text-truncate(
@@ -168,7 +184,8 @@ v-sheet#contacts(
               v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} miembros
             v-list-item-action
               //- v-chip(v-if="chat.unread != 0", color="primary") {{ chat.unread }}
-create-group(v-else, @back='newGroup = false')
+create-group(v-else-if='newGroup', @back='newGroup = false')
+create-chat(v-else, @back='newChat = false')
 </template>
 
 <script>
@@ -177,8 +194,12 @@ import date from '@/mixins/date'
 import pushAlert from '@/components/pushAlert'
 
 export default {
+  head: {
+    title: 'Chats | Olimaps',
+  },
   components: {
     createGroup: () => import('@/layouts/createGroup'),
+    createChat: () => import('@/layouts/createChat'),
     pushAlert,
   },
   mixins: [geo, date],
@@ -186,6 +207,7 @@ export default {
     return {
       dial: false,
       newGroup: false,
+      newChat: false,
       tab: 'chat',
       searchEnabled: false,
       textFilter: '',
@@ -208,11 +230,25 @@ export default {
     chats() {
       if (!this.$store.getters['auth/authenticated'])
         this.$router.replace({ path: '/' })
-      return this.$store.state.chat.chats.filter((chat) =>
-        (chat.chat.title || this.getMember(chat).username)
-          .toLowerCase()
-          .includes(this.textFilter.toLowerCase())
-      )
+      return this.$store.state.chat.chats
+        .filter((chat) =>
+          (chat.chat.title || this.getMember(chat).username)
+            .toLowerCase()
+            .includes(this.textFilter.toLowerCase())
+        )
+        .sort((a, b) => {
+          const timeA =
+            typeof a.chat.message_chatTomessage_channel[0] !== 'undefined'
+              ? a.chat.message_chatTomessage_channel[0].created_at
+              : a.chat.created_at
+          const timeB =
+            typeof b.chat.message_chatTomessage_channel[0] !== 'undefined'
+              ? b.chat.message_chatTomessage_channel[0].created_at
+              : b.chat.created_at
+          const dateA = new Date(timeA)
+          const dateB = new Date(timeB)
+          return dateA.getTime() > dateB.getTime() ? -1 : 1
+        })
     },
     nearbyTotal() {
       return this.$store.state.chat.nearbyTotal
@@ -237,8 +273,13 @@ export default {
         this.$store.state.auth.user.profile_id
       ) {
         return chat.member[0].profile
-      } else {
+      } else if (typeof chat.member[1] !== 'undefined') {
         return chat.member[1].profile
+      } else {
+        return {
+          username: 'Usuario eliminado',
+          profile_picture: null,
+        }
       }
     },
     getLastMessage(chat) {

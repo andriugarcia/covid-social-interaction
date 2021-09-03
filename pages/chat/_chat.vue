@@ -16,14 +16,22 @@
       dark,
       style='width: 100%'
     )
-      v-avatar(
-        @click='$router.push({ path: "/" + member.username })',
-        color='primary'
+      v-badge(
+        overlap,
+        bottom,
+        color='primary',
+        :value='member.active',
+        offset-x='18',
+        offset-y='18'
       )
-        v-img(:src='member.profile_picture')
-          template(#placeholder)
-            v-row.fill-height.ma-0(align='center', justify='center')
-              v-progress-circular(indeterminate, color='grey lighten-5')
+        v-avatar(
+          @click='$router.push({ path: "/" + member.username })',
+          color='primary'
+        )
+          v-img(v-if='member.profile_picture', :src='member.profile_picture')
+            template(#placeholder)
+              v-row.fill-height.ma-0(align='center', justify='center')
+                v-progress-circular(indeterminate, color='grey lighten-5')
       .ml-2.background--text.font-weight-bold(
         @click='$router.push({ path: "/" + member.username })'
       ) {{ member.username }}
@@ -38,13 +46,13 @@
           v-icon fas fa-ellipsis-v
       v-card
         v-list
-          v-list-item(v-if='!chat.muted', @click='mute')
+          v-list-item(v-if='!member.muted', @click='mute')
             v-list-item-avatar
               v-icon fas fa-volume-mute
             v-list-item-content Silenciar Chat
           v-list-item(v-else, @click='unmute')
             v-list-item-avatar
-              v-icon fas fa-volume
+              v-icon fas fa-bell
             v-list-item-content Activar Notificaciones
           v-list-item 
             v-list-item-avatar
@@ -90,6 +98,7 @@ export default {
       return this.$store.state.auth.user
     },
     chat() {
+      console.log(this.$store.state.chat.chat)
       return this.$store.state.chat.chat
     },
     member() {
@@ -99,8 +108,17 @@ export default {
         this.$store.state.chat.chat.member[0].profile.profile_id !==
         this.$store.state.auth.user.profile_id
       ) {
+        this.$store.state.chat.chat.member[0].profile.muted =
+          this.$store.state.chat.chat.member[1].muted
         return this.$store.state.chat.chat.member[0].profile
       } else {
+        if (typeof this.$store.state.chat.chat.member[1] == 'undefined')
+          return {
+            username: 'Usuario eliminado',
+            profile_picture: null,
+          }
+        this.$store.state.chat.chat.member[1].profile.muted =
+          this.$store.state.chat.chat.member[0].muted
         return this.$store.state.chat.chat.member[1].profile
       }
     },
@@ -119,7 +137,11 @@ export default {
   },
   async mounted() {
     this.loading = true
-    await this.$store.dispatch('chat/getChat', this.$route.params.chat)
+    try {
+      await this.$store.dispatch('chat/getChat', this.$route.params.chat)
+    } catch (err) {
+      this.$router.go(-1)
+    }
     this.chatLoaded = true
     await this.$store.dispatch('chat/getMessages', {
       chatId: this.$store.state.chat.chat.chat_id,

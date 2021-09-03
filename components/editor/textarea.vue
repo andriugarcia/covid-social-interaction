@@ -179,6 +179,7 @@ export default {
       const style = {}
       style.color = this.option.textColor
       style.fontSize = this.size
+      style.overflowY = 'none'
       return style
     },
     hashtagStyle() {

@@ -192,7 +192,7 @@ export default {
       this.placeOpened = false
     },
     openSearch() {
-      this.$router.push({ hash: 'search' })
+      this.$router.replace({ hash: 'search' })
       this.opened = 'search'
     },
     openEditor() {

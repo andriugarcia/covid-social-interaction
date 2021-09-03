@@ -28,6 +28,8 @@ v-app
     :inset='$vuetify.breakpoint.mdAndUp'
   )
     login
+  v-dialog(:value='newContactsDialog')
+    new-contacts
   v-snackbar(
     v-model='postCreated',
     :timeout='1500',
@@ -55,13 +57,16 @@ export default {
     login: () => import('../components/login/login.vue'),
     mainMobile: () => import('../layouts/mainMobile.vue'),
     mainDesktop: () => import('../layouts/mainDesktop.vue'),
+    newContacts: () => import('../layouts/newContacts.vue'),
   },
   async middleware({ app, store }) {
+    console.log('MIDDLEWARE')
     await store.dispatch('auth/checkLogged')
   },
   data: () => ({
     centre: [0, 0],
     firstMapPositionUpdated: false,
+    newContactsDialog: false,
   }),
   computed: {
     loginOpened() {
@@ -112,10 +117,20 @@ export default {
     this.loadNearbyMessages()
 
     this.enableLocation()
+
+    this.checkNewContactsAvailable()
   },
   methods: {
     loadNearbyMessages() {
       this.$store.commit('chat/loadNearbyMessages')
+    },
+    async checkNewContactsAvailable() {
+      if (this.$store.state.auth.user.twitter_id) {
+        await this.$store.dispatch('user/getRrssContacts')
+        if (this.$store.state.user.rrssContacts.length > 0) {
+          this.newContactsDialog = true
+        }
+      }
     },
     enableLocation() {
       const self = this
@@ -149,6 +164,15 @@ export default {
             console.log('Service worker registration failed, error:', err)
           })
       }
+
+      this.$fire.messaging.onMessage((payload) => {
+        console.info('Mensaje recibido', payload)
+      })
+
+      // console.log('onTokenRefresh')
+      // this.$fire.messaging.onTokenRefresh(() => {
+      //   console.error('Token requiere ser refrescado')
+      // })
     },
     checkIfAppIsInstalled() {
       window.addEventListener('beforeinstallprompt', (e) => {

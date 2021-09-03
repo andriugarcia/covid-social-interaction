@@ -324,6 +324,9 @@
 import AvatarGroup from '@/components/avatar-group'
 import AvatarInput from '@/components/avatar-input'
 export default {
+  head: {
+    title: 'Nuevo Evento | Olimaps',
+  },
   components: {
     locationSelect: () => import('@/components/map/locationSelect'),
     groupSelect: () => import('@/components/editor/groupSelect'),

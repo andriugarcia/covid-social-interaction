@@ -15,7 +15,7 @@ export const mutations = {
   setUserPosition(state, coordinates) {
     state.userPosition = { ...coordinates }
     state.locationEnabled = true
-    console.log(coordinates.direction)
+
     state.userDirection = coordinates.direction
   },
   setMapPosition(state, coordinates) {
@@ -25,7 +25,7 @@ export const mutations = {
     state.zoom = zoom
   },
   setEventActions(state, eventActions) {
-    console.log('%cIniciando mapa', 'color: blue;')
+
     state.eventActions = eventActions
   },
   fitBounds(state, bbox) {
@@ -39,7 +39,7 @@ export const mutations = {
   },
   jumpTo(state, coordinates) {
     if (!state.eventActions) return
-    console.log('%cSalto', 'color: blue;')
+
     state.eventActions.jumpTo({
       center: coordinates,
       zoom: 15

@@ -1,7 +1,7 @@
 <template lang="pug">
-#messages.px-2(
+#messages.px-2.height-without-topbar(
   ref='chat',
-  style='padding-top: 100px; height: 100vh; overflow-y: scroll; overflow-x: hidden; padding-bottom: 82px'
+  style='overflow-y: scroll; overflow-x: hidden; padding-bottom: 82px'
 )
   v-layout(justify-center)
     v-sheet.rounded-xl.pa-4(
@@ -10,14 +10,16 @@
       dark
     ) 
       span.mx-2 Esto está muy vacío por aquí
-      v-btn.mt-2(small, depressed, rounded, color='white', light, block) Invitar Usuarios
+      v-btn.mt-2(small, depressed, rounded, color='white', light, block) Empezar a Escribir
   div(v-for='(message, i) in messages', :key='i')
     v-layout.my-1(justify-center)
       v-chip.my-4.font-weight-bold(
         v-if='i == 0 || !hasSameDay(messages[i - 1], message)',
         color='blue-grey lighten-3'
       ) {{ message.created_at | toDate }}
-    v-layout(align-end, :justify-end='isMe(message.author)')
+    v-layout(v-if='message.type == "info"', justify-center)
+      v-chip.gray--text {{ message.text }}
+    v-layout(v-else, align-end, :justify-end='isMe(message.author)')
       div(v-if='!isMe(message.author)', style='min-width: 42px')
         v-avatar(
           v-if='i + 1 >= messages.length || messages[i + 1].author != message.author',
@@ -141,7 +143,7 @@ export default {
   computed: {
     messages() {
       if (this.nearby) return this.$store.state.chat.nearbyMessages
-      console.log(this.$store.state.chat.messages)
+
       return this.$store.state.chat.messages
     },
     chat() {
@@ -233,7 +235,7 @@ export default {
     openImage(src) {
       this.imageOpened = true
       this.imageSrc = src
-      this.$router.push({ hash: 'image' })
+      this.$router.replace({ hash: 'image' })
     },
     closeImage() {
       this.imageOpened = false
@@ -242,3 +244,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.height-without-topbar {
+  height: calc(100vh - 56px);
+}
+</style>

@@ -9,7 +9,7 @@ MglMap(
   :interactive='false',
   style='width: 100%; height: 240px'
 )
-  MglMarker(:coordinates='coordinates')
+  MglMarker(:coordinates='coordinates', color='#F0134D')
 </template>
 
 <script>
@@ -36,7 +36,7 @@ export default {
   methods: {
     goToMaps() {
       window.open(
-        `https://www.google.com/maps/@${this.coordinates.lat},${this.coordinates.lng},15z`
+        `https://www.google.com/maps/search/?api=1&query=${this.coordinates.lat},${this.coordinates.lng}`
       )
     },
   },

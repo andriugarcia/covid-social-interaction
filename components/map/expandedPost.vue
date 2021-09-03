@@ -40,7 +40,7 @@
               :class='{ "letter-shadow": type != "short" }'
             ) {{ content.username || content.profile.username }}
             span(:class='{ "letter-shadow": type != "short" }') {{ content.created_at | toRelativeDate }}
-          p.pa-2.py-2(
+          p.pa-2.py-2.font-weight-medium(
             v-if='type != "short" && content.text.length != 0',
             :class='{ "letter-shadow": type != "short" }',
             v-html='content.text'
@@ -167,7 +167,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.content)
     this.$store.dispatch('post/openPost', this.content.post_id)
   },
   computed: {
@@ -196,7 +195,7 @@ export default {
       if (this.taps === 1) {
         this.timer = setTimeout(() => {
           this.taps = 0
-        }, 700)
+        }, 400)
       } else {
         clearTimeout(this.timer)
         this.enableHeartAnimation()
@@ -266,7 +265,7 @@ export default {
 
 <style lang="scss" scoped>
 .letter-shadow {
-  text-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
 }
 
 .fadescale-enter {

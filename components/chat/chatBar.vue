@@ -27,10 +27,10 @@
       style='position: absolute; top: 0px; right: 0px; left: 0; bottom: 0'
     )
       v-progress-circular(indeterminate, color='grey lighten-5')
-  v-layout.px-2(align-center)
+  v-layout.px-2(align-end)
     v-card.py-2.px-3.mr-1.rounded-xl(style='width: 100%', outlined)
-      v-layout(align-center, justify-center)
-        v-btn(v-if='!message.src', icon, depressed, small)
+      v-layout(align-end, justify-center)
+        v-btn.mb-1(v-if='!message.src', icon, depressed, small)
           v-icon fas fa-camera
           input(
             type='file',
@@ -52,6 +52,7 @@
           v-model='message.text',
           top,
           placeholder='Escribe tu mensaje...',
+          style='max-height: 30vh; overflow-y: auto; margin-bottom: 8px',
           size='1em',
           @enter='sendMessage'
         )
@@ -179,8 +180,8 @@ export default {
         await this.$store.dispatch('chat/createNearbyMessage', this.message)
       } else if (this.userId) {
         this.message.userId = this.userId
-        console.log('Sending to', this.userId)
-        const { data: chat_id } = await this.$store.dispatch(
+
+        const chat_id = await this.$store.dispatch(
           'chat/createMessage',
           this.message
         )

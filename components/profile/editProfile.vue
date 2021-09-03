@@ -3,14 +3,15 @@ v-card#editProfile(style='position: relative')
   v-toolbar(
     color='primary',
     style='position: absolute; top: 0; left: 0; right: 0; z-index: 20',
-    dark
+    dark,
+    flat
   ) 
     v-btn(icon, dark, @click='$emit("back")')
       v-icon fas fa-times
     span Editando Perfil
     v-spacer
-    v-btn(text, dark, @click='updateProfile') Guardar
-  .pa-4.pt-12(style='height: 100vh; overflow-y: scroll')
+    v-btn(text, dark, @click='updateProfile', style='letter-spacing: 0') Guardar
+  v-sheet.pa-4.pt-12(style='height: 100vh; overflow-y: scroll', color='white')
     .overline.mt-6 Foto de Perfil
     avatar-input(
       @update='updateProfilePicture',
@@ -112,7 +113,7 @@ export default {
     async updateProfilePicture(img) {
       await this.$store.dispatch('user/updateProfilePicture', img)
     },
-    async updateProfile(img) {
+    async updateProfile() {
       const updatedData = {}
 
       if (this.user.name !== this.profile.name)

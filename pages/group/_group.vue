@@ -18,27 +18,37 @@
           .background--text.font-weight-bold {{ chat.title }}
           span.white--text(v-if='chat.member') {{ chat.member.length | formatNumber }} participantes
         v-spacer
-          v-menu(offset-y)
-            template(v-slot:activator='{ on }')
-              v-btn(icon, dark, v-on='on')
-                v-icon fas fa-ellipsis-v
-            v-card
-              v-list
-                v-list-item(
-                  v-if='chat.about && !chat.about.muted',
-                  @click='muteChat'
-                )
-                  v-list-item-avatar
-                    v-icon fas fa-volume-mute
-                  v-list-item-content Silenciar Grupo
-                v-list-item(v-else, @click='unmuteChat')
-                  v-list-item-avatar
-                    v-icon fas fa-bell
-                  v-list-item-content Activar Notificaciones
-                v-list-item(v-if='chat.member')
-                  v-list-item-avatar
-                    v-icon fas fa-sign-out-alt
-                  v-list-item-content Salir del Grupo
+        v-btn(icon, dark, @click='shareDialog = true')
+          v-icon fas fa-share-alt
+        v-menu(offset-y)
+          template(v-slot:activator='{ on }')
+            v-btn(icon, dark, v-on='on')
+              v-icon fas fa-ellipsis-v
+          v-card
+            v-list
+              v-list-item(
+                v-if='chat.about && !chat.about.muted',
+                @click='muteChat'
+              )
+                v-list-item-avatar
+                  v-icon fas fa-volume-mute
+                v-list-item-content Silenciar Grupo
+              v-list-item(v-else, @click='unmuteChat')
+                v-list-item-avatar
+                  v-icon fas fa-bell
+                v-list-item-content Activar Notificaciones
+              v-dialog(v-if='isParticipant', v-model='leaveDialogOut')
+                template(v-slot:activator='{ on }')
+                  v-list-item(v-on='on')
+                    v-list-item-avatar
+                      v-icon.red--text fas fa-sign-out-alt
+                    v-list-item-title.red--text Salir del grupo
+                v-card.pa-2
+                  .overline SALIR DEL GRUPO
+                  p.text-center ¿De verdad quieres salir del grupo?
+                  v-layout(justify-space-between)
+                    v-btn(text, @click='leaveDialogOut = false') Cancelar
+                    v-btn(color='red', @click='leaveGroup()', dark, depressed) Salir
       v-card(
         v-if='chat.event && chat.event.length != 0',
         flat,
@@ -48,6 +58,8 @@
         v-list-item(
           @click='$router.push({ path: `/events/${chat.event[0].event_id}` })'
         )
+          v-list-item-avatar(color='white')
+            span(style='font-size: 1.6em') {{ chat.event[0].emoji }}
           v-list-item-content
             span.font-weight-bold {{ chat.event[0].title }}
             span {{ chat.event[0].start_date | toDateShort }}
@@ -77,7 +89,7 @@
     v-text-field(v-model='chat.description', filled, rounded)
   v-sheet#chat-info(v-else, color='white', style='height: 100vh')
     v-layout.pa-4(justify-space-between, align-center)
-      v-btn(icon)
+      v-btn(icon, @click='groupinfo = false')
         v-icon fas fa-arrow-left
       v-btn.mr-2(v-if='isAdmin', icon, small, @click='settingsOpened = true')
         v-icon fas fa-pen
@@ -110,7 +122,7 @@
             v-list-item-avatar
               v-icon fas fa-plus
             v-list-item-title Nuevo participante
-          v-dialog
+          v-dialog(v-if='isParticipant', v-model='leaveDialogIn')
             template(v-slot:activator='{ on }')
               v-list-item(v-on='on')
                 v-list-item-avatar
@@ -120,7 +132,7 @@
               .overline SALIR DEL GRUPO
               p.text-center ¿De verdad quieres salir del grupo?
               v-layout(justify-space-between)
-                v-btn(text, @click='removeParticipantDialog') Cancelar
+                v-btn(text, @click='leaveDialogIn = false') Cancelar
                 v-btn(color='red', @click='leaveGroup()', dark, depressed) Salir
           v-menu(offset-y, v-for='(member, i) in chat.member', :key='i')
             template(v-slot:activator='{ on }')
@@ -136,7 +148,7 @@
                   v-list-item-avatar 
                     v-img(:src='member.profile.profile_picture')
                   v-list-item-content Ver perfil de {{ member.profile.username }}
-                v-dialog
+                v-dialog(v-model='addAdminDialog')
                   template(v-slot:activator='{ on }')
                     v-list-item(
                       v-on='on',
@@ -153,14 +165,14 @@
                       v-list-item-content {{ member.profile.username }}
                     p.text-center ¿Quieres añadirlo como administrador?
                     v-layout(justify-space-between)
-                      v-btn(text, @click='addAdminDialog') Cancelar
+                      v-btn(text, @click='addAdminDialog = false') Cancelar
                       v-btn(
                         color='primary',
                         dark,
                         depressed,
                         @click='addAdmin(member)'
                       ) Hacer Administrador
-                v-dialog
+                v-dialog(v-model='removeAdminDialog')
                   template(v-slot:activator='{ on }')
                     v-list-item(
                       v-on='on',
@@ -177,14 +189,14 @@
                       v-list-item-content {{ member.profile.username }}
                     p.text-center ¿Quieres quitarlo como administrador?
                     v-layout(justify-space-between)
-                      v-btn(text, @click='addAdminDialog') Cancelar
+                      v-btn(text, @click='removeAdminDialog = false') Cancelar
                       v-btn(
                         color='primary',
                         dark,
                         depressed,
                         @click='removeAdmin(member)'
                       ) Quitar Administrador
-                v-dialog
+                v-dialog(v-model='removeParticipantDialog')
                   template(v-slot:activator='{ on }')
                     v-list-item(
                       v-on='on',
@@ -201,7 +213,7 @@
                       v-list-item-content {{ member.profile.username }}
                     p.text-center ¿Quieres expulsarlo del grupo?
                     v-layout(justify-space-between)
-                      v-btn(text, @click='removeParticipantDialog') Cancelar
+                      v-btn(text, @click='removeParticipantDialog = false') Cancelar
                       v-btn(
                         color='red',
                         dark,
@@ -229,6 +241,8 @@
                 template(#placeholder)
                   v-row.fill-height.ma-0(align='center', justify='center')
                     v-progress-circular(indeterminate, color='grey lighten-5')
+  v-bottom-sheet(v-model='shareDialog', :inset='$vuetify.breakpoint.mdAndUp')
+    share(:group='chat', @back='shareDialog = false')
 </template>
 
 <script>
@@ -247,6 +261,7 @@ export default {
     Post,
     Event,
     avatarInput: () => import('@/components/avatar-input'),
+    share: () => import('@/components/map/share.vue'),
     // staticMap: () => import('@/components/map/staticMap')
   },
   beforeRouteLeave(_, __, next) {
@@ -259,6 +274,13 @@ export default {
   },
   data() {
     return {
+      shareDialog: false,
+      addParticipantDialog: false,
+      removeParticipantDialog: false,
+      addAdminDialog: false,
+      removeAdminDialog: false,
+      leaveDialogIn: false,
+      leaveDialogOut: false,
       chatLoaded: false,
       hasJoined: false,
       groupinfo: false,
@@ -337,8 +359,8 @@ export default {
     async addAdmin(member) {
       if (
         await this.$store.dispatch('chat/addAdmin', {
-          chat_id: this.chat.chat_id,
-          member_id: member.profile_id,
+          chatId: this.chat.chat_id,
+          memberId: member.profile_id,
         })
       ) {
         member.is_admin = true
@@ -347,8 +369,8 @@ export default {
     async removeAdmin(member) {
       if (
         await this.$store.dispatch('chat/removeAdmin', {
-          chat_id: this.chat.chat_id,
-          member_id: member.profile_id,
+          chatId: this.chat.chat_id,
+          memberId: member.profile_id,
         })
       ) {
         member.is_admin = false

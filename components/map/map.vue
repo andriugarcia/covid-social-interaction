@@ -12,7 +12,8 @@
     :zoom.sync='zoom',
     :pitch='20',
     style='position: absolute; top: 0; left: 0; right: 0; bottom: 0',
-    @click='mapClick'
+    @click='mapClick',
+    @dblclick='mapDblclick'
   )
     MglMarker(
       v-for='(post, i) in posts',
@@ -44,7 +45,6 @@ export default {
 
   data() {
     return {
-      taps: 0,
       accessToken: process.env.MAPBOX_TOKEN, // your access token. Needed if you using Mapbox maps
       mapStyle: 'mapbox://styles/mapbox/light-v9',
       bounds: {},
@@ -56,7 +56,6 @@ export default {
       return this.$store.state.map.locationEnabled
     },
     hasPortals() {
-      console.log('hasPortals:', this.$store.getters['auth/hasPortals'])
       return this.$store.getters['auth/hasPortals']
     },
     zoom: {
@@ -103,7 +102,7 @@ export default {
 
   created() {
     // We need to set mapbox-gl library here in order to use it in template
-    console.log('CREATED MAP', { ...this.mapPosition })
+
     this.mapbox = Mapbox
     this.map = null
   },
@@ -113,7 +112,6 @@ export default {
       const self = this
       navigator.geolocation.getCurrentPosition(
         function (position) {
-          console.log('GET CURRENT POSITION')
           self.updatePosition(position)
         },
         (error) => {
@@ -137,24 +135,16 @@ export default {
       this.$store.dispatch('event/getEvents')
     },
     mapClick(map) {
-      console.log(this.taps)
-      if (this.taps === 0) {
-        console.log('Generate timeout')
-        this.timer = setTimeout(() => {
-          console.log('Timeout resolved, opening closeplace')
-          this.taps = 0
-          this.$emit('click', map.mapboxEvent.lngLat)
-        }, 500)
-      } else {
-        console.log('Timeout removed, double tap')
-        this.taps = -1
-        clearTimeout(this.timer)
-        this.timer = null
-      }
-      this.taps++
+      if (this.timer) return
+      this.timer = setTimeout(() => {
+        this.$emit('click', map.mapboxEvent.lngLat)
+      }, 500)
+    },
+    mapDblclick() {
+      clearTimeout(this.timer)
+      this.timer = null
     },
     onLoad(ev) {
-      console.log('Cargando mapa', this.mapPosition)
       this.map = ev.map
       this.$store.commit('map/setEventActions', ev.component.actions)
       this.$store.dispatch('post/getPosts', ev.map.getBounds())

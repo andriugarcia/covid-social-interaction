@@ -91,13 +91,14 @@ export default {
 
       const [{ data: places }, { data: users }] = await Promise.all([
         axios.get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${this.searchText}.json?proximity=${this.userPosition.lng},${this.userPosition.lat}&autocomplete=true&access_token=${process.env.MAPBOX_TOKEN}`
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${this.searchText}.json?proximity=${this.userPosition.lng},${this.userPosition.lat}&autocomplete=true&access_token=${process.env.MAPBOX_TOKEN}`,
+          { withCredentials: false }
         ),
         axios.get(`${process.env.SERVER_URL}/users/find/${this.searchText}`),
       ])
 
       this.users = users
-      console.log(places.features)
+
       this.places = places.features
         .map((place) => {
           return {
@@ -117,7 +118,6 @@ export default {
 
   methods: {
     select(index) {
-      console.log(this.places[index])
       if (typeof this.places[index].bbox !== 'undefined') {
         if (this.onlyPlaces) {
           this.$emit('updateByBbox', this.places[index].bbox)

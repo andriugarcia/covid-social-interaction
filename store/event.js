@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../axios'
 
 export const state = () => ({
   events: [],
@@ -320,7 +320,7 @@ export const actions = {
       const { data } = await axios.get(
         `${process.env.SERVER_URL}/events?lat=${rootState.map.userPosition.lat}&lng=${rootState.map.userPosition.lng}&page=${page}`
       )
-      console.log('EVENTS', data)
+
       commit('setEvents', data)
     } catch (err) {
       console.error(err)
@@ -334,7 +334,7 @@ export const actions = {
       return data
     } catch (err) {
       console.error(err)
-      return []
+      return null
     }
   },
   async createEvent(_, event) {
@@ -343,6 +343,9 @@ export const actions = {
         `${process.env.SERVER_URL}/events`,
         event
       )
+      this.app.$fire.analytics.logEvent('add_event', {
+        event_id: data,
+      })
       return data
     } catch (err) {
       console.error(err)
@@ -352,6 +355,9 @@ export const actions = {
   async joinEvent(_, eventId) {
     try {
       await axios.post(`${process.env.SERVER_URL}/events/join/${eventId}`)
+      this.app.$fire.analytics.logEvent('join_event', {
+        event_id: eventId,
+      })
       return true
     } catch (err) {
       console.error(err)
@@ -361,6 +367,9 @@ export const actions = {
   async unjoinEvent(_, eventId) {
     try {
       await axios.post(`${process.env.SERVER_URL}/events/unjoin/${eventId}`)
+      this.app.$fire.analytics.logEvent('unjoin_event', {
+        event_id: eventId,
+      })
       return true
     } catch (err) {
       console.error(err)
@@ -370,16 +379,19 @@ export const actions = {
   async cancelEvent(_, eventId) {
     try {
       await axios.post(`${process.env.SERVER_URL}/events/cancel/${eventId}`)
+      this.app.$fire.analytics.logEvent('cancel_event', {
+        event_id: eventId,
+      })
       return true
     } catch (err) {
       console.error(err)
       return false
     }
   },
-  async getNearbyEvents(_, coordinates) {
+  async getNearbyEvents(_, { coordinates, page }) {
     try {
       const { data } = await axios.get(
-        `${process.env.SERVER_URL}/events/nearby?lat=${coordinates.lat}&lng=${coordinates.lng}`
+        `${process.env.SERVER_URL}/events/nearby?lat=${coordinates.lat}&lng=${coordinates.lng}&page=${page}`
       )
       return data
     } catch (err) {

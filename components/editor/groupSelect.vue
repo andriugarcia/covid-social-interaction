@@ -4,8 +4,8 @@
     v-btn(icon, @click='$emit("back")')
       v-icon fas fa-arrow-left
     v-toolbar-title Seleccionar Grupo
-  v-card(flat, style='height: 100%')
-    v-list
+  v-card(flat, style='height: 100%', color='white')
+    v-list(color='white')
       v-list-item(@click='selectGroup(null)')
         v-list-item-avatar
           v-icon fas fa-times

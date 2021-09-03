@@ -174,7 +174,6 @@ export default {
         const self = this
         navigator.geolocation.getCurrentPosition(
           function (position) {
-            console.log('GET CURRENT POSITION')
             self.updatePosition(position)
             self.$store.dispatch('chat/joinNearby')
           },
@@ -201,7 +200,7 @@ export default {
       this.placeOpened = false
     },
     openSearch() {
-      this.$router.push({ hash: 'search' })
+      this.$router.replace({ hash: 'search' })
       this.opened = 'search'
     },
     openEditor() {

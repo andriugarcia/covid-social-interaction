@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../axios'
 import socket from '../socket'
 
 export const state = () => ({
@@ -15,7 +15,7 @@ export const state = () => ({
 
 export const getters = {
   total(state) {
-    return state.chats.reduce((a, b) => a + (b.unread || 0), 0) + state.nearbyTotal
+    return state.chats.reduce((a, b) => a + (b.unread ? 1 : 0), 0) + state.nearbyTotal
   },
   totalClose(state) {
     return state.closeChats.length
@@ -33,8 +33,14 @@ export const getters = {
     state.chats.splice(index, 1)
   },
   getChatIdFromUsername: (state) => (username) => {
+    console.log(state.chats)
     const index = state.chats.findIndex(
-      (chat) => chat.chat.member[0].profile.username === username || chat.chat.member[1].profile.username === username
+      (chat) => {
+        if (chat.chat.type !== 'chat') return false
+        if (typeof chat.chat.member[1] === 'undefined') return false
+
+        return chat.chat.member[0].profile.username === username || chat.chat.member[1].profile.username === username
+      }
     )
 
     if (index !== -1) {
@@ -94,19 +100,31 @@ export const mutations = {
 }
 
 export const actions = {
+  async share({ commit }, shareContent) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/group/share/${shareContent.chat}`, {
+        targets: shareContent.targets,
+      })
+      commit('setShareCreated', true, { root: true })
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
   joinNearby({ rootState, commit }) {
-    console.log("JOIN NEARBY")
+
     socket.emit('join-nearby', {
       user: rootState.auth.user,
       coordinates: rootState.map.userPosition,
     })
 
     socket.on('message', (message) => {
-      console.log('MENSAJE RECIBIDO')
+
       commit('pushNearbyMessage', message)
     })
     socket.on('disconnected', (message) => {
-      console.log('DESCONECTADO')
+
       socket.disconnect()
     })
   },
@@ -116,7 +134,7 @@ export const actions = {
     })
   },
   createNearbyMessage({ commit, rootState }, message) {
-    console.log("SEND NEARBY MESSAGE")
+
     socket.emit('send-nearby', {
       ...message,
       coordinates: rootState.map.userPosition,
@@ -174,8 +192,10 @@ export const actions = {
       const { messages, chat } = data
       commit('setMessages', messages)
       commit('setChat', chat)
+
     } catch (err) {
       console.error(err)
+      throw new Error(err)
     }
   },
   async muteChat({ commit }, chatId) {
@@ -287,13 +307,17 @@ export const actions = {
   },
   async createMessage({ rootState, commit }, message) {
     try {
-      await axios.post(`${process.env.SERVER_URL}/chat/send`, message)
+      const { data } = await axios.post(`${process.env.SERVER_URL}/chat/send`, message)
       commit('pushMessage', {
         ...message,
         author: rootState.auth.user.profile_id,
         created_at: Date.now(),
       })
-      return true
+      this.app.$fire.analytics.logEvent('new_message', {
+        chat_id: message.chat_ref,
+        author: rootState.auth.user.profile_id,
+      })
+      return data
     } catch (err) {
       console.error(err)
       return false
@@ -302,6 +326,10 @@ export const actions = {
   async createGroup(_, group) {
     try {
       const { data } = await axios.post(`${process.env.SERVER_URL}/group/new`, group)
+      this.app.$fire.analytics.logEvent('new_group', {
+        chat_id: data,
+        name: data.title,
+      })
       return data
     } catch (err) {
       console.error(err)

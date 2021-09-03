@@ -1,11 +1,11 @@
 <template lang="pug">
-v-card(style='border-radius: 24px 24px 0 0', color="white", v-touch="{ down: () => closePlaceSelected() }",)
+v-card(:style='!$vuetify.breakpoint.mdAndUp ? "border-radius: 24px 24px 0 0" : ""', color="white", v-touch="{ down: () => closePlaceSelected() }",)
   v-toolbar(
     dark,
     flat,
     color='primary',
     extended,
-    style='position: absolute; top: 0; left: 0; right: 0; z-index: 20'
+    style='position: absolute; top: 0; left: 0; right: 0; z-index: 20; overflow-y: none'
   )
     v-btn(icon, @click='$emit("back")')
       v-icon fas fa-chevron-down
@@ -18,8 +18,9 @@ v-card(style='border-radius: 24px 24px 0 0', color="white", v-touch="{ down: () 
         v-tab(key='events')
           v-icon.mr-1(small) fas fa-flag
           div Eventos
-  .px-2(ref="postcontent",
-      style='padding-top: 116px; min-height: calc(100vh - 104px)')
+  .px-2(ref="scrollarea",
+      style='padding-top: 116px; overflow-y: scroll;',
+      :style='$vuetify.breakpoint.mdAndUp ? "height: 90vh" : "height: 100vh"')
     v-tabs-items.px-2(
       v-model='tab', style='background-color: transparent;'
     )
@@ -37,7 +38,6 @@ v-card(style='border-radius: 24px 24px 0 0', color="white", v-touch="{ down: () 
             :content='post',
             grid
           )
-          .mb-15
         v-card.my-2.rounded-xl(v-else, outlined)
           v-layout.pa-6.text-center(
             column,
@@ -80,25 +80,66 @@ export default {
       nearbyPosts: [],
       nearbyEvents: [],
       loading: false,
+      finished: false,
+      postsPage: 1,
+      eventsPage: 1,
       tab: 'posts',
     }
   },
   async mounted() {
     this.loading = true
     const [nearbyPosts, nearbyEvents] = await Promise.all([
-      this.$store.dispatch('post/getNearbyPosts', this.coordinates),
-      this.$store.dispatch('event/getNearbyEvents', this.coordinates),
+      this.$store.dispatch('post/getNearbyPosts', {
+        coordinates: this.coordinates,
+        page: 0,
+      }),
+      this.$store.dispatch('event/getNearbyEvents', {
+        coordinates: this.coordinates,
+        page: 0,
+      }),
     ])
 
     this.nearbyPosts = nearbyPosts
-    console.log(this.nearbyPosts)
     this.nearbyEvents = nearbyEvents
+
     this.loading = false
+    this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
   },
 
   methods: {
+    async handleScroll() {
+      if (
+        !this.finished &&
+        this.$refs.scrollarea.scrollTop + 1000 >=
+          this.$refs.scrollarea.scrollHeight &&
+        !this.loading
+      ) {
+        this.loading = true
+        if (this.tabs == 'posts') {
+          const newNearbyPosts = await this.$store.dispatch(
+            'post/getNearbyPosts',
+            { coordinates: this.coordinates, page: this.postsPage }
+          )
+          this.nearbyPosts.push(...newNearbyPosts)
+          this.postsPage++
+          if (newNearbyPosts.length <= 0) {
+            this.finished = true
+          }
+        } else {
+          const newNearbyEvents = await this.$store.dispatch(
+            'event/getNearbyEvents',
+            { coordinates: this.coordinates, page: this.eventsPage }
+          )
+          this.nearbyEvents.push(...newNearbyEvents)
+          this.eventsPage++
+          if (newNearbyEvents.length <= 0) {
+            this.finished = true
+          }
+        }
+        this.loading = false
+      }
+    },
     closePlaceSelected() {
-      console.log('DOWN', this.$refs.postcontent.scrollTop)
       if (this.$refs.postcontent.scrollTop <= 50) {
         this.$emit('back')
       }
@@ -108,6 +149,7 @@ export default {
         name: 'editor',
         query: this.coordinates,
       })
+      this.$emit('back')
     },
   },
 }

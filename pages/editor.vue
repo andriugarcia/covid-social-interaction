@@ -173,6 +173,9 @@ import texteditor from '@/components/editor/textarea'
 // import imageCompression from 'browser-image-compression';
 
 export default {
+  head: {
+    title: 'Nuevo Post | Olimaps',
+  },
   components: {
     locationSelect: () => import('../components/map/locationSelect'),
     groupSelect: () => import('../components/editor/groupSelect'),
@@ -293,7 +296,7 @@ export default {
     async imageUpdated(ev) {
       const file = ev.target.files[0]
       this.uploading = true
-      console.log(file)
+
       this.imageBeforeEdit = null
 
       this.uploading = true
@@ -304,13 +307,12 @@ export default {
         this.post.type = 'image'
 
         data = await this.$store.dispatch('storage/uploadFile', file)
-        console.log(file)
       } else if (file.type.startsWith('video')) {
         this.post.type = 'video'
 
         data = await this.$store.dispatch('storage/uploadVideo', file)
       }
-      console.log(data.location)
+
       this.post.src = data.location
       this.uploading = false
     },

@@ -4,15 +4,17 @@
       .text-center(@click.stop="$router.push({ path: `/group/${content.chat_id}` })")
         v-avatar.elevation-2(size="40")
           img(:src="content.cover")
-        v-card.px-1.rounded-pill(outlined)
+        v-card.px-1.text-center.rounded-pill(outlined, style='max-width: 120px')
           span.mx-1.font-weight-bold {{ content.title }}
       v-layout(justify-center)
         .triangle
     #event(v-else-if="type == 'event'")
-      v-layout(align-center, reverse)
-        v-card.px-2.ml-n2.rounded-pill(outlined, style="height: fit-content", @click="$router.push({ path: `/events/${content.event_id}`})")
+      v-card.px-2.ml-n2.rounded-pill(outlined, style="height: fit-content", @click="$router.push({ path: `/events/${content.event_id}`})")
+        v-layout(align-center)
+          v-avatar(small, :color="getColor()", :size="32", style="font-size: 2em") {{ content.emoji }}
           span.mx-1.font-weight-bold {{ content.title }}
-        v-avatar(small, :color="getColor()", :size="32", style="font-size: 2em") {{ content.emoji }}
+      v-layout(justify-center)
+        .triangle
     div(v-else)
       transition(name="scale")
         v-card.card.rounded-lg(v-show="visible", outlined, @click.stop="expand", width="100%")
@@ -83,7 +85,7 @@ export default {
   },
   methods: {
     expand() {
-      this.$router.push({ hash: this.content.post_id })
+      this.$router.replace({ hash: this.content.post_id })
       this.expanded = true
     },
     closePost() {

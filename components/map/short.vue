@@ -7,15 +7,15 @@
   p.font-weight-light(
     v-else,
     :class='{ shortGrid: grid, short: !grid }',
-    v-html='content.text'
+    :inner-html.prop='content.text | truncate'
   )
 </template>
 
 <script>
 export default {
-  methods: {
+  filters: {
     truncate(value) {
-      const limit = 64
+      const limit = 56
       if (value.length > limit) return value.substr(0, limit) + '...'
       return value
     },

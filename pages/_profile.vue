@@ -1,12 +1,16 @@
 <template lang="pug">
-#profile(v-if='user')
+#profile(
+  v-if='!userLoading && user && !userNotFound',
+  style='position: relative'
+)
   v-app-bar(
     absolute,
     flat,
     color='primary',
     dark,
     inverted-scroll,
-    scroll-target='#profile-scroll'
+    scroll-target='#scrolltarget',
+    style='z-index: 20'
   )
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left
@@ -16,9 +20,9 @@
           v-row.fill-height.ma-0(align='center', justify='center')
             v-progress-circular(indeterminate, color='grey lighten-5')
     v-toolbar-title {{ user.username }}
-  v-sheet#profile-scroll(
-    color='white',
-    style='height: 100vh; overflow-y: scroll'
+  #scrolltarget(
+    ref='scrollarea',
+    style='overflow-y: scroll; height: 100vh; background-color: #f5f0e3'
   )
     v-layout.px-4.pt-4
       v-btn(icon, color='black', @click='$router.go(-1)')
@@ -51,7 +55,7 @@
         :outlined='!user.isFollowing',
         color='primary',
         @click='follow'
-      ) {{ user.isFollowing ? "Siguiendo" : "OLI 👋🏼" }}
+      ) {{ user.isFollowing ? "Siguiendo" : "Seguir" }}
       v-btn(
         v-else,
         rounded,
@@ -106,7 +110,7 @@
           span.ml-1 {{ rrss.name }}
     .mt-4.ml-4.font-weight-black {{ user.followers }} seguidores
     p.ma-4 {{ user.description }}
-    .ma-4
+    .ma-4(v-if='user.groups.length != 0')
       .overline(v-if='user.groups.length !== 0') PARTICIPANDO EN:
       v-layout(wrap)
         v-chip.pl-0.pr-2.mb-1.mr-1(
@@ -122,7 +126,7 @@
       v-model='tab',
       fixed-tabs,
       background-color='white',
-      style='position: sticky; top: 54px; left: 0; right: 0; z-index: 10'
+      style='position: sticky; top: 56px; left: 0; right: 0; z-index: 10'
     )
       v-tab(key='posts') Posts
       v-tab(key='events') Eventos
@@ -136,16 +140,48 @@
             :content='publication',
             grid
           )
+        v-layout.pt-4.pb-8(v-if='loading', justify-center)
+          v-progress-circular(indeterminate, color='primary')
       v-tab-item.pa-4(key='events')
         event.mb-2(v-for='(event, i) in events', :key='i', :event='event')
+        v-layout.pt-4.pb-8(v-if='loading', justify-center)
+          v-progress-circular(indeterminate, color='primary')
     v-dialog(:value='sendMessage', fullscreen, transition='fade-transition')
       v-sheet(
         color='#1e1e1eE0',
         style='position: relative; width: 100%; height: 100%'
       )
-        new-chat(:user='user', @back='sendMessage = false')
+        v-layout(justify-center)
+          new-chat(
+            :user='user',
+            @back='sendMessage = false',
+            style='max-width: 600px'
+          )
   viewer(v-model='editingProfile')
     edit-profile(@back='editFinished')
+v-sheet#notFound.pa-4(
+  v-else-if='!userLoading',
+  color='white',
+  style='height: 100vh'
+)
+  v-card.ma-2.rounded-xl(outlined)
+    v-layout.pa-6.text-center(
+      column,
+      justify-center,
+      align-center,
+      color='white',
+      style='height: 100%'
+    )
+      v-icon(color='primary', x-large) far fa-sad-cry
+      .mt-4.black--text Usuario no encontrado
+      .black--text El usuario que buscas no existe
+      v-btn.mt-2(
+        block,
+        rounded,
+        depressed,
+        color='primary',
+        @click='$router.replace({ path: "/" })'
+      ) Ir a Olimaps
 </template>
 
 <script>
@@ -161,7 +197,13 @@ export default {
   },
   data() {
     return {
+      page: 1,
+      loading: false,
+      finished: false,
       user: null,
+      userLoading: true,
+      userNotFound: false,
+      loading: false,
       posts: [],
       events: [],
       editingProfile: false,
@@ -174,22 +216,50 @@ export default {
       return this.$store.state.auth.user
     },
   },
-  mounted() {
-    this.getUser()
+  async mounted() {
+    await this.getUser()
+    this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
   },
   methods: {
+    async handleScroll() {
+      if (
+        !this.finished &&
+        this.$refs.scrollarea.scrollTop + 1500 >=
+          this.$refs.scrollarea.scrollHeight &&
+        !this.loading
+      ) {
+        this.loading = true
+        const user = await this.$store.dispatch('user/getUser', {
+          username: this.$route.params.profile,
+          page: this.page,
+        })
+        this.posts.push(
+          ...user.post.map((post) => ({
+            ...post,
+            profile: this.user,
+          }))
+        )
+        this.events.push(...user.event)
+        this.page++
+        // this.finished = true
+        this.loading = false
+      }
+    },
     async getUser() {
-      this.user = await this.$store.dispatch(
-        'user/getUser',
-        this.$route.params.profile
-      )
-      console.log(this.user.event)
-      this.posts = this.user.post.map((post) => ({
-        ...post,
-        profile: this.user,
-      }))
+      try {
+        this.user = await this.$store.dispatch('user/getUser', {
+          username: this.$route.params.profile,
+        })
+        this.userLoading = false
 
-      this.events = this.user.event
+        this.posts = this.user.post.map((post) => ({
+          ...post,
+          profile: this.user,
+        }))
+        this.events = this.user.event
+      } catch (err) {
+        this.userNotFound = true
+      }
     },
     openChat() {
       const chatId = this.$store.getters['chat/getChatIdFromUsername'](

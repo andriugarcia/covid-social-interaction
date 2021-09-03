@@ -1,5 +1,7 @@
-import axios from 'axios'
+import axios from '../axios'
 import socket from '../socket'
+
+axios.defaults.withCredentials = true;
 
 const defaultPortal = {
   audience: 0,
@@ -37,14 +39,16 @@ export const state = () => ({
 export const mutations = {
   setUser(state, user) {
     state.user = user
-
+  },
+  restartPortals(state) {
+    state.portals = [
+      defaultPortal
+    ]
   },
   setPortals(state, portals) {
-    console.log(portals)
-    state.portals = [
-      defaultPortal,
-      ...Object.values(portals),
-    ]
+
+    state.portals.push(...Object.values(portals))
+
   },
   setPushEnabled(state, pushEnabled) {
     state.pushEnabled = pushEnabled
@@ -56,7 +60,7 @@ export const mutations = {
     state.user.notifications.unshift(newNotification)
     state.newNotification = newNotification
 
-    console.log("showing notification")
+
     setTimeout(() => {
       state.newNotification = null
     }, 8000)
@@ -89,9 +93,14 @@ export const actions = {
     const token = localStorage.getItem('token')
     if (token) {
       axios.defaults.headers.common.authorization = 'Bearer ' + token
-      return await dispatch('getMe')
     }
-    return false
+
+    try {
+      return await dispatch('getMe')
+    } catch (err) {
+      console.error(err)
+      return false
+    }
   },
   initAuthError({ dispatch }, router) {
     axios.interceptors.response.use(
@@ -110,13 +119,15 @@ export const actions = {
   logout({ commit }) {
     delete axios.defaults.headers.common.authorization
     localStorage.removeItem('token')
-    localStorage.removeItem('pushToken')
+    // localStorage.removeItem('pushToken')
     commit('setPushEnabled', false)
     commit('setUser', {})
     commit('setPortals', [])
+    axios.get(`${process.env.SERVER_URL}/logout`)
+    this.app.$fire.analytics.logEvent('logout')
   },
   async login({ dispatch }, body) {
-    console.log('LOGIN');
+
     try {
       const { data: token } = await axios.post(
         `${process.env.SERVER_URL}/login`,
@@ -124,6 +135,27 @@ export const actions = {
       )
       axios.defaults.headers.common.authorization = 'Bearer ' + token
       localStorage.setItem('token', token)
+      this.app.$fire.analytics.logEvent('login', {
+        method: 'Email'
+      })
+      return await dispatch('getMe')
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async loginPhone({ dispatch }, body) {
+
+    try {
+      const { data: token } = await axios.post(
+        `${process.env.SERVER_URL}/login/phone`,
+        body
+      )
+      axios.defaults.headers.common.authorization = 'Bearer ' + token
+      localStorage.setItem('token', token)
+      this.app.$fire.analytics.logEvent('login', {
+        method: 'Phone'
+      })
       return await dispatch('getMe')
     } catch (err) {
       console.error(err)
@@ -131,6 +163,44 @@ export const actions = {
     }
   },
 
+  async signupByPhone({ dispatch }, body) {
+    try {
+      const { data: token } = await axios.post(
+        `${process.env.SERVER_URL}/signup/phone`,
+        body
+      )
+
+
+      axios.defaults.headers.common.authorization = 'Bearer ' + token
+      localStorage.setItem('token', token)
+      this.app.$fire.analytics.logEvent('sign_up', {
+        method: 'Phone'
+      })
+      return await dispatch('getMe')
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  },
+  async signupByEmail({ dispatch }, body) {
+    try {
+      const { data: token } = await axios.post(
+        `${process.env.SERVER_URL}/signup/email`,
+        body
+      )
+
+
+      axios.defaults.headers.common.authorization = 'Bearer ' + token
+      localStorage.setItem('token', token)
+      this.app.$fire.analytics.logEvent('sign_up', {
+        method: 'Email'
+      })
+      return await dispatch('getMe')
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+  },
   async signup({ dispatch }, body) {
     try {
       const { data: token } = await axios.post(
@@ -140,30 +210,49 @@ export const actions = {
 
       axios.defaults.headers.common.authorization = 'Bearer ' + token
       localStorage.setItem('token', token)
+      this.app.$fire.analytics.logEvent('sign_up', {
+        method: 'Email'
+      })
       return await dispatch('getMe')
     } catch (err) {
       console.error(err)
       return false
     }
   },
-  async getPortals({ commit }) {
+  async getPortals({ commit }, page) {
     try {
-      const { data } = await axios.get(`${process.env.SERVER_URL}/portals`)
+      const { data } = await axios.get(`${process.env.SERVER_URL}/portals/${page}`)
+
 
       commit('setPortals', data)
+      return true
     } catch (err) {
       console.error(err)
+      return false
     }
   },
-  async getMe({ commit, dispatch }) {
+  async updatePassword(_, password) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/user/updatePassword`, { password })
+      this.app.$fire.analytics.logEvent('updatePassword')
+      return true
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
+    }
+
+  },
+  async getMe({ state, commit, dispatch }) {
     try {
       const { data: user } = await axios.get(
         `${process.env.SERVER_URL}/user/me`
       )
       commit('setUser', user)
-      console.log("USER", user)
+
       dispatch('chat/getChats', {}, { root: true })
-      dispatch('getPortals')
+      if (state.portals.length <= 1) {
+        dispatch('getPortals')
+      }
 
       // socket.emit('join', {
       //   profile_id: user.profile_id,
@@ -174,11 +263,11 @@ export const actions = {
       })
 
       socket.on('notification', (notification) => {
-        console.log('Notificacion recibida')
+
         commit('setNotification', notification)
       })
 
-      console.log(user)
+
 
       return true
     } catch (err) {

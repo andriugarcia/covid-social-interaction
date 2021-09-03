@@ -88,6 +88,7 @@ export default {
     { src: '~/plugins/masonry.js', ssr: false },
     { src: '~/plugins/viewer.js' },
     { src: '~/plugins/swiper.js', ssr: false },
+    { src: '~/plugins/mask.js' },
   ],
 
   vuetify: {
@@ -144,8 +145,18 @@ export default {
     services: {
       messaging: {
         createServiceWorker: true,
+        fcmPublicVapidKey: 'BA84ymQLz9C8zPCw0AeQh5ofs-KKfBK6BTfoex9d3fPq9PjDg99WIzDSfiErdQqOal8tpALRsg52HGyQM2Ic44o',
         inject: fs.readFileSync('./serviceWorker.js')
       },
+      auth: {
+        persistence: 'local', // default
+        ssr: false, // default
+        emulatorPort: undefined,
+        emulatorHost: 'http://localhost',
+      },
+      analytics: {
+        collectionEnabled: true // default
+      }
     }
   },
 
@@ -160,8 +171,55 @@ export default {
   //   ],
   // },
 
-  // PWA module configuration: https://go.nuxtjs.dev/pwa
+  // ∂ module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
+    workbox: false,
+    meta: {
+
+      title: "Qué está pasando a tu alrededor 🌍 | Olimaps",
+      meta: [
+        {
+          name: "description",
+          content:
+            "Descubre que está haciendo la gente cerca de ti y conocelos haciendo eventos."
+        },
+        {
+          property: "og:title",
+          content: "Qué está pasando a tu alrededor 🌍 | Olimaps"
+        },
+        {
+          property: "og:description",
+          content:
+            "Descubre que está haciendo la gente cerca de ti y conocelos haciendo eventos."
+        },
+        { property: "og:site_name", content: "Olimaps" },
+        { property: "og:type", content: "website" },
+        {
+          property: "og:image",
+          content: "https://olimaps.com/icon.png"
+        },
+        { property: "og:url", content: "https://olimaps.com" },
+        {
+          name: "twitter:title",
+          content: "Qué está pasando a tu alrededor 🌍 | Olimaps"
+        },
+        {
+          name: "twitter:description",
+          content:
+            "Descubre que está haciendo la gente cerca de ti y conocelos haciendo eventos."
+        },
+        {
+          name: "twitter:image",
+          content: "https://olimaps.com/icon.png"
+        },
+        { name: "twitter:image:alt", content: "Logo de Pick a Look" },
+        {
+          name: "twitter:card",
+          content: "https://olimaps.com/icon.png"
+        },
+        { name: "twitter:site", content: "@versymattic" }
+      ],
+    },
     manifest: {
       name: 'Olimaps',
       short_name: 'Olimaps',

@@ -1,10 +1,32 @@
-import axios from 'axios'
+import axios from '../axios'
+
+export const state = () => ({
+  rrssContacts: []
+})
+
+export const mutations = {
+  setRrssContacts(state, data) {
+    state.rrssContacts = data
+  }
+}
 
 export const actions = {
-  async getUser(_, username) {
+  async getUser(_, { username, page }) {
     try {
       const { data } = await axios.get(
-        `${process.env.SERVER_URL}/users/${username}`
+        `${process.env.SERVER_URL}/users/${username}/${page}`
+      )
+      return data
+    } catch (err) {
+      console.error(err)
+      return null
+      throw new Error(err)
+    }
+  },
+  async getNotifications(_, page) {
+    try {
+      const { data } = await axios.get(
+        `${process.env.SERVER_URL}/user/notifications/${page}`
       )
       return data
     } catch (err) {
@@ -12,10 +34,10 @@ export const actions = {
       return []
     }
   },
-  async getNotifications(_, page) {
+  async getFollowers(_) {
     try {
       const { data } = await axios.get(
-        `${process.env.SERVER_URL}/user/notifications/${page}`
+        `${process.env.SERVER_URL}/user/followers`
       )
       return data
     } catch (err) {
@@ -30,6 +52,30 @@ export const actions = {
     } catch (err) {
       console.error(err)
       return []
+    }
+  },
+  async getRrssContacts({ commit }) {
+    const lastRrssChecked = localStorage.getItem('lastRrssChecked')
+
+    if (lastRrssChecked) {
+      const date = new Date(lastRrssChecked * 1)
+      const diff = new Date() - date
+
+      // Comprobamos si la última comprobación ha sido hace menos de una semana
+      if (diff < (3600000 * 24 * 7)) {
+        return
+      }
+    }
+    try {
+      const { data } = await axios.get(`${process.env.SERVER_URL}/user/rrssContacts`)
+      commit('setRrssContacts', data.map(contact => ({
+        ...contact,
+        follow: false,
+      })))
+      localStorage.setItem('lastRrssChecked', Date.now())
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
     }
   },
   async userAutocomplete(_, searchText) {
@@ -57,6 +103,9 @@ export const actions = {
   async follow(_, userId) {
     try {
       await axios.post(`${process.env.SERVER_URL}/follow/${userId}`)
+      this.app.$fire.analytics.logEvent('follow', {
+        user_id: userId,
+      })
       return true
     } catch (err) {
       console.error(err)
@@ -66,6 +115,9 @@ export const actions = {
   async unfollow(_, userId) {
     try {
       await axios.post(`${process.env.SERVER_URL}/unfollow/${userId}`)
+      this.app.$fire.analytics.logEvent('unfollow', {
+        user_id: userId,
+      })
       return true
     } catch (err) {
       console.error(err)
@@ -79,7 +131,7 @@ export const actions = {
       return true
     } catch (err) {
       console.error(err)
-      return false
+      throw new Error(err)
     }
   },
   async updateProfilePicture(_, profilePicture) {
@@ -107,7 +159,7 @@ export const actions = {
       await axios.post(`${process.env.SERVER_URL}/subscribePushClient`, {
         token
       })
-      console.log("TOKEN ENVIADO CON EXITO", token)
+
       return true
     } catch (err) {
       console.error(err)

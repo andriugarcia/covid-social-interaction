@@ -1,6 +1,6 @@
 <template lang="pug">
 #portals
-  v-row.flex-nowrap.px-4.pb-5.hide-scrollbar(style='overflow-x: scroll')
+  .flex-nowrap.align-center.pb-2.hide-scrollbar(ref='scrollarea', style='overflow-x: scroll; display: flex;')
     v-btn.mr-2.rounded-xl(
       v-if='appNotInstalled',
       fab,
@@ -16,14 +16,14 @@
       :color='getColor(participation.event.emoji)',
       @click.prevent='$router.push({ path: `/events/${participation.event.event_id}` })',
       dark,
-      style='font-size: 0.7em'
+      style='font-size: 0.7em; max-width: 180px;'
     )
       v-layout(align-center, style='height: 100%')
         v-avatar.mr-2.rounded-xl(tile, color='white')
           span(style='font-size: 2em') {{ participation.event.emoji }}
         .pr-1
           .text-uppercase.font-weight-bold(style='white-space: nowrap') {{ participation.event.start_date | toDateShort }}
-          span(style='white-space: nowrap') Ahora
+          span.text-truncate(style='white-space: nowrap') {{ participation.event.title }}
     v-avatar.mr-2.rounded-xl(
       v-for='(portal, i) in portals',
       :key='i',
@@ -37,9 +37,11 @@
         template(#placeholder)
           v-row.fill-height.ma-0(align='center', justify='center')
             v-progress-circular(indeterminate, color='grey lighten-5')
+    .mx-2(v-if='loading')
+      v-progress-circular(indeterminate, color='primary')
   viewer(v-model='portalsOpened')
     v-sheet(color="black", style="height: 100%")
-      v-carousel(v-if='portalsOpened', v-model="portalIndex", v-touch="{ down: () => portalsOpened = false }", :touchless="focused", :show-arrows="!focused", hide-delimiters, height='100%', continuous, light)
+      v-carousel(v-if='portalsOpened', v-model="portalIndex", v-touch="{ down: () => closePortals() }", :touchless="focused", :show-arrows="!focused", hide-delimiters, height='100%', continuous, light)
         template(v-slot:prev="{ on, attrs }")
           v-btn(
             fab,
@@ -68,7 +70,8 @@
             :content='portal',
             style='background-color: white',
             @focused="focused = true",
-            @blured="focused = false"
+            @blured="focused = false",
+            @back='closePortals'
           )
       //- swiper(ref="portals", :options="swiperOptions", style="height: 100%", virtual, :enabled="false")
         swiper-slide(v-for="(portal, i) in portals", :key="portal.post_id", style="height: 100%", :virtualIndex="portal.post_id")
@@ -84,6 +87,7 @@ export default {
   data() {
     return {
       portalIndex: 0,
+      page: 1,
       portalsOpened: false,
       // swiperOptions: {
       //   // effect: 'cube',
@@ -94,6 +98,8 @@ export default {
       //   loop: true,
       // },
       focused: false,
+      loading: false,
+      finished: false,
     }
   },
   components: {
@@ -105,11 +111,20 @@ export default {
         this.portalsOpened = false
       }
     },
+    portalIndex(value) {
+      if (!this.loading && value + 3 >= this.portals.length) {
+        this.getFollowingPortals()
+      }
+    },
   },
   methods: {
+    closePortals() {
+      this.$router.replace({ hash: '' })
+      this.portalsOpened = false
+    },
     openPortals(i) {
       this.portalIndex = i
-      this.$router.push({ hash: 'portals' })
+      this.$router.replace({ hash: 'portals' })
       this.portalsOpened = true
       // setTimeout(() => {
       //   this.$refs.portals.$swiper.slideTo(i + 1, 0, false)
@@ -119,25 +134,45 @@ export default {
       this.$store.commit('downloadApp')
     },
     getColor(emoji) {
-      return this.$store.state.event.colors[emoji] || 'gray'
+      return this.$store.state.event.colors[emoji] || 'primary'
+    },
+    async handleScroll() {
+      const length = this.portals.length
+      if (
+        !this.loading &&
+        !this.finished &&
+        this.$refs.scrollarea.scrollLeft + 500 >=
+          this.$refs.scrollarea.scrollWidth
+      ) {
+        await this.getFollowingPortals()
+      }
+    },
+    async getFollowingPortals() {
+      this.loading = true
+
+      await this.$store.dispatch('auth/getPortals', this.page)
+      this.finished = length == this.portals.length
+
+      this.page++
+      this.loading = false
     },
   },
   computed: {
     user() {
-      console.log(this.$store.state.auth.user)
       return this.$store.state.auth.user
     },
     authenticated() {
       return this.$store.getters['auth/authenticated']
     },
     portals() {
-      console.log(this.$store.state.auth.portals)
       return this.$store.state.auth.portals
     },
     appNotInstalled() {
       return this.$store.state.appNotInstalled
     },
   },
-  mounted() {},
+  mounted() {
+    this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
+  },
 }
 </script>

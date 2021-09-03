@@ -25,7 +25,7 @@ export const mutations = {
   },
 
   downloadApp(state) {
-    console.log('downloading')
+
     state.deferredPrompt.prompt()
     state.deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {

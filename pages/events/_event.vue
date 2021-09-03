@@ -1,5 +1,5 @@
 <template lang="pug">
-#event(v-if='event', style='position: relative; inset: 0')
+#event(v-if='event && !eventNotFound', style='position: relative; inset: 0')
   v-toolbar(absolute, color='primary', dark, flat, style='left: 0; right: 0')
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left
@@ -38,11 +38,15 @@
           .font-weight-light Anfitrión
           .font-weight-bold {{ event.username }}
         v-spacer
-        v-btn.black--text.text-capitalize.rounded-lg(
-          depressed,
+        v-btn(
+          v-if='event.profile_id != user.profile_id',
+          rounded,
           small,
-          color='primary lighten-5'
-        ) Ver Eventos
+          depressed,
+          :outlined='!event.follow',
+          color='primary',
+          @click='follow'
+        ) {{ event.follow ? "Siguiendo" : "Seguir" }}
       .overline.text-uppercase.mt-2.font-weight-bold Ubicación
       p {{ event.place_description }}
       static-map(:coordinates='event.place')
@@ -64,12 +68,7 @@
             .ml-3
               .font-weight-bold {{ event.chatname }}
             v-spacer
-            v-btn.black--text(
-              small,
-              rounded,
-              depressed,
-              color='primary lighten-4'
-            ) Cotillear
+            v-btn.rounded-md(small, depressed, color='primary') Ver grupo
       .overline.text-uppercase.mt-4.font-weight-bold {{ event.participants.length }} Participantes
       v-layout.mb-12.pb-6(wrap)
         v-flex.pa-2(
@@ -89,7 +88,9 @@
       v-if='eventState() == states.PROMOTION',
       style='position: absolute; bottom: 0; left: 0; right: 0'
     )
-      v-dialog(v-if='event.joined && event.participation.is_host')
+      v-dialog(
+        v-if='event.joined && event.participation && event.participation.is_host'
+      )
         template(v-slot:activator='{ on }')
           v-btn(v-on='on', block, dark, large, color='primary', rounded) Cancelar Evento
         v-card.pa-4.rounded-xl
@@ -118,6 +119,25 @@
             v-btn(rounded, dark, depressed, color='red', @click='unjoinEvent') CANCELAR
   v-bottom-sheet(v-model='shareDialog', :inset='$vuetify.breakpoint.mdAndUp')
     share(:event='event', @back='shareDialog = false')
+v-sheet.pa-4(v-else, color='white', style='height: 100vh')
+  v-card.ma-2.rounded-xl(outlined)
+    v-layout.pa-6.text-center(
+      column,
+      justify-center,
+      align-center,
+      color='white',
+      style='height: 100%'
+    )
+      v-icon(color='primary', x-large) far fa-sad-cry
+      .mt-4.black--text Evento no encontrado
+      .black--text El evento que buscas no existe o ha sido cancelado
+      v-btn.mt-2(
+        block,
+        rounded,
+        depressed,
+        color='primary',
+        @click='$router.replace({ path: "/events" })'
+      ) Ver Otros Eventos
 </template>
 
 <script>
@@ -136,6 +156,7 @@ export default {
   data() {
     return {
       event: null,
+      eventNotFound: false,
       shareDialog: false,
       states: {
         PROMOTION: 0,
@@ -144,28 +165,42 @@ export default {
       },
     }
   },
+  computed: {
+    user() {
+      return this.$store.state.auth.user
+    },
+  },
   async fetch() {
-    this.event = await this.$store.dispatch(
-      'event/getEvent',
-      this.$route.params.event
-    )
-    console.log(this.event)
+    try {
+      this.event = await this.$store.dispatch(
+        'event/getEvent',
+        this.$route.params.event
+      )
+    } catch (e) {
+      this.eventNotFound = true
+    }
   },
 
   methods: {
+    follow() {
+      if (this.event.follow) {
+        this.$store.dispatch('user/unfollow', this.event.profile_id)
+        this.event.follow = false
+      } else {
+        this.$store.dispatch('user/follow', this.event.profile_id)
+        this.event.follow = true
+      }
+    },
     eventState() {
       const now = new Date()
       const start = new Date(this.event.start_date)
       const end = new Date(this.event.end_date)
 
       if (start.getTime() <= now.getTime() && end.getTime() >= now.getTime()) {
-        console.log('Started')
         return this.states.STARTED
       } else if (start.getTime() >= now.getTime()) {
-        console.log('Promotion', start, now)
         return this.states.PROMOTION
       } else if (end.getTime() <= now.getTime()) {
-        console.log('End')
         return this.states.END
       }
     },
@@ -182,7 +217,7 @@ export default {
     async cancelEvent() {
       if (this.openLoginIfNotAuthenticated()) return
       await this.$store.dispatch('event/cancelEvent', this.$route.params.event)
-      this.$router.replace({ path: 'event' })
+      this.$router.replace({ path: '/events' })
     },
     getColor() {
       return (
@@ -192,7 +227,7 @@ export default {
     },
     goToMaps() {
       window.open(
-        `https://www.google.com/maps/search/?api=1&query=${this.event.place.lat},${this.event.place.lng}`
+        `https://www.google.com/maps/search/?api=1&q=${this.event.place.lat},${this.event.place.lng}+(My%20location)`
       )
     },
   },

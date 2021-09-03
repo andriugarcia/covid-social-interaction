@@ -20,6 +20,9 @@ import messages from '@/components/chat/messages'
 import chatBar from '@/components/chat/chatBar'
 
 export default {
+  head: {
+    title: 'Cerca de ti | Olimaps',
+  },
   components: {
     messages,
     chatBar,
