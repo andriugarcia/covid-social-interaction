@@ -1,5 +1,5 @@
 <template lang="pug">
-v-sheet#editor(style='position: relative; inset: 0', color='white')
+v-sheet#editor(style='position: relative; inset: 0; width: 100%', color='white')
   v-toolbar(color='primary', dark, flat, absolute, style='left: 0; right: 0')
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left

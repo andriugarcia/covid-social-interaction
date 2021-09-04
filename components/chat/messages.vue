@@ -1,7 +1,7 @@
 <template lang="pug">
-#messages.px-2.height-without-topbar(
+#messages.px-2(
   ref='chat',
-  style='overflow-y: scroll; overflow-x: hidden; padding-bottom: 82px'
+  style='overflow-y: scroll; height: 100%; overflow-x: hidden; padding-bottom: 82px'
 )
   v-layout(justify-center)
     v-sheet.rounded-xl.pa-4(
@@ -67,6 +67,7 @@
               span(style='font-size: 2em') {{ message.event.emoji }}
             v-list-item-content
               v-list-item-title {{ message.event.title }}
+              v-list-item-subtitle {{ message.event.start_date | toDateShort }}
         div(v-else-if='message.type == "chat"')
           v-subheader GRUPO
           v-list-item(nuxt, :to='"/group/" + message.chat.chat_id')
@@ -74,6 +75,7 @@
               v-img(:src='message.chat.cover')
             v-list-item-content
               v-list-item-title {{ message.chat.title }}
+              v-list-item-subtitle.text-truncate {{ message.chat.description }}
         p.mb-1(
           v-html='message.text',
           :style='isEmoji(message.text) ? "font-size: 3em" : ""'
@@ -245,8 +247,3 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.height-without-topbar {
-  height: calc(100vh - 56px);
-}
-</style>

@@ -13,9 +13,9 @@ v-app
           v-icon.mr-4 {{ getIcon(newNotification.type) }}
           v-avatar(size='40')
             v-img(:src='newNotification.image') 
-          .ml-2.mt-2.font-weight-bold
-            span {{ newNotification.title }}
-            p {{ newNotification.text }}
+          .ml-2.mt-2
+            span.font-weight-bold {{ newNotification.title }}
+            p.font-weight-medium {{ newNotification.text }}
         v-layout(justify-center)
           #holder.mb-2
     main-mobile(v-if='$route.name == "index"')
@@ -168,11 +168,6 @@ export default {
       this.$fire.messaging.onMessage((payload) => {
         console.info('Mensaje recibido', payload)
       })
-
-      // console.log('onTokenRefresh')
-      // this.$fire.messaging.onTokenRefresh(() => {
-      //   console.error('Token requiere ser refrescado')
-      // })
     },
     checkIfAppIsInstalled() {
       window.addEventListener('beforeinstallprompt', (e) => {

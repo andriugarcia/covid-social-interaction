@@ -18,7 +18,14 @@ v-card#editProfile(style='position: relative')
       :preview='user.profile_picture'
     )
     .overline Nombre
-    v-text-field(v-model='profile.name', filled, rounded)
+    v-text-field(
+      v-model='profile.name',
+      filled,
+      rounded,
+      :rules='[usernameCheck]',
+      maxlength='30',
+      counter
+    )
     .overline Biografía
     v-textarea(
       v-model='profile.description',
@@ -107,6 +114,10 @@ export default {
         description: this.$store.state.auth.user.description,
       },
       rrss,
+      usernameCheck: (value) =>
+        value.match(
+          /^(?=.{5,30}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/
+        ) || 'Nombre de usuario no válido',
     }
   },
   methods: {

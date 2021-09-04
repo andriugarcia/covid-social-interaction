@@ -128,6 +128,7 @@ export default {
       this.loading = true
       if (await this.$store.dispatch('auth/login', this.loginData)) {
         this.$store.commit('setLogin', false)
+        if (this.$route.name == 'signup') this.$router.replace({ path: '/' })
       } else {
         this.loginError = true
       }
@@ -138,13 +139,15 @@ export default {
       this.loading = true
       if (await this.$store.dispatch('auth/loginPhone', this.loginData)) {
         this.$store.commit('setLogin', false)
+        if (this.$route.name == 'signup') this.$router.replace({ path: '/' })
       } else {
         this.loginPhoneError = true
       }
       this.loading = false
     },
     openSignup() {
-      window.location.href = '/signup'
+      this.$router.push({ path: '/signup' })
+      this.$store.commit('setLogin', false)
     },
     async signup() {
       if (await this.$store.dispatch('auth/signup', this.signupData)) {

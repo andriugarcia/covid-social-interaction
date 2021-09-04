@@ -34,6 +34,7 @@ export const state = () => ({
   newNotification: null,
   pushEnabled: false,
   pushAvailable: false,
+  logChecked: false,
 })
 
 export const mutations = {
@@ -89,13 +90,15 @@ export const getters = {
 }
 
 export const actions = {
-  async checkLogged({ dispatch }) {
+  async checkLogged({ state, dispatch }) {
+    if (state.logChecked) return
     const token = localStorage.getItem('token')
     if (token) {
       axios.defaults.headers.common.authorization = 'Bearer ' + token
     }
 
     try {
+      state.logChecked = true
       return await dispatch('getMe')
     } catch (err) {
       console.error(err)
@@ -259,11 +262,16 @@ export const actions = {
       // })
 
       socket.on('chatnotification', (message) => {
+        console.log('IN APP CHAT MESSAGE', message)
         commit('chat/chatNotification', message, { root: true })
+        commit('setNotification', {
+          type: 'chat', image: message.profile.profile_picture, title: message.profile.username, text: message.text,
+          link: '/chat/' + message.channel
+        })
       })
 
       socket.on('notification', (notification) => {
-
+        console.log('IN APP NOTIFICATION', notification)
         commit('setNotification', notification)
       })
 

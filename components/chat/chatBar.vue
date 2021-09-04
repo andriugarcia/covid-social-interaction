@@ -4,22 +4,22 @@
     v-if='message.src && (message.type == "image" || message.type == "video")',
     flat,
     color='primary',
-    style='position: relative; width: 300px'
+    style='position: relative; width: fit-content'
   )
-    .rounded-xl(style='overflow: hidden; width: 300px; height: 200px')
-      v-img.rounded-xl(
-        v-if='message.type == "image"',
-        :src='message.src',
-        :class='{ blured: uploading }'
-      )
-      video.rounded-xl(
-        v-else-if='message.type == "video"',
-        preload='metadata',
-        :src='message.src',
-        :controls='!loading',
-        style='width: 100%; height: 100%; max-height: 400px; object-fit: contain',
-        :class='{ blured: uploading }'
-      )
+    img.rounded-xl(
+      v-if='message.type == "image"',
+      :src='message.src',
+      :class='{ blured: uploading }',
+      style='max-width: 300px; max-height: 400px'
+    )
+    video.rounded-xl(
+      v-else-if='message.type == "video"',
+      preload='metadata',
+      :src='message.src',
+      :controls='!loading',
+      style='width: 100%; height: 100%; max-height: 400px; object-fit: contain',
+      :class='{ blured: uploading }'
+    )
     v-row.fill-height.ma-0(
       v-if='uploading',
       align='center',

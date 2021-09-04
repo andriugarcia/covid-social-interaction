@@ -131,7 +131,7 @@
       v-tab(key='posts') Posts
       v-tab(key='events') Eventos
     v-tabs-items(v-model='tab', style='background-color: transparent')
-      v-tab-item(key='posts')
+      v-tab-item(key='posts', style='width: 100%')
         masonry.pa-2(v-if='posts.length != 0', :cols='2', :gutter='10')
           post.mb-2(
             v-for='(publication, i) in posts',
@@ -142,7 +142,7 @@
           )
         v-layout.pt-4.pb-8(v-if='loading', justify-center)
           v-progress-circular(indeterminate, color='primary')
-      v-tab-item.pa-4(key='events')
+      v-tab-item.pa-4(key='events', style='width: 100%')
         event.mb-2(v-for='(event, i) in events', :key='i', :event='event')
         v-layout.pt-4.pb-8(v-if='loading', justify-center)
           v-progress-circular(indeterminate, color='primary')

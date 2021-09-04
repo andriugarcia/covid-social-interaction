@@ -99,6 +99,8 @@
   viewer(v-model='opened')
     v-card
       search(v-if='opened == "search"', @updated='updateCentre')
+  viewer(v-model="postOpened", @click:outside="closePost")
+    expanded-post(v-if="postOpened", :type="openedPost.type", v-touch="{ down: () => closePost() }", :content="openedPost", @back="closePost")
   v-dialog(
     v-model='placeOpened',
     fullscreen,
@@ -138,6 +140,7 @@ export default {
     Post,
     Portals,
     placeSelected: () => import('@/components/map/placeSelected'),
+    expandedPost: () => import('@/components/map/expandedPost.vue'),
   },
 
   mixins: [loginMixin, numberMixin],
@@ -148,6 +151,18 @@ export default {
       placeOpened: false,
       coordinatesSelected: null,
       fullPosts: [],
+      openedPost: null,
+      postOpened: false,
+    }
+  },
+
+  async mounted() {
+    if (this.$route.hash.length > 1) {
+      this.openedPost = await this.$store.dispatch(
+        'post/getPost',
+        this.$route.hash.substring(1)
+      )
+      this.postOpened = true
     }
   },
 
@@ -169,11 +184,17 @@ export default {
     logout() {
       this.$store.dispatch('auth/logout')
     },
+    closePost() {
+      this.$router.replace({ hash: '' })
+      this.openedPost = null
+      this.postOpened = false
+    },
     flyToMe() {
       if (!this.$store.state.map.locationEnabled) {
         const self = this
         navigator.geolocation.getCurrentPosition(
           function (position) {
+            console.log(position)
             self.updatePosition(position)
             self.$store.dispatch('chat/joinNearby')
           },
@@ -185,6 +206,25 @@ export default {
       } else {
         this.$store.commit('map/flyToMe')
       }
+    },
+    updatePosition(position) {
+      console.log(
+        '%cActualizando posicion',
+        'background-color: red; color: white'
+      )
+      const coordinates = {
+        lng: position.coords.longitude,
+        lat: position.coords.latitude,
+        direction: position.heading,
+      }
+
+      console.log('%cPrimera vez', 'background-color: orange; color: white')
+      this.$store.commit('map/setZoom', 14)
+      this.$store.commit('map/setMapPosition', coordinates)
+      this.$store.commit('map/jumpTo', coordinates)
+      this.$store.commit('map/setUserPosition', coordinates)
+      this.$store.dispatch('chat/getCloseChats')
+      this.$store.dispatch('event/getEvents')
     },
     updateCentre(coordinates) {
       this.$store.commit('map/setMapPosition', coordinates)

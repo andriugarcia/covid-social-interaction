@@ -296,7 +296,8 @@ export const getters = {
     const now = new Date()
     return rootState.auth.user.participation.find(participation => {
       const start = new Date(participation.event.start_date)
-      const end = new Date(participation.event.end_date)
+      let end = new Date(participation.event.end_date)
+      end.setDate(end.getDate() + 2);
       return (start <= now && end >= now)
     })
   }

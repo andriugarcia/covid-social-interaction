@@ -53,7 +53,7 @@
         v-if='chat.event && chat.event.length != 0',
         flat,
         tile,
-        color='primary'
+        color='primary lighten-2'
       )
         v-list-item(
           @click='$router.push({ path: `/events/${chat.event[0].event_id}` })'
@@ -64,29 +64,42 @@
             span.font-weight-bold {{ chat.event[0].title }}
             span {{ chat.event[0].start_date | toDateShort }}
           v-list-item-action
-            v-btn(small, depressed, color='primary darken-1') ASISTIR
-    v-sheet(color='white', style='position: relative')
+            v-btn.text-capitalize(small, depressed, color='primary') Más Info
+    v-sheet(color='white', style='position: relative; height: 100vh')
       messages(v-if='chatLoaded')
     div(style='position: absolute; bottom: 0px; left: 0; right: 0')
       chat-bar(v-if='isParticipant', :chat='chat')
       v-btn(v-else, block, tile, large, color='primary', @click='joinChat') UNIRME
-  v-sheet#chat-settings.px-6(
+  v-sheet#chat-settings(
     v-else-if='settingsOpened',
     color='white',
     style='height: 100%'
   )
-    v-layout.pa-4(
-      justify-space-between,
-      align-center,
-      @click='settingsOpened = false'
-    )
-      v-btn(small, outlined, @click='settingsOpened = false') Cancelar
-      v-btn(small, outlined, @click='updateChat()') Hecho
-    avatar-input(@update='updateCover', :preview='chat.cover')
-    .overline.mt-4 Nombre
-    v-text-field(v-model='chat.title', filled, rounded)
-    .overline Descripción
-    v-text-field(v-model='chat.description', filled, rounded)
+    v-toolbar(color='primary', dark, flat)
+      v-btn(icon, @click='settingsOpened = false')
+        v-icon fas fa-times
+      v-toolbar-title Editar Grupo
+      v-spacer
+      v-btn(icon, @click='updateChat()')
+        v-icon fas fa-check
+    .px-6.mt-6
+      avatar-input(@update='updateCover', :preview='chat.cover')
+      .overline.mt-4 Nombre
+      v-text-field(
+        v-model='chat.title',
+        filled,
+        rounded,
+        counter,
+        maxlength='30'
+      )
+      .overline Descripción
+      v-textarea(
+        v-model='chat.description',
+        filled,
+        rounded,
+        maxlength='240',
+        counter
+      )
   v-sheet#chat-info(v-else, color='white', style='height: 100vh')
     v-layout.pa-4(justify-space-between, align-center)
       v-btn(icon, @click='groupinfo = false')

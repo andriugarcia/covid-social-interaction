@@ -56,7 +56,7 @@ v-sheet#contacts(
       v-model='tab',
       style='background-color: transparent; min-height: calc(100vh - 104px)'
     )
-      v-tab-item(key='chats')
+      v-tab-item(key='chats', style='width: 100%')
         v-list(color='white')
           v-layout.mb-4(v-if='!searchEnabled', justify-center)
             v-card(
@@ -148,7 +148,7 @@ v-sheet#contacts(
               v-list-item-content
                 v-list-item-title.font-weight-bold {{ chat.title }}
                 v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} miembros
-      v-tab-item(key='close', style='height: 100%')
+      v-tab-item(key='close', style='height: 100%; width: 100%')
         v-card.ma-2.rounded-xl(v-if='!userPosition', outlined)
           v-layout.pa-6.text-center(
             column,

@@ -45,7 +45,7 @@
           v-icon.black--text fas fa-map-marker-alt
         v-list-item-content
           v-list-item-title {{ place.name }}
-          v-list-item-subtitle.font-italic {{ place.distance }} km
+          v-list-item-subtitle.font-italic(v-if='place.distance') {{ place.distance }} km
   v-card(
     v-else-if='searchText != ""',
     flat,
@@ -89,9 +89,14 @@ export default {
         this.places = []
       }
 
+      let proximity = ''
+      if (this.userPosition) {
+        proximity = `&proximity=${this.userPosition.lng},${this.userPosition.lat}`
+      }
+
       const [{ data: places }, { data: users }] = await Promise.all([
         axios.get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${this.searchText}.json?proximity=${this.userPosition.lng},${this.userPosition.lat}&autocomplete=true&access_token=${process.env.MAPBOX_TOKEN}`,
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${this.searchText}.json?autocomplete=true&access_token=${process.env.MAPBOX_TOKEN}${proximity}`,
           { withCredentials: false }
         ),
         axios.get(`${process.env.SERVER_URL}/users/find/${this.searchText}`),
@@ -105,11 +110,13 @@ export default {
             name: place.place_name,
             coordinates: place.center,
             bbox: place.bbox,
-            distance: this.haversineDistance(
-              [this.userPosition.lng, this.userPosition.lat],
-              place.center,
-              false
-            ),
+            distance: this.userPosition
+              ? this.haversineDistance(
+                  [this.userPosition.lng, this.userPosition.lat],
+                  place.center,
+                  false
+                )
+              : null,
           }
         })
         .slice(0, 6)

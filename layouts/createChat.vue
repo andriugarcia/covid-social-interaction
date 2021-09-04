@@ -1,5 +1,5 @@
 <template lang="pug">
-#createGroup(style='position: relative; inset: 0')
+#createGroup(style='position: relative; width: 100%; inset: 0')
   v-toolbar(
     color='primary',
     dark,

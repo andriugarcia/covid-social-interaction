@@ -1,5 +1,5 @@
 <template lang="pug">
-#createActivity(style='position: relative; inset: 0')
+#createActivity(style='position: relative; width: 100%; height: 100%; inset: 0')
   v-toolbar(
     color='primary',
     dark,
@@ -122,17 +122,12 @@
         depressed,
         block
       ) Añadir Grupo
-      v-dialog(
-        v-model='selectGroupDialog',
-        fullscreen,
-        hide-overlay,
-        transition='dialog-bottom-transition'
-      )
+      viewer(v-model='selectGroupDialog')
         group-select(
           @back='selectGroupDialog = false',
           @selected='updateGroup'
         )
-      v-alert.mb-12(text, color='primary') Asignar un grupo al evento permitirá que los asistentes al evento puedan acceder al grupo y conocer al resto de asistentes.
+      v-alert.mb-6(text, color='primary') Los asistentes podrán entrar al grupo para mantener el contacto.
       .overline.font-weight-black INVITAR USUARIOS
       v-text-field.rounded-lg(
         dense,
@@ -141,7 +136,10 @@
         v-model='textFilter',
         prepend-inner-icon='fas fa-search'
       )
-      v-list(color='white')
+      v-list(
+        color='white',
+        style='height: calc(100vh - 450px); overflow-y: scroll'
+      )
         v-list-item(
           v-for='(person, i) in peopleFiltered',
           :key='person.profile_id',

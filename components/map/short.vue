@@ -1,5 +1,8 @@
 <template lang="pug">
-#shortMap.rounded-lg(style='background-color: white; height: 100%')
+#shortMap(
+  style='background-color: white; height: 100%',
+  :class='{ "rounded-lg": !expanded }'
+)
   p.pb-4.font-weight-light.shortExpanded(
     v-if='expanded',
     v-html='content.text'

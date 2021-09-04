@@ -81,6 +81,7 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
       justify-space-between
     )
       //- v-btn(outlined, large, @click='step = "select"') Atrás
+      v-spacer
       v-btn(color='primary', large, @click='confirmVerificationCode') Siguiente
   .pa-6(v-if='step == "password"')
     .font-weight-black CONTRASEÑA
@@ -118,7 +119,15 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
         @update='updateProfilePicture',
         :preview='user.profile_picture'
       )
-      v-text-field.mt-6(dense, rounded, filled, v-model='user.username')
+      v-text-field.mt-6(
+        dense,
+        maxlength='30',
+        counter,
+        rounded,
+        filled,
+        v-model='user.username',
+        :rules='[usernameCheck]'
+      )
     span.mt-8 Puedes cambiar tu avatar y tu nombre de usuario más adelante
     .font-weight-black.mt-6 BIOGRAFÍA
     v-textarea.mt-2(
@@ -181,6 +190,10 @@ export default {
         email.match(
           /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
         ) || 'El email no tiene un formato válido',
+      usernameCheck: (value) =>
+        value.match(
+          /^(?=.{5,30}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/
+        ) || 'Nombre de usuario no válido',
     }
   },
   components: {

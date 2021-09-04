@@ -1,13 +1,13 @@
 <template lang="pug">
-#event(v-if='event && !eventNotFound', style='position: relative; inset: 0')
+#event(v-if='event && !loadingEvent', style='position: relative; inset: 0')
   v-toolbar(absolute, color='primary', dark, flat, style='left: 0; right: 0')
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left
-    span {{ event.title }}
+    span.text-truncate {{ event.title }}
     v-spacer
     v-btn(icon, @click='shareDialog = true')
       v-icon fas fa-share-alt
-  v-sheet(color='white', style='height: 100vh; overflow-y: scroll')
+  v-sheet.pt-6(color='white', style='height: 100vh; overflow-y: scroll')
     div(style='height: 64px')
     div(v-if='event.image')
       img(
@@ -18,15 +18,14 @@
         v-icon fas fa-arrow-left
     //- category(:cat="event.category")
     .px-4
-      v-layout
-        v-sheet.px-3(:color='getColor()', rounded-sm)
-          v-layout(align-center, style='height: 100%')
-            span(style='font-size: 2em') {{ event.emoji }}
-        .ml-2
-          .text-uppercase.font-weight-medium {{ event.start_date | toDateShort }}
-          span(
-            style='font-size: 2.4em; font-weight: 700; letter-spacing: -1px'
-          ) {{ event.title }}
+      v-layout(align-end)
+        v-chip.pl-1(:color='getColor()')
+          v-avatar(color='white')
+            span(style='font-size: 1em') {{ event.emoji }}
+          span.font-weight-medium.ml-2 {{ getCategoryName(event.emoji) }}
+        .text-uppercase.font-weight-medium.ml-2 {{ event.start_date | toDateShort }}
+
+      span(style='font-size: 2em; font-weight: 700; letter-spacing: -1px') {{ event.title }}
       p.font-weight-light.mt-4 {{ event.description }}
       v-layout.my-4(
         align-center,
@@ -51,11 +50,21 @@
       p {{ event.place_description }}
       static-map(:coordinates='event.place')
       .overline.text-uppercase.mt-2.font-weight-bold Horario
-      v-layout.pl-2
-        v-icon(large, color='text') far fa-clock
-        .ml-4
-          div {{ event.start_date | toDate }}
-          div De 17:30 a 20:30
+      v-timeline.pl-0(align-top, dense)
+        v-timeline-item(color='blue', small)
+          v-row.pt-1
+            v-col(cols='3')
+              strong Inicio
+            v-col
+              strong {{ event.start_date | toDate }}
+              div {{ event.start_date | toHour }}
+        v-timeline-item(color='primary', small)
+          v-row.pt-1
+            v-col(cols='3')
+              strong Fin
+            v-col
+              strong {{ event.end_date | toDate }}
+              div {{ event.end_date | toHour }}
       div(v-if='event.chat_id')
         .overline.text-uppercase.mt-2.font-weight-bold CHAT GRUPAL
         v-card.pa-2.rounded-xl(
@@ -68,9 +77,11 @@
             .ml-3
               .font-weight-bold {{ event.chatname }}
             v-spacer
-            v-btn.rounded-md(small, depressed, color='primary') Ver grupo
-      .overline.text-uppercase.mt-4.font-weight-bold {{ event.participants.length }} Participantes
-      v-layout.mb-12.pb-6(wrap)
+            v-btn.rounded-lg(small, depressed, color='primary') Ver grupo
+      .overline.text-uppercase.mt-4.font-weight-bold(
+        v-if='event.participants.length > 1'
+      ) {{ event.participants.length }} Participantes
+      v-layout(v-if='event.participants.length > 1', wrap)
         v-flex.pa-2(
           v-for='(participant, i) in event.participants',
           :key='i',
@@ -84,6 +95,7 @@
               v-avatar
                 v-img(:src='participant.profile.profile_picture')
               span.font-weight-bold {{ participant.profile.username }}
+      .mb-12.pb-6
     .pa-2(
       v-if='eventState() == states.PROMOTION',
       style='position: absolute; bottom: 0; left: 0; right: 0'
@@ -119,6 +131,9 @@
             v-btn(rounded, dark, depressed, color='red', @click='unjoinEvent') CANCELAR
   v-bottom-sheet(v-model='shareDialog', :inset='$vuetify.breakpoint.mdAndUp')
     share(:event='event', @back='shareDialog = false')
+v-sheet.pa-4(v-else-if='loadingEvent', color='white', style='height: 100vh')
+  v-layout.mt-6(justify-center)
+    v-progress-circular(size='64', indeterminate, color='primary')
 v-sheet.pa-4(v-else, color='white', style='height: 100vh')
   v-card.ma-2.rounded-xl(outlined)
     v-layout.pa-6.text-center(
@@ -157,6 +172,7 @@ export default {
     return {
       event: null,
       eventNotFound: false,
+      loadingEvent: true,
       shareDialog: false,
       states: {
         PROMOTION: 0,
@@ -179,9 +195,15 @@ export default {
     } catch (e) {
       this.eventNotFound = true
     }
+    this.loadingEvent = false
   },
 
   methods: {
+    getCategoryName(emoji) {
+      return this.$store.state.event.categories.find(
+        (category) => category.emoji === emoji
+      ).name
+    },
     follow() {
       if (this.event.follow) {
         this.$store.dispatch('user/unfollow', this.event.profile_id)

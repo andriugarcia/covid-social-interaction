@@ -11,7 +11,7 @@
           span(style='font-size: 2em') {{ event.emoji }}
 
       .pa-4(style='width: 100%')
-        .font-weight-bold(style='font-size: 1.4em') {{ event.title }}
+        .font-weight-medium(style='font-size: 1.2em') {{ event.title }}
         //- .font-weight-bold {{ event.description }}
         span.font-weight-light {{ event.start_date | toDateShort }}
         v-layout(align-center)
@@ -22,7 +22,7 @@
   v-card.rounded-xl(
     v-else,
     outlined,
-    style='width: 200px; height: 120px',
+    style='max-width: 240px; height: 120px',
     @click='$router.push({ path: `/events/${event.event_id}` })'
   ) 
     //- v-img(
@@ -30,12 +30,13 @@
     //-   src='https://cdn.pixabay.com/photo/2017/08/06/18/35/night-2594984_1280.jpg'
     //- )
     .px-4.py-2(style='width: 100%')
-      v-layout(align-center)
-        span.mr-2(style='font-size: 1em') {{ event.emoji }}
-        span.text--text.font-weight-bold(style='font-size: 0.8em') {{ getCategoryName(event.emoji) }}
-      .font-weight-bold {{ event.title }}
-      span.font-weight-bold(style='font-size: 0.7em') {{ event.place_description }}
-      .text--text.font-weight-bold(
+      v-chip.pl-0(:color='getColor()', small)
+        v-avatar(color='white')
+          span(style='font-size: 1.4em') {{ event.emoji }}
+        span.font-weight-medium.ml-2 {{ getCategoryName(event.emoji) }}
+      .font-weight-medium.text-truncate.mt-2(style='font-size: 0.8em') {{ event.title }}
+      span.font-weight-medium(style='font-size: 0.7em') {{ event.place_description }}
+      .text--text.font-weight-medium(
         style='position: absolute; bottom: 8px; left: 16px; font-size: 0.7em'
       ) {{ event.start_date | toDateShort }}
       //- v-layout

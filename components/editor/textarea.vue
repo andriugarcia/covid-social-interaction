@@ -68,6 +68,7 @@ $textPadding: 0 23px;
     font-weight: lighter;
     line-height: 0;
     color: #505050;
+    overflow-y: none;
   }
 }
 </style>

@@ -23,7 +23,7 @@
           span(style='font-size: 2em') {{ participation.event.emoji }}
         .pr-1
           .text-uppercase.font-weight-bold(style='white-space: nowrap') {{ participation.event.start_date | toDateShort }}
-          span.text-truncate(style='white-space: nowrap') {{ participation.event.title }}
+          span {{ participation.event.title | truncate }}
     v-avatar.mr-2.rounded-xl(
       v-for='(portal, i) in portals',
       :key='i',
@@ -115,6 +115,13 @@ export default {
       if (!this.loading && value + 3 >= this.portals.length) {
         this.getFollowingPortals()
       }
+    },
+  },
+  filters: {
+    truncate(value) {
+      const limit = 24
+      if (value.length > limit) return value.substr(0, limit) + '...'
+      return value
     },
   },
   methods: {

@@ -1,5 +1,5 @@
 <template lang="pug">
-#events(style='position: relative; inset: 0')
+#events(style='position: relative; inset: 0; width: 100%')
   v-toolbar(
     color='primary',
     dark,
@@ -13,22 +13,29 @@
     v-btn(color='white', rounded, depressed, dark, small, @click='createEvent')
       .primary--text.text-capitalize Nuevo Evento
   div(ref='scrollarea', style='height: 100vh; overflow-y: scroll')
-    v-sheet.pa-4(v-if='authenticated', color='white', style='height: 100%')
-      .font-weight-black(style='font-size: 1.4em; margin-top: 60px') Próximos Eventos
+    v-sheet.pa-4.mt-10(color='white', style='height: 100%')
+      v-layout.mt-6.mb-3(v-if='authenticated')
+        v-icon.mr-2(color='black') far fa-calendar-alt
+        .font-weight-medium(style='font-size: 1.4em') Próximos Eventos
       v-alert(
-        v-if='user.participation.length === 0',
+        v-if='authenticated && user.participation.length === 0',
         color='purple',
         text,
         icon='fas fa-glass-cheers'
       ) No tienes eventos próximamente
-      v-layout.hide-scrollbar.my-2(style='overflow-x: scroll')
+      v-layout.hide-scrollbar.my-2(
+        v-if='authenticated',
+        style='overflow-x: scroll'
+      )
         event.mb-2.mr-2(
           v-for='(event, i) in events',
           :key='i',
           :event='event',
           small
         )
-      .font-weight-black.mt-6(style='font-size: 1.4em') Eventos cerca
+      v-layout.mt-6.mb-3
+        v-icon.mr-2(color='black') fas fa-map-marked-alt
+        .font-weight-medium(style='font-size: 1.4em') Eventos cerca
       //- v-row#loadBar.my-12(justify='center', align='center')
       //-   v-progress-circular(indeterminate, color='primary')
       v-alert(

@@ -1,8 +1,5 @@
 <template lang="pug">
-#chat(
-  v-if='chatLoaded && member',
-  style='position: relative; width: 100%; height: 100%'
-)
+#chat(v-if='chatLoaded && member', style='position: relative; width: 100%')
   v-toolbar(
     flat,
     color='text',
@@ -60,7 +57,7 @@
             v-list-item-content Bloquear Usuario
   v-sheet(
     color='white',
-    style='padding-top: 52px; height: 100vh; overflow-y: scroll; overflow-x: hidden'
+    style='padding-top: 52px; height: 100vh; overflow-y: none; overflow-x: hidden'
   )
     v-row#loadBar.my-12.pt-12(
       v-if='loading',

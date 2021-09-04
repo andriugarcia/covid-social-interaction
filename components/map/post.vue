@@ -9,10 +9,14 @@
       v-layout(justify-center)
         .triangle
     #event(v-else-if="type == 'event'")
-      v-card.px-2.ml-n2.rounded-pill(outlined, style="height: fit-content", @click="$router.push({ path: `/events/${content.event_id}`})")
-        v-layout(align-center)
-          v-avatar(small, :color="getColor()", :size="32", style="font-size: 2em") {{ content.emoji }}
-          span.mx-1.font-weight-bold {{ content.title }}
+      v-card.ml-n2.rounded-lg(outlined, style="height: fit-content; min-width: 140px; max-width: 200px;", @click.stop="$router.push({ path: `/events/${content.event_id}`})")
+        v-layout(fill-height)
+          v-sheet.rounded-lg(:color="getColor()", style="min-height: 40px;")
+            v-layout.px-1(align-center, style='height: 100%')
+              span(style='font-size: 2em') {{ content.emoji }}
+          .mx-2.py-1
+            div.font-weight-medium.text-truncate(style='font-size: 0.8em; line-height: 1.4; max-width: 120px;') {{ content.title }}
+            div.font-weight-light(style='font-size: 0.8em;') {{ content.start_date | toDateShort }}
       v-layout(justify-center)
         .triangle
     div(v-else)
@@ -32,8 +36,10 @@
 <script>
 import bottomAvatar from './bottomAvatar.vue'
 import expandedPost from './expandedPost.vue'
+import date from '@/mixins/date'
 
 export default {
+  mixins: [date],
   components: {
     bottomAvatar,
     imageMap: () => import('./image.vue'),

@@ -1,15 +1,23 @@
 <template lang="pug">
-MglMap(
-  @click='goToMaps',
-  :accessToken='accessToken',
-  :mapStyle='mapStyle',
-  logoPosition='bottom-left',
-  :center.sync='coordinates',
-  :zoom='15',
-  :interactive='false',
-  style='width: 100%; height: 240px'
-)
-  MglMarker(:coordinates='coordinates', color='#F0134D')
+#static-map
+  MglMap(
+    @click='goToMaps',
+    :accessToken='accessToken',
+    :mapStyle='mapStyle',
+    logoPosition='bottom-left',
+    :center.sync='coordinates',
+    :zoom='15',
+    :interactive='false',
+    style='width: 100%; height: 240px'
+  )
+    MglMarker(:coordinates='coordinates', color='#F0134D')
+  v-btn.text-capitalize(
+    block,
+    tile,
+    depressed,
+    color='blue-grey lighten-3',
+    @click='goToMaps'
+  ) Ver en Google Maps
 </template>
 
 <script>
