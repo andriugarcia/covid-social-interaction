@@ -97,7 +97,7 @@
             v-icon.pa-1(color='black', style='display: block') fas fa-comment-dots
             span(style='font-size: 0.7em') CHAT
   //- viewer(v-model='opened')
-  v-card(v-if='opened == "search"', style='position: fixed; inset: 0')
+  v-card(v-if='opened == "search"', style='position: fixed; inset: 0; width: 100%; height: 100%')
     search(@updated='updateCentre')
   viewer(v-model="postOpened", @click:outside="closePost")
     expanded-post(v-if="postOpened", :type="openedPost.type", v-touch="{ down: () => closePost() }", :content="openedPost", @back="closePost")

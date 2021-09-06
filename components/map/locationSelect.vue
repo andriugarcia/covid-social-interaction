@@ -18,7 +18,7 @@
     align-center,
     style='position: absolute; top: 0; left: 0; right: 0'
   )
-    v-btn(icon, @click='$emit("back")') 
+    v-btn(icon, @click='goBack') 
       v-icon fas fa-arrow-left
     v-dialog(
       v-model='searchOpened',
@@ -122,6 +122,10 @@ export default {
     select() {
       this.$emit('updated', this.centre)
       this.$emit('back')
+    },
+
+    goBack() {
+      this.$router.go(-1)
     },
 
     onLoad(ev) {

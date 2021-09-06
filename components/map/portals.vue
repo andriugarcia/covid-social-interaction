@@ -1,14 +1,17 @@
 <template lang="pug">
 #portals
   .flex-nowrap.align-center.pb-2.hide-scrollbar(ref='scrollarea', style='overflow-x: scroll; display: flex;')
-    v-btn.mr-2.rounded-xl(
+    v-card.rounded-xl.pa-1.mr-2(
       v-if='appNotInstalled',
-      fab,
       depressed,
+      dark,
       color='primary',
-      @click='downloadApp'
+      @click='downloadApp',
+      style='height: 56px'
     )
-      v-icon fas fa-arrow-circle-down
+      v-layout(style='height: 100%', align-center)
+        v-icon.mx-2(color='white', size='32') fas fa-arrow-circle-down
+        span.font-weight-bold(style='font-size: 0.7em; width: 70px;') INSTALAR OLIMAPS
     v-card.rounded-xl.pa-1.mr-2(
       v-if='authenticated',
       v-for='(participation, i) in user.participation',

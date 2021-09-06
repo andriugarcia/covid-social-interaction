@@ -1,5 +1,8 @@
 <template lang="pug">
-#event(v-if='event && !loadingEvent', style='position: relative; inset: 0')
+#event(
+  v-if='event && !loadingEvent',
+  style='position: relative; inset: 0; width: 100%'
+)
   v-toolbar(absolute, color='primary', dark, flat, style='left: 0; right: 0')
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left

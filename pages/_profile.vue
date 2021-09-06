@@ -1,6 +1,6 @@
 <template lang="pug">
 #profile(
-  v-if='!userLoading && user && !userNotFound',
+  v-if='!userLoading && !userNotFound',
   style='position: relative; width: 100%'
 )
   v-app-bar(
@@ -159,11 +159,10 @@
           )
   viewer(v-model='editingProfile')
     edit-profile(@back='editFinished')
-v-sheet#notFound.pa-4(
-  v-else-if='!userLoading',
-  color='white',
-  style='height: 100vh'
-)
+v-sheet.pa-4(v-else-if='userLoading', color='white', style='height: 100vh')
+  v-layout.mt-6(justify-center)
+    v-progress-circular(size='64', indeterminate, color='primary')
+v-sheet#notFound.pa-4(v-else, color='white', style='height: 100vh')
   v-card.ma-2.rounded-xl(outlined)
     v-layout.pa-6.text-center(
       column,
@@ -223,10 +222,15 @@ export default {
   },
   async mounted() {
     await this.getUser()
-    this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
+
+    if (!this.userNotFound) {
+      this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
+    }
   },
   beforeDestroy() {
-    this.$refs.scrollarea.removeEventListener('scroll', this.handleScroll)
+    if (!this.userNotFound) {
+      this.$refs.scrollarea.removeEventListener('scroll', this.handleScroll)
+    }
   },
   methods: {
     async handleScroll() {
@@ -263,14 +267,15 @@ export default {
         this.user = await this.$store.dispatch('user/getUser', {
           username: this.$route.params.profile,
         })
-        this.userLoading = false
 
         this.posts = this.user.post.map((post) => ({
           ...post,
           profile: this.user,
         }))
         this.events = this.user.event
+        this.userLoading = false
       } catch (err) {
+        this.userLoading = false
         this.userNotFound = true
       }
     },

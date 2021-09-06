@@ -179,9 +179,17 @@ export default {
 
         // Stash the event so it can be triggered later.
         this.$store.state.deferredPrompt = e
+        console.log(
+          '%cEl navegador permite la instalación de la web app',
+          'background-color: blue; color: white'
+        )
         this.$store.state.appNotInstalled = true
       })
       window.addEventListener('appinstalled', (evt) => {
+        console.log(
+          '%cLa aplicación ya está instalada',
+          'background-color: blue; color: white'
+        )
         this.$store.state.appNotInstalled = false
       })
     },

@@ -85,7 +85,7 @@ v-sheet#editor(style='position: relative; inset: 0; width: 100%', color='white')
     v-btn.px-2.ml-3.rounded-lg(
       outlined,
       color='grey lighten-3',
-      @click='locationSelectorOpened = true'
+      @click='openLocationSelect'
     )
       v-icon.text--text(small) fas fa-crosshairs
       .ml-2.text--text.font-weight-bold.text-capitalize.letter-spacing-none {{ locationMessage }}
@@ -176,6 +176,13 @@ export default {
   head: {
     title: 'Nuevo Post | Olimaps',
   },
+  watch: {
+    $route(route) {
+      if (typeof route.query.location_select === 'undefined') {
+        this.locationSelectorOpened = false
+      }
+    },
+  },
   components: {
     locationSelect: () => import('../components/map/locationSelect'),
     groupSelect: () => import('../components/editor/groupSelect'),
@@ -262,6 +269,14 @@ export default {
           lng: parseFloat(query.lng),
         })
       }
+    },
+    openLocationSelect() {
+      this.$router.push({
+        query: {
+          location_select: 'true',
+        },
+      })
+      this.locationSelectorOpened = true
     },
     updateLocation(coordinates) {
       this.currentPosition = false

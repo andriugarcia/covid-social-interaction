@@ -162,7 +162,7 @@
       .overline.font-weight-black UBICACIÓN
       v-text-field(
         label='Ubicación',
-        @click='locationSelectorOpened = true',
+        @click='openLocationSelect',
         :value='event.coordinates != null ? event.coordinates.lat.toFixed(4) + ". " + event.coordinates.lng.toFixed(4) : ""',
         v-on='on',
         readonly,
@@ -423,6 +423,11 @@ export default {
     timeEnd() {
       this.checkTimeOrder()
     },
+    $route(route) {
+      if (typeof route.query.location_select === 'undefined') {
+        this.locationSelectorOpened = false
+      }
+    },
   },
   methods: {
     selectMember(member_id) {
@@ -435,6 +440,14 @@ export default {
       } else {
         this.event.members.unshift(index, 1)
       }
+    },
+    openLocationSelect() {
+      this.$router.push({
+        query: {
+          location_select: 'true',
+        },
+      })
+      this.locationSelectorOpened = true
     },
     updateLocation(coordinates) {
       this.event.coordinates = coordinates

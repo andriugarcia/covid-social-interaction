@@ -17,8 +17,10 @@
       v-layout.mt-6.mb-3(v-if='authenticated')
         v-icon.mr-2(color='black') far fa-calendar-alt
         .font-weight-medium(style='font-size: 1.4em') Próximos Eventos
+        v-spacer
+        v-chip.font-weight-medium(v-if='events.length !== 0', color='primary') {{ events.length }}
       v-alert(
-        v-if='authenticated && user.participation.length === 0',
+        v-if='authenticated && events.length === 0',
         color='purple',
         text,
         icon='fas fa-glass-cheers'
@@ -110,7 +112,7 @@ export default {
         const newEvents = this.$store.dispatch('event/getEvents', this.page)
         this.events = [...this.events, ...newEvents]
         this.page++
-        this.finished = true
+        if (newEvents.length <= 0) this.finished = true
         this.loading = false
       }
     },

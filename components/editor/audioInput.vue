@@ -1,34 +1,35 @@
 <template lang="pug">
 #audioInput.d-flex(v-if='!notSupported', :class='{ "flex-row-reverse": left }')
-  v-layout(justify-space-between, align-center, style='width: 100%')
-    v-chip.font-weight-bold.mx-1(v-if='recording', dark, color='red') {{ counter | getMinutes }}:{{ counter | getSeconds }}
-    v-spacer
-    span.mr-2.red--text(v-if='recording') {{touching ? '<< Desliza para cancelar' : 'Pulsa para enviar >>'}}
-    v-btn(
-      depressed,
-      fab,
-      dark,
-      color='primary',
-      @touchstart.prevent='handleTouch',
-      @touchend='handleEnd',
-      @click='record'
-      v-touch='{left: () => cancelAudio()}'
-    )
-      v-icon {{ recording ? 'fas fa-stop-circle' : 'fas fa-microphone'}}
-    //- v-btn(
-      :icon='!dark || recording',
-      depressed,
-      :fab='dark && !recording',
-      :dark='dark && !recording',
-      :color='dark && !recording ? "primary" : ""',
-      @touchstart.prevent='handleTouch',
-      @touchend='handleEnd'
-    //- )
-      //- @click='record'
-      v-icon(
-        :class='{ "red--text": recording, "text--text": !dark }',
-        :large='recording'
-      ) {{ recording ? "fas fa-stop-circle" : "fas fa-microphone" }}
+  v-card.rounded-pill(outlined, style='width: 100%')
+    v-layout(justify-space-between, align-center)
+      v-chip.font-weight-bold.ml-3(v-if='recording', dark, color='red') {{ counter | getMinutes }}:{{ counter | getSeconds }}
+      v-spacer
+      span.mr-2.red--text(v-if='recording') {{touching ? '<< Desliza para cancelar' : 'Pulsa para enviar >>'}}
+      v-btn(
+        depressed,
+        fab,
+        dark,
+        color='primary',
+        @touchstart.prevent='handleTouch',
+        @touchend='handleEnd',
+        @click='record'
+        v-touch='{left: () => cancelAudio()}'
+      )
+        v-icon {{ recording ? 'fas fa-stop-circle' : 'fas fa-microphone'}}
+      //- v-btn(
+        :icon='!dark || recording',
+        depressed,
+        :fab='dark && !recording',
+        :dark='dark && !recording',
+        :color='dark && !recording ? "primary" : ""',
+        @touchstart.prevent='handleTouch',
+        @touchend='handleEnd'
+      //- )
+        //- @click='record'
+        v-icon(
+          :class='{ "red--text": recording, "text--text": !dark }',
+          :large='recording'
+        ) {{ recording ? "fas fa-stop-circle" : "fas fa-microphone" }}
 </template>
 
 <script>
