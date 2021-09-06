@@ -145,10 +145,10 @@ export default {
         url = `http://olimaps.com/?post=${this.post.post_id}`
       } else if (this.event) {
         type = 'event'
-        url = `http://olimaps.com/event/${this.event.event_id}`
+        url = `http://olimaps.com/events/${this.event.event_id}`
       } else if (this.group) {
         type = 'group'
-        url = `http://olimaps.com/event/${this.group.chat_id}`
+        url = `http://olimaps.com/group/${this.group.chat_id}`
       }
       switch (channel) {
         case 'whatsapp':
