@@ -174,7 +174,7 @@ export default {
   // ∂ module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     workbox: {
-      swUrl: '/firebase-messaging-sw.js'
+      importScripts: ['firebase-messaging-sw.js']
     },
     meta: {
 
