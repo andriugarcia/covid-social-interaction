@@ -173,7 +173,9 @@ export default {
 
   // ∂ module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
-    workbox: false,
+    workbox: {
+      swUrl: '/firebase-messaging-sw.js'
+    },
     meta: {
 
       title: "Qué está pasando a tu alrededor 🌍 | Olimaps",

@@ -10,7 +10,7 @@
         contentEditable='true',
         spellcheck='false'
       )
-      .hashtag-textarea__placeholder(
+      .hashtag-textarea__placeholder.text-truncate(
         :style='placeholderTextStyle',
         v-show='shouldShowPlaceholder'
       ) {{ placeholder }}
@@ -28,7 +28,7 @@
 
 <style lang="scss">
 $textWidth: 100%;
-$textPadding: 0 23px;
+$textPadding: 0 18px;
 // NOTE: Component of hashtag textarea
 .hashtag-textarea {
   position: relative;
@@ -70,7 +70,6 @@ $textPadding: 0 23px;
     color: #505050;
     position: absolute;
     top: 0;
-    font-size: 24px;
     min-height: 24px;
   }
 }

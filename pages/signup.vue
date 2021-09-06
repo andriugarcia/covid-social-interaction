@@ -214,7 +214,8 @@ export default {
     },
   },
   mounted() {
-    if (this.$route.query.verify) {
+    if (this.$store.getters['auth/authenticated']) {
+      this.$router.replace({ path: '/' })
     }
   },
   methods: {

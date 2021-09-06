@@ -57,7 +57,7 @@
           top,
           placeholder='Escribe tu mensaje...',
           style='max-height: 30vh; overflow-y: auto; margin-bottom: 8px',
-          size='1em',
+          size='0.9em',
           @enter='sendMessage'
         )
         v-menu(top, offset-y)
