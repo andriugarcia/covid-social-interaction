@@ -47,25 +47,23 @@
             fab,
             small,
             depressed,
-            color="primary",
-            v-bind="attrs"
+            v-bind="attrs",
             v-on="on") 
-            v-icon fas fa-chevron-left
+            v-icon.primary--text fas fa-chevron-left
         template(v-slot:next="{ on, attrs }")
           v-btn(
             fab,
             small,
             depressed,
-            color="primary",
-            v-bind="attrs"
+            v-bind="attrs",
             v-on="on") 
-            v-icon fas fa-chevron-right
+            v-icon.primary--text fas fa-chevron-right
         v-carousel-item(
           v-for='(portal, i) in portals',
           :key='portal.post_id',
           style='height: 100%'
         )
-          expandedPost.ma-1.rounded-lg(
+          expandedPost.rounded-lg(
             :type='portal.type',
             :content='portal',
             style='background-color: white',
@@ -131,7 +129,7 @@ export default {
     },
     openPortals(i) {
       this.portalIndex = i
-      this.$router.replace({ hash: 'portals' })
+      this.$router.push({ hash: 'portals' })
       this.portalsOpened = true
       // setTimeout(() => {
       //   this.$refs.portals.$swiper.slideTo(i + 1, 0, false)
@@ -180,6 +178,9 @@ export default {
   },
   mounted() {
     this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
+  },
+  beforeDestroy() {
+    this.$refs.scrollarea.removeEventListener('scroll', this.handleScroll)
   },
 }
 </script>

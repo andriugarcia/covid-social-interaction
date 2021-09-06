@@ -125,7 +125,7 @@ export default {
   mixins: [loginMixin, numberMixin],
 
   beforeRouteUpdate(to, _, next) {
-    if (to.hash === '') {
+    if (Object.keys(to.query).length === 0) {
       this.opened = ''
     }
     next()

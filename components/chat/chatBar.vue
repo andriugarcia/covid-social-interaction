@@ -28,7 +28,11 @@
     )
       v-progress-circular(indeterminate, color='grey lighten-5')
   v-layout.px-2(align-end)
-    v-card.py-2.px-3.mr-1.rounded-xl(style='width: 100%', outlined)
+    v-card.py-2.px-3.mr-1.rounded-xl(
+      v-if='!recording',
+      style='width: 100%',
+      outlined
+    )
       v-layout(align-end, justify-center)
         v-btn.mb-1(v-if='!message.src', icon, depressed, small)
           v-icon fas fa-camera
@@ -105,11 +109,14 @@
     audio-input(
       v-if='message.text.length == 0 && !message.src',
       @update='audioUpdated',
+      @recordstart='recording = true',
+      @recordstop='recording = false',
       left,
-      dark
+      dark,
+      :style='recording ? "width: 100%" : ""'
     )
-    v-btn.mx-1(v-else, fab, color='primary', @click='sendMessage')
-      v-icon far fa-paper-plane
+    v-btn(v-else, fab, depressed, color='primary', @click='sendMessage')
+      v-icon fas fa-paper-plane
   v-dialog(
     v-model='shareGroup',
     :fullscreen='!$vuetify.breakpoint.mdAndUp',
@@ -170,6 +177,7 @@ export default {
         text: '',
         type: 'text',
       },
+      recording: false,
       uploading: false,
       shareGroup: false,
     }
@@ -253,7 +261,7 @@ export default {
 
 <style lang="scss" scoped>
 .blured {
-  filter: blur(4px);
-  margin: -4%;
+  filter: blur(2px);
+  margin: -8%;
 }
 </style>

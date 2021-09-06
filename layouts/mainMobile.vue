@@ -96,9 +96,9 @@
           )
             v-icon.pa-1(color='black', style='display: block') fas fa-comment-dots
             span(style='font-size: 0.7em') CHAT
-  viewer(v-model='opened')
-    v-card
-      search(v-if='opened == "search"', @updated='updateCentre')
+  //- viewer(v-model='opened')
+  v-card(v-if='opened == "search"', style='position: fixed; inset: 0')
+    search(@updated='updateCentre')
   viewer(v-model="postOpened", @click:outside="closePost")
     expanded-post(v-if="postOpened", :type="openedPost.type", v-touch="{ down: () => closePost() }", :content="openedPost", @back="closePost")
   v-dialog(
@@ -127,7 +127,7 @@ import Portals from '../components/map/portals'
 export default {
   watch: {
     $route(route) {
-      if (route.hash === '') {
+      if (Object.keys(route.query).length === 0) {
         this.opened = ''
       }
     },
@@ -156,11 +156,20 @@ export default {
     }
   },
 
+  watch: {
+    $route(route) {
+      console.log('route update')
+      if (typeof route.query.post === 'undefined') {
+        this.postOpened = false
+      }
+    },
+  },
+
   async mounted() {
-    if (this.$route.hash.length > 1) {
+    if (typeof this.$route.query.post !== 'undefined') {
       this.openedPost = await this.$store.dispatch(
         'post/getPost',
-        this.$route.hash.substring(1)
+        this.$route.query.post
       )
       this.postOpened = true
     }

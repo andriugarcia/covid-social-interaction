@@ -10,10 +10,15 @@
       v-icon fas fa-arrow-left
     span Nuevo Chat
   v-sheet.pt-12.pa-4(color='white', style='height: 100vh; overflow-y: scroll')
-    v-text-field.mt-6(filled, dense, placeholder='Buscar Contactos')
+    v-text-field.mt-6(
+      v-model='textFilter',
+      filled,
+      dense,
+      placeholder='Buscar Contactos'
+    )
     v-list(color='white')
       v-list-item(
-        v-for='(follower, i) in followers',
+        v-for='(follower, i) in followersFiltered',
         :key='i',
         @click='openChat(follower.target)'
       )
@@ -48,10 +53,25 @@ export default {
     return {
       followers: [],
       sendMessage: false,
+      textFilter: '',
     }
   },
   async mounted() {
     this.followers = await this.$store.dispatch('user/getFollowers')
+  },
+  computed: {
+    followersFiltered() {
+      if (this.textFilter.length === 0) {
+        return [...this.followers]
+      }
+      const ff = this.followers.filter((follower) => {
+        const name = follower.profile.username
+
+        return name.toLowerCase().includes(this.textFilter.toLowerCase())
+      })
+
+      return ff
+    },
   },
   methods: {
     openChat(profile_id) {

@@ -1,7 +1,7 @@
 <template lang="pug">
 #profile(
   v-if='!userLoading && user && !userNotFound',
-  style='position: relative'
+  style='position: relative; width: 100%'
 )
   v-app-bar(
     absolute,
@@ -195,6 +195,11 @@ export default {
     NewChat: () => import('@/layouts/newChat'),
     editProfile: () => import('@/components/profile/editProfile'),
   },
+  watch: {
+    tab(value) {
+      this.finished = false
+    },
+  },
   data() {
     return {
       page: 1,
@@ -220,11 +225,14 @@ export default {
     await this.getUser()
     this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
   },
+  beforeDestroy() {
+    this.$refs.scrollarea.removeEventListener('scroll', this.handleScroll)
+  },
   methods: {
     async handleScroll() {
       if (
         !this.finished &&
-        this.$refs.scrollarea.scrollTop + 1500 >=
+        this.$refs.scrollarea.scrollTop + 2000 >=
           this.$refs.scrollarea.scrollHeight &&
         !this.loading
       ) {
@@ -241,7 +249,12 @@ export default {
         )
         this.events.push(...user.event)
         this.page++
-        // this.finished = true
+
+        if (this.tab === 'posts') {
+          if (user.post.length <= 0) this.finished = true
+        } else if (this.tab === 'events') {
+          if (user.event.length <= 0) this.finished = true
+        }
         this.loading = false
       }
     },

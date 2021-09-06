@@ -1,7 +1,7 @@
 <template lang="pug">
 v-sheet#contacts(
   v-if='!newGroup && !newChat',
-  style='height: 100vh; position: relative',
+  style='height: 100vh; width: 100%; position: relative',
   color='white'
 )
   v-toolbar.px-2(

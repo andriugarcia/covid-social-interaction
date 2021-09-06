@@ -75,7 +75,10 @@ export default {
 
   watch: {
     $route(route) {
-      if (route.hash === '') {
+      if (
+        typeof route.query.post === 'undefined' &&
+        typeof route.query.search === 'undefined'
+      ) {
         this.expanded = false
       }
     },
@@ -91,11 +94,15 @@ export default {
   },
   methods: {
     expand() {
-      this.$router.replace({ hash: this.content.post_id })
+      this.$router.push({
+        query: {
+          post: this.content.post_id,
+        },
+      })
       this.expanded = true
     },
     closePost() {
-      this.$router.replace({ hash: '' })
+      this.$router.replace({ query: {} })
       this.expanded = false
     },
     getColor() {

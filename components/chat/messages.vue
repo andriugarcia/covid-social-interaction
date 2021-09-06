@@ -190,6 +190,9 @@ export default {
     self.$refs.chat.scrollTop = self.$refs.chat.scrollHeight
     self.$refs.chat.addEventListener('scroll', this.handleScroll)
   },
+  beforeDestroy() {
+    this.$refs.chat.removeEventListener('scroll', this.handleScroll)
+  },
   methods: {
     isEmoji(text) {
       return (
@@ -237,7 +240,7 @@ export default {
     openImage(src) {
       this.imageOpened = true
       this.imageSrc = src
-      this.$router.replace({ hash: 'image' })
+      this.$router.push({ hash: 'image' })
     },
     closeImage() {
       this.imageOpened = false

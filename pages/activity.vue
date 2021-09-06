@@ -52,6 +52,9 @@ export default {
     this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
     this.notifications = this.$store.state.auth.user.notifications
   },
+  beforeDestroy() {
+    this.$refs.scrollarea.removeEventListener('scroll', this.handleScroll)
+  },
   methods: {
     async handleScroll() {
       if (

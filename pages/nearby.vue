@@ -9,7 +9,10 @@
     .white--text
       .font-weight-bold Close to you
       span(v-if='participants') {{ participants }} personas cerca
-  v-sheet(color='white')
+  v-sheet(
+    color='white',
+    style='padding-top: 52px; height: 100vh; overflow-y: none; overflow-x: hidden'
+  )
     messages(nearby)
   div(style='position: absolute; bottom: 0px; left: 0; right: 0')
     chat-bar(nearby)

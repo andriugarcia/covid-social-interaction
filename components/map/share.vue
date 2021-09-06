@@ -142,7 +142,7 @@ export default {
       let type = 'unknown'
       if (this.post) {
         type = 'post'
-        url = `http://olimaps.com/post/${this.post.post_id}`
+        url = `http://olimaps.com/?post=${this.post.post_id}`
       } else if (this.event) {
         type = 'event'
         url = `http://olimaps.com/event/${this.event.event_id}`

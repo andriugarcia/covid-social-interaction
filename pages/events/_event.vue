@@ -104,7 +104,15 @@
         v-if='event.joined && event.participation && event.participation.is_host'
       )
         template(v-slot:activator='{ on }')
-          v-btn(v-on='on', block, dark, large, color='primary', rounded) Cancelar Evento
+          v-btn(
+            v-on='on',
+            block,
+            dark,
+            large,
+            color='primary',
+            style='z-index: 10',
+            rounded
+          ) Cancelar Evento
         v-card.pa-4.rounded-xl
           .overline CANCELAR EVENTO
           p ¿Estás seguro de querer cancelar el evento?
@@ -118,11 +126,20 @@
         large,
         color='primary',
         rounded,
+        style='z-index: 10',
         @click='joinEvent'
       ) Asistir
       v-dialog(v-else)
         template(v-slot:activator='{ on }')
-          v-btn(v-on='on', block, dark, large, color='primary', rounded) Cancelar Asistencia
+          v-btn(
+            v-on='on',
+            block,
+            dark,
+            large,
+            color='primary',
+            style='z-index: 10',
+            rounded
+          ) Cancelar Asistencia
         v-card.pa-4.rounded-xl
           .overline CANCELAR ASISTENCIA
           p ¿Estás seguro de querer cancelar tu asistencia al evento?

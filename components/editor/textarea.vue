@@ -33,11 +33,12 @@ $textPadding: 0 23px;
 .hashtag-textarea {
   position: relative;
   overflow: auto;
+  min-height: 24px;
   background: transparent;
-  min-height: 20px;
   font-weight: lighter;
   height: 100%;
   width: 100%;
+  margin-bottom: 4px !important;
   // NOTE: Textarea layout. Fix position
   &__true-text {
     border: 0;
@@ -61,14 +62,16 @@ $textPadding: 0 23px;
     overflow-wrap: break-word;
   }
   &__placeholder {
-    font-size: 18px;
     padding: $textPadding;
-    position: absolute;
-    top: 11px;
+    margin: 0;
+    height: 100%;
+    width: $textWidth;
     font-weight: lighter;
-    line-height: 0;
     color: #505050;
-    overflow-y: none;
+    position: absolute;
+    top: 0;
+    font-size: 24px;
+    min-height: 24px;
   }
 }
 </style>
@@ -149,9 +152,9 @@ export default {
       document.execCommand('insertHTML', false, text)
     })
   },
-  // destroyed() {
-  // const overlayElm = document.getElementById('input-overlay')
-  // overlayElm.removeEventListener("click", this.onSelectHashtag, false);
+  // beforeDestroy() {
+  //   const overlayElm = document.getElementById('input-overlay')
+  //   overlayElm.removeEventListener('click', this.onSelectHashtag, false)
   // },
   computed: {
     isSafariBrowser() {

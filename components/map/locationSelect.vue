@@ -14,8 +14,11 @@
     @moveend='moving = false',
     style='position: absolute; top: 0; left: 0; right: 0; bottom: 0'
   )
-  v-layout.pa-4(style='position: absolute; top: 0; left: 0; right: 0')
-    v-btn.mt-3(icon, @click='$emit("back")') 
+  v-layout.pa-4(
+    align-center,
+    style='position: absolute; top: 0; left: 0; right: 0'
+  )
+    v-btn(icon, @click='$emit("back")') 
       v-icon fas fa-arrow-left
     v-dialog(
       v-model='searchOpened',
@@ -29,6 +32,7 @@
           flat,
           solo,
           rounded,
+          dense,
           append-icon='fas fa-search',
           readonly,
           hide-details,
@@ -102,6 +106,11 @@ export default {
     // We need to set mapbox-gl library here in order to use it in template
     this.mapbox = Mapbox
     this.map = null
+
+    if (!this.$store.state.map.userPosition) {
+      this.centre = { ...this.$store.state.map.mapPosition }
+      this.zoom = 5
+    }
   },
 
   _destroyed() {

@@ -44,6 +44,9 @@ export default {
     this.posts = await this.$store.dispatch('post/getSavedPosts')
     this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
   },
+  beforeDestroy() {
+    this.$refs.scrollarea.removeEventListener('scroll', this.handleScroll)
+  },
   methods: {
     async handleScroll() {
       if (

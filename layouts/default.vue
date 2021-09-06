@@ -119,6 +119,11 @@ export default {
     this.enableLocation()
 
     this.checkNewContactsAvailable()
+
+    // TODO Comprobar si esto hace que funcione en ios
+    setTimeout(() => {
+      if (!this.$store.state.map.locationEnabled) this.enableLocation()
+    }, 500)
   },
   methods: {
     loadNearbyMessages() {
@@ -134,6 +139,7 @@ export default {
     },
     enableLocation() {
       const self = this
+      console.log('Obteniendo ubicacion por primera vez')
       navigator.geolocation.getCurrentPosition(
         function (position) {
           console.log('GET CURRENT POSITION')

@@ -12,48 +12,49 @@
   v-sheet(
     flat,
     color='white',
-    style='height: 100%; overflow-y: scroll; position: relative; padding-top: 160px'
+    style='height: 100%; overflow-y: scroll; padding-top: 160px; padding-bottom: 80px'
   )
-    v-layout.pa-6.mt-12(
-      justify-space-around,
-      style='position: absolute; top: 0; left: 0; right: 0'
+    v-sheet.mt-14(
+      color='white',
+      style='position: absolute; top: 0; left: 0; right: 0; z-index: 20'
     )
-      v-flex(xs3)
-        v-card.py-2.mx-1.text-center.rounded-xl(
-          :color='step == 1 || step == 2 ? "primary" : "white"',
-          :dark='step == 1 || step == 2',
-          flat,
-          style='width: 120px'
-        )
-          .font-weight-black(style='display: block') 1
-          .font-weight-bold QUE
-      v-flex(xs3)
-        v-card.py-2.mx-1.text-center.rounded-xl(
-          :color='step == 3 ? "primary" : "white"',
-          :dark='step == 3',
-          flat,
-          style='width: 120px'
-        )
-          .font-weight-black(style='display: block') 2
-          .font-weight-bold QUIEN
-      v-flex(xs3)
-        v-card.py-2.mx-1.text-center.rounded-xl(
-          :color='step == 4 ? "primary" : "white"',
-          :dark='step == 4',
-          flat,
-          style='width: 120px'
-        )
-          .font-weight-black(style='display: block') 3
-          .font-weight-bold DONDE
-      v-flex(xs3)
-        v-card.py-2.mx-1.text-center.rounded-xl(
-          :color='step == 5 ? "primary" : "white"',
-          :dark='step == 5',
-          flat,
-          style='width: 120px'
-        )
-          .font-weight-black(style='display: block') 4
-          .font-weight-bold CUANDO
+      v-layout.pa-3(justify-center)
+        v-flex(xs3)
+          v-card.py-2.mx-1.text-center.rounded-xl(
+            :color='step == 1 || step == 2 ? "primary" : "white"',
+            :dark='step == 1 || step == 2',
+            flat,
+            style='width: 120px'
+          )
+            .font-weight-black(style='display: block') 1
+            .font-weight-bold QUE
+        v-flex(xs3)
+          v-card.py-2.mx-1.text-center.rounded-xl(
+            :color='step == 3 ? "primary" : "white"',
+            :dark='step == 3',
+            flat,
+            style='width: 120px'
+          )
+            .font-weight-black(style='display: block') 2
+            .font-weight-bold QUIEN
+        v-flex(xs3)
+          v-card.py-2.mx-1.text-center.rounded-xl(
+            :color='step == 4 ? "primary" : "white"',
+            :dark='step == 4',
+            flat,
+            style='width: 120px'
+          )
+            .font-weight-black(style='display: block') 3
+            .font-weight-bold DONDE
+        v-flex(xs3)
+          v-card.py-2.mx-1.text-center.rounded-xl(
+            :color='step == 5 ? "primary" : "white"',
+            :dark='step == 5',
+            flat,
+            style='width: 120px'
+          )
+            .font-weight-black(style='display: block') 4
+            .font-weight-bold CUANDO
     .px-4(v-if='step == 1')
       .overline.font-weight-black.mt-2 CIUDAD
       v-layout(wrap)
@@ -138,7 +139,7 @@
       )
       v-list(
         color='white',
-        style='height: calc(100vh - 450px); overflow-y: scroll'
+        style='height: calc(100vh - 350px); overflow-y: scroll'
       )
         v-list-item(
           v-for='(person, i) in peopleFiltered',
@@ -475,10 +476,10 @@ export default {
         this.step += 1
       } else {
         this.event.date.start = new Date(
-          this.date + ' ' + this.time
+          this.date.replace(/-/g, '/') + ' ' + this.time
         ).toISOString()
         this.event.date.end = new Date(
-          this.dateEnd + ' ' + this.timeEnd
+          this.dateEnd.replace(/-/g, '/') + ' ' + this.timeEnd
         ).toISOString()
         this.event.chat_id = this.group ? this.group.chat_id : null
         const eventId = await this.$store.dispatch(
