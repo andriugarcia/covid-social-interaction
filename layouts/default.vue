@@ -119,11 +119,6 @@ export default {
     this.enableLocation()
 
     this.checkNewContactsAvailable()
-
-    // TODO Comprobar si esto hace que funcione en ios
-    setTimeout(() => {
-      if (!this.$store.state.map.locationEnabled) this.enableLocation()
-    }, 500)
   },
   methods: {
     loadNearbyMessages() {
@@ -171,9 +166,11 @@ export default {
           })
       }
 
-      this.$fire.messaging.onMessage((payload) => {
-        console.info('Mensaje recibido', payload)
-      })
+      if (typeof this.$fire.messaging !== 'undefined') {
+        this.$fire.messaging.onMessage((payload) => {
+          console.info('Mensaje recibido', payload)
+        })
+      }
     },
     checkIfAppIsInstalled() {
       window.addEventListener('beforeinstallprompt', (e) => {
