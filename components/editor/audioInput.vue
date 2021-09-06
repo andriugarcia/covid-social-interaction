@@ -71,11 +71,11 @@ export default {
 
       const self = this
 
+      this.touching = true
+      this.$emit('recordstart')
+      this.recording = true
       navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
         window.navigator.vibrate(50)
-        this.touching = true
-        this.$emit('recordstart')
-        this.recording = true
         this.interval = setInterval(function () {
           self.counter += 1
         }, 1000)

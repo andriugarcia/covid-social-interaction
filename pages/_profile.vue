@@ -254,9 +254,9 @@ export default {
         this.events.push(...user.event)
         this.page++
 
-        if (this.tab === 'posts') {
+        if (this.tab === 0) {
           if (user.post.length <= 0) this.finished = true
-        } else if (this.tab === 'events') {
+        } else if (this.tab === 1) {
           if (user.event.length <= 0) this.finished = true
         }
         this.loading = false

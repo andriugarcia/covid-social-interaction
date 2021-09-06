@@ -20,28 +20,24 @@
       v-list-item(
         v-for='(follower, i) in followersFiltered',
         :key='i',
-        @click='openChat(follower.target)'
+        @click='openChat(i)'
       )
         v-list-item-avatar(color='primary')
           v-img(:src='follower.profile.profile_picture')
         v-list-item-content
           v-list-item-title {{ follower.profile.username }}
-        v-dialog(
-          :value='sendMessage',
-          fullscreen,
-          transition='fade-transition'
+  v-dialog(v-model='sendMessage', fullscreen, transition='fade-transition')
+    v-sheet(
+      color='#1e1e1eE0',
+      style='position: relative; width: 100%; height: 100%'
+    )
+      v-layout(justify-center)
+        new-chat(
+          v-if='sendMessage',
+          :user='userSelected',
+          @back='closeChat',
+          style='max-width: 600px'
         )
-          v-sheet(
-            color='#1e1e1eE0',
-            style='position: relative; width: 100%; height: 100%'
-          )
-            v-layout(justify-center)
-              new-chat(
-                v-if='sendMessage',
-                :user='follower.profile',
-                @back='sendMessage = false',
-                style='max-width: 600px'
-              )
 </template>
 
 <script>
@@ -54,6 +50,7 @@ export default {
       followers: [],
       sendMessage: false,
       textFilter: '',
+      userSelected: null,
     }
   },
   async mounted() {
@@ -74,14 +71,19 @@ export default {
     },
   },
   methods: {
-    openChat(profile_id) {
-      const chatId =
-        this.$store.getters['chat/getChatIdFromUsername'](profile_id)
+    closeChat() {
+      this.sendMessage = false
+      this.userSelected = null
+    },
+    openChat(i) {
+      const username = this.followersFiltered[i].profile.username
+      const chatId = this.$store.getters['chat/getChatIdFromUsername'](username)
 
       if (chatId !== null) {
         this.$router.push({ path: `chat/${chatId}` })
       } else {
         this.sendMessage = true
+        this.userSelected = this.followersFiltered[i].profile
       }
     },
   },
