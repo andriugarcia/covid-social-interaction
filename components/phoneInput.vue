@@ -7,6 +7,8 @@
       :items='countryPrefixes',
       outlined,
       append-icon='',
+      item-text='name',
+      item-value='mask',
       dense,
       filled,
       style='max-width: 80px'
@@ -22,7 +24,7 @@
       hide-details,
       rounded,
       type='phone',
-      v-mask='countrySelected.mask',
+      v-mask='countrySelected',
       placeholder='Número de Teléfono',
       append-icon='fas fa-phone'
     )
@@ -35,12 +37,8 @@ export default {
   data() {
     return {
       phone: '',
-      countrySelected: {
-        name: 'Spain',
-        dial_code: '+34',
-        code: 'ES',
-        mask: '### ### ###',
-      },
+      countrySelected: '### ### ###',
+      maskSelected: null,
       countryPrefixes,
     }
   },
@@ -50,6 +48,9 @@ export default {
         'input',
         this.countrySelected.dial_code + value.replaceAll(' ', '')
       )
+    },
+    countrySelected(value) {
+      console.log('Country', value)
     },
   },
   methods: {

@@ -12,8 +12,7 @@
     :zoom.sync='zoom',
     :pitch='20',
     style='position: absolute; top: 0; left: 0; right: 0; bottom: 0',
-    @click='mapClick',
-    @dblclick='mapDblclick'
+    @click='mapClick'
   )
     MglMarker(
       v-for='(post, i) in posts',
@@ -48,6 +47,8 @@ export default {
       accessToken: process.env.MAPBOX_TOKEN, // your access token. Needed if you using Mapbox maps
       mapStyle: 'mapbox://styles/mapbox/light-v9',
       bounds: {},
+      timer: null,
+      taps: 0,
     }
   },
 
@@ -135,14 +136,17 @@ export default {
       this.$store.dispatch('event/getEvents')
     },
     mapClick(map) {
-      if (this.timer) return
-      this.timer = setTimeout(() => {
-        this.$emit('click', map.mapboxEvent.lngLat)
-      }, 500)
-    },
-    mapDblclick() {
-      clearTimeout(this.timer)
-      this.timer = null
+      this.taps += 1
+
+      if (!this.timer) {
+        this.timer = setTimeout(() => {
+          if (this.taps == 1) {
+            this.$emit('click', map.mapboxEvent.lngLat)
+          }
+          this.timer = null
+          this.taps = 0
+        }, 500)
+      }
     },
     onLoad(ev) {
       this.map = ev.map

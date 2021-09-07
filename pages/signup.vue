@@ -27,11 +27,8 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
       v-tab-item(key='phone', style='height: calc(100vh - 140px)')
         .font-weight-black TELÉFONO
         v-phone-input.mt-2(v-model='phone')
-        v-checkbox.mt-4(
-          color='primary',
-          label='Acepto recibir un SMS para que Olimaps pueda verificar mi número de teléfono'
-        )
         v-checkbox(
+          v-model='termsCheck',
           color='primary',
           label='Acepto los términos y condiciones de Olimaps'
         )
@@ -40,7 +37,7 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
           justify-space-between
         )
           v-btn(outlined, large, @click='step = "select"') Atrás
-          v-btn#signup-button(color='primary', large) Siguiente
+          v-btn#signup-button(color='primary', :disabled='!termsCheck', large) Siguiente
       v-tab-item(key='email', style='height: calc(100vh - 140px)')
         .font-weight-black EMAIL
         v-text-field.mt-2(
@@ -53,10 +50,12 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
           :rules='[checkEmail]'
         )
         v-checkbox.mt-4(
+          v-model='smsVerificationCheck',
           color='primary',
-          label='Acepto recibir un SMS para que Olimaps pueda verificar mi número de teléfono'
+          label='Acepto recibir un SMS para verificar mi número de teléfono'
         )
         v-checkbox(
+          v-model='termsCheck',
           color='primary',
           label='Acepto los términos y condiciones de Olimaps'
         )
@@ -65,7 +64,12 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
           justify-space-between
         )
           v-btn(outlined, large, @click='step = "select"') Atrás
-          v-btn(color='primary', large, @click='signupByEmail') Siguiente
+          v-btn(
+            color='primary',
+            large,
+            :disabled='!smsVerificationCheck || !termsCheck',
+            @click='signupByEmail'
+          ) Siguiente
   .pa-6(v-if='step == "phoneVerification"')
     .font-weight-black CÓDIGO DE VERIFICACION
     v-text-field.mt-2(
@@ -184,6 +188,8 @@ export default {
       description: '',
       phone: '',
       phoneVerificationCode: null,
+      smsVerificationCheck: false,
+      termsCheck: false,
       step: 'select',
       showPassOnLogin: false,
       checkEmail: (email) =>
@@ -214,7 +220,7 @@ export default {
     },
   },
   mounted() {
-    if (this.$store.getters['auth/authenticated']) {
+    if (this.$store.getters['auth/sauthenticated']) {
       this.$router.replace({ path: '/' })
     }
   },

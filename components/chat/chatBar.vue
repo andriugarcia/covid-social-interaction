@@ -1,9 +1,10 @@
 <template lang="pug">
 #chatBar.pb-2
-  v-card.pa-1.mb-2.ml-4.rounded-xl(
+  v-card.mb-2.ml-4.rounded-xl(
     v-if='message.src && (message.type == "image" || message.type == "video")',
     flat,
     color='primary',
+    :class='{ "pa-1": false, "pa-3": true }',
     style='position: relative; width: fit-content'
   )
     img.rounded-xl(
@@ -262,6 +263,6 @@ export default {
 <style lang="scss" scoped>
 .blured {
   filter: blur(2px);
-  margin: -8%;
+  margin: -10px;
 }
 </style>

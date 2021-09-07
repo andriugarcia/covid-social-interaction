@@ -28,9 +28,7 @@ v-card(:style='!$vuetify.breakpoint.mdAndUp ? "border-radius: 24px 24px 0 0" : "
         v-btn(rounded, color='primary', block, depressed, @click='openEditor')
           v-icon.mr-2(small) fas fa-plus
           span.text-capitalize Publicar Aquí
-        .text-center.pt-2(v-if='loading')
-          v-progress-circular(indeterminate, color='primary')
-        .masonry.mt-4(v-else-if='nearbyPosts.length !== 0')
+        .masonry.mt-4(v-if='nearbyPosts.length !== 0')
           post.mb-2(
             v-for='(post, i) in nearbyPosts',
             :key='i',
@@ -48,17 +46,19 @@ v-card(:style='!$vuetify.breakpoint.mdAndUp ? "border-radius: 24px 24px 0 0" : "
           )
             v-icon(color='primary', x-large) far fa-sad-cry
             .mt-4.black--text No hay posts en esta zona
-      v-tab-item(key='events')
         .text-center.pt-2(v-if='loading')
           v-progress-circular(indeterminate, color='primary')
+      v-tab-item(key='events')
         v-alert(
-          v-else-if='nearbyEvents.length === 0',
+          v-if='nearbyEvents.length === 0',
           type='error',
           text,
           icon='far fa-sad-tear',
           prominent
         ) No hay eventos cerca
         event.mb-2(v-for='(event, i) in nearbyEvents', :key='i', :event='event')
+        .text-center.pt-2(v-if='loading')
+          v-progress-circular(indeterminate, color='primary')
 </template>
 
 <script>
@@ -119,11 +119,12 @@ export default {
         !this.loading
       ) {
         this.loading = true
-        if (this.tabs == 'posts') {
+        if (this.tab == 0) {
           const newNearbyPosts = await this.$store.dispatch(
             'post/getNearbyPosts',
             { coordinates: this.coordinates, page: this.postsPage }
           )
+          console.log(newNearbyPosts)
           this.nearbyPosts.push(...newNearbyPosts)
           this.postsPage++
           if (newNearbyPosts.length <= 0) {
@@ -144,7 +145,7 @@ export default {
       }
     },
     closePlaceSelected() {
-      if (this.$refs.postcontent.scrollTop <= 50) {
+      if (this.$refs.scrollarea.scrollTop <= 50) {
         this.$emit('back')
       }
     },

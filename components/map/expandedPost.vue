@@ -197,6 +197,7 @@ export default {
           this.taps = 0
         }, 400)
       } else {
+        if (this.openLoginIfNotAuthenticated()) return
         clearTimeout(this.timer)
         this.enableHeartAnimation()
         if (!this.content.is_liked) {

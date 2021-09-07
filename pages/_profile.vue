@@ -159,10 +159,18 @@
           )
   viewer(v-model='editingProfile')
     edit-profile(@back='editFinished')
-v-sheet.pa-4(v-else-if='userLoading', color='white', style='height: 100vh')
+v-sheet.pa-4(
+  v-else-if='userLoading',
+  color='white',
+  style='height: 100vh; width: 100%'
+)
   v-layout.mt-6(justify-center)
     v-progress-circular(size='64', indeterminate, color='primary')
-v-sheet#notFound.pa-4(v-else, color='white', style='height: 100vh')
+v-sheet#notFound.pa-4(
+  v-else,
+  color='white',
+  style='height: 100vh; width: 100%'
+)
   v-card.ma-2.rounded-xl(outlined)
     v-layout.pa-6.text-center(
       column,
