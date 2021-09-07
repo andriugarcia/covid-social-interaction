@@ -116,7 +116,7 @@ export default {
       rrss,
       usernameCheck: (value) =>
         value.match(
-          /^(?=.{5,30}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/
+          /^[a-zA-Z0-9]+([a-zA-Z0-9](_|-| )[a-zA-Z0-9])*[a-zA-Z0-9]+$/
         ) || 'Nombre de usuario no válido',
     }
   },

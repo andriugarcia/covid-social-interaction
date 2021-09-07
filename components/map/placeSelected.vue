@@ -124,7 +124,6 @@ export default {
             'post/getNearbyPosts',
             { coordinates: this.coordinates, page: this.postsPage }
           )
-          console.log(newNearbyPosts)
           this.nearbyPosts.push(...newNearbyPosts)
           this.postsPage++
           if (newNearbyPosts.length <= 0) {
