@@ -75,7 +75,11 @@ export default {
       this.$emit('recordstart')
       this.recording = true
       navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-        if (!this.touching) return
+        if (!this.touching) {
+          this.mediaRecorder.stop()
+          this.mediaRecorder.stream.getTracks().forEach((i) => i.stop())
+          return
+        }
         window.navigator.vibrate(50)
         this.interval = setInterval(function () {
           self.counter += 1
