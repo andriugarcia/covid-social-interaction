@@ -4,6 +4,9 @@
     @click='morePosts',
     style='position: fixed; top: 0; left: 0; right: 0; bottom: 0'
   )
+  v-chip(v-if='user.email && !user.verified', small, @click='sendConfirmationEmail', style='position: fixed; right: 18px; top: 84px;') 
+    v-icon(x-small) fas fa-info-circle
+    span.ml-1 Email no verificado
   v-layout.pa-4(
     style='position: fixed; top: 0px; right: 0; left: 0',
     align-center,
@@ -102,6 +105,13 @@
   viewer(v-model="postOpened", @click:outside="closePost")
     expanded-post(v-if="postOpened", :type="openedPost.type", v-touch="{ down: () => closePost() }", :content="openedPost", @back="closePost")
   v-dialog(
+    v-model='confirmationSent'
+  )
+    v-card.pa-2
+      v-subheader Email enviado
+      span Te hemos envíado un email para poder confirmar tu cuenta
+      v-btn(block, color='primary', tile, @click='confirmationSent = false') Cerrar
+  v-dialog(
     v-model='placeOpened',
     fullscreen,
     hide-overlay,
@@ -153,6 +163,7 @@ export default {
       fullPosts: [],
       openedPost: null,
       postOpened: false,
+      confirmationSent: false,
     }
   },
 
@@ -263,6 +274,11 @@ export default {
     openActivity() {
       if (this.openLoginIfNotAuthenticated()) return
       this.$router.push({ path: '/activity' })
+    },
+    sendConfirmationEmail() {
+      if (this.openLoginIfNotAuthenticated()) return
+      this.$store.dispatch('auth/sendConfirmationEmail')
+      this.confirmationSent = true
     },
   },
 }

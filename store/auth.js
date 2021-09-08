@@ -72,6 +72,10 @@ export const mutations = {
   updateProfile(state, updatedProfile) {
     Object.assign(state.user, updatedProfile)
   },
+  setLoginToken(_, token) {
+    axios.defaults.headers.common.authorization = 'Bearer ' + token
+    localStorage.setItem('token', token)
+  },
 }
 
 export const getters = {
@@ -142,6 +146,39 @@ export const actions = {
         method: 'Email'
       })
       return await dispatch('getMe')
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async sendConfirmationEmail() {
+    try {
+      await axios.post(
+        `${process.env.SERVER_URL}/user/sendConfirmationEmail`,
+      )
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async verifyUser() {
+    try {
+      await axios.post(
+        `${process.env.SERVER_URL}/user/verify`,
+      )
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async recoverPassword(_, email) {
+    try {
+      await axios.post(
+        `${process.env.SERVER_URL}/user/recoverPassword/${email}`,
+      )
+      return true
     } catch (err) {
       console.error(err)
       return false

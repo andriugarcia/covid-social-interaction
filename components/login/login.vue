@@ -75,7 +75,11 @@ v-card#login.pa-6(color='primary', dark)
           @click='login'
         ) Iniciar Sesión
     v-layout.my-4(justify-center)
-      v-btn.white--text.text-capitalize(text, style='letter-spacing: 0') Recuperar Contraseña
+      v-btn.white--text.text-capitalize(
+        text,
+        @click='$router.push({ path: "/recoverPassword" })',
+        style='letter-spacing: 0'
+      ) Recuperar Contraseña
     .white--text O puedes acceder con:
     v-layout.mt-2
       v-btn.mr-2(fab, color='white', @click='openTwitter')

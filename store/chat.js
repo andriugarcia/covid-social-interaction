@@ -28,6 +28,13 @@ export const getters = {
     )
     return index !== -1
   },
+  isParticipantInGroup: (state) => (chat_id) => {
+    const index = state.chats.findIndex((chat) => {
+      if (chat.chat.type !== 'group') return false
+      return chat.chat_id === chat_id
+    })
+    return index !== -1
+  },
   removeChat(state, chatId) {
     const index = state.chats.findIndex((chat) => chat.chat_id === chatId)
     state.chats.splice(index, 1)

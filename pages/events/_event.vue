@@ -132,25 +132,32 @@
         style='z-index: 10',
         @click='joinEvent'
       ) Asistir
-      v-dialog(v-else)
-        template(v-slot:activator='{ on }')
+      v-dialog(v-else, v-model='unjoinDialog')
+        template(#activator)
           v-btn(
-            v-on='on',
             block,
             dark,
             large,
             color='primary',
             style='z-index: 10',
+            @click='unjoinDialog = true',
             rounded
           ) Cancelar Asistencia
         v-card.pa-4.rounded-xl
           .overline CANCELAR ASISTENCIA
           p ¿Estás seguro de querer cancelar tu asistencia al evento?
           v-layout(justify-space-between)
-            v-btn(rounded, text) ATRÁS
+            v-btn(rounded, text, @click='unjoinDialog = false') ATRÁS
             v-btn(rounded, dark, depressed, color='red', @click='unjoinEvent') CANCELAR
   v-bottom-sheet(v-model='shareDialog', :inset='$vuetify.breakpoint.mdAndUp')
     share(:event='event', @back='shareDialog = false')
+  v-dialog(v-model='askGroupDialog')
+    v-card.pa-4
+      v-subheader Participar en el grupo
+      p ¿Quieres participar también en el grupo del evento para conocer a los asistentes?
+      v-layout(justify-space-between)
+        v-btn(text, @click='askGroupDialog = false') No quiero
+        v-btn(color='primary', @click='joinChat') Participar
 v-sheet.pa-4(v-else-if='loadingEvent', color='white', style='height: 100vh')
   v-layout.mt-6(justify-center)
     v-progress-circular(size='64', indeterminate, color='primary')
@@ -194,6 +201,8 @@ export default {
       eventNotFound: false,
       loadingEvent: true,
       shareDialog: false,
+      askGroupDialog: false,
+      unjoinDialog: false,
       states: {
         PROMOTION: 0,
         STARTED: 1,
@@ -250,11 +259,26 @@ export default {
       if (this.openLoginIfNotAuthenticated()) return
       await this.$store.dispatch('event/joinEvent', this.$route.params.event)
       this.event.joined = true
+
+      console.log(
+        this.$store.getters['chat/isParticipantInGroup'](this.event.chat_id)
+      )
+      if (
+        this.event.chat_id &&
+        !this.$store.getters['chat/isParticipantInGroup'](this.event.chat_id)
+      ) {
+        this.askGroupDialog = true
+      }
+    },
+    async joinChat() {
+      await this.$store.dispatch('chat/joinChat', this.event.chat_id)
+      this.askGroupDialog = false
     },
     async unjoinEvent() {
       if (this.openLoginIfNotAuthenticated()) return
-      await this.$store.dispatch('event/unjoinEvent', this.$route.params.event)
+      this.$store.dispatch('event/unjoinEvent', this.$route.params.event)
       this.event.joined = false
+      this.unjoinDialog = false
     },
     async cancelEvent() {
       if (this.openLoginIfNotAuthenticated()) return

@@ -119,10 +119,22 @@ export default {
     this.enableLocation()
 
     this.checkNewContactsAvailable()
+
+    this.checkEmailVerification()
   },
   methods: {
     loadNearbyMessages() {
       this.$store.commit('chat/loadNearbyMessages')
+    },
+    async checkEmailVerification() {
+      console.log('check email verification')
+      if (typeof this.$route.query.verify !== 'undefined') {
+        console.log('INIT email verification')
+        this.$store.commit('auth/setLoginToken', this.$route.query.verify)
+        await this.$store.dispatch('auth/verifyUser')
+        await this.$store.dispatch('auth/getMe')
+        this.$router.replace({ path: '/' })
+      }
     },
     async checkNewContactsAvailable() {
       if (this.$store.state.auth.user.twitter_id) {

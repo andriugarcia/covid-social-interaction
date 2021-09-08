@@ -234,7 +234,7 @@
                         @click='removeParticipant(i)'
                       ) Expulsar
       v-tab-item(key='events')
-        v-sheet(color='white')
+        v-sheet.pa-2(color='white')
           event.mb-2(v-for='(event, i) in events', :key='i', :event='event')
       v-tab-item(key='posts')
         v-sheet(color='white')
@@ -359,7 +359,6 @@ export default {
   methods: {
     async getChat() {
       await this.$store.dispatch('chat/getGroup', this.$route.params.group)
-
       this.chatLoaded = true
     },
     async joinChat() {
