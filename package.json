@@ -76,7 +76,7 @@
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
     "sass-loader": "^10.1.1",
-    "stylelint": "^13.9.0",
+    "stylelint": "^13.13.1",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^20.0.0",
     "vue-masonry-css": "^1.0.3"
