@@ -76,6 +76,8 @@ export default {
       this.recording = true
       navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
         if (!this.touching) {
+          this.$emit('recordstop')
+          clearInterval(this.interval)
           this.mediaRecorder.stop()
           this.mediaRecorder.stream.getTracks().forEach((i) => i.stop())
           return

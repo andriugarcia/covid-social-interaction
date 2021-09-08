@@ -61,7 +61,7 @@
           v-list-item-avatar(color='white')
             span(style='font-size: 1.6em') {{ chat.event[0].emoji }}
           v-list-item-content
-            span.font-weight-bold {{ chat.event[0].title }}
+            span.font-weight-bold.text-truncate {{ chat.event[0].title }}
             span {{ chat.event[0].start_date | toDateShort }}
           v-list-item-action
             v-btn.text-capitalize(small, depressed, color='primary') Más Info
