@@ -35,6 +35,7 @@ export default {
             if (currentToken) {
               this.$store.dispatch('user/sendNotificationToken', currentToken)
               localStorage.setItem(`pushToken-${this.$store.state.auth.user.profile_id}`, currentToken)
+              this.app.$fire.analytics.logEvent('push_notification_enabled')
             } else {
               console.warn('No se ha podido registrar el token de notification')
             }

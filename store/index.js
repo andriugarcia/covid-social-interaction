@@ -25,7 +25,7 @@ export const mutations = {
   },
 
   downloadApp(state) {
-
+    this.app.$fire.analytics.logEvent('install')
     state.deferredPrompt.prompt()
     state.deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {

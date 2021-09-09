@@ -135,13 +135,6 @@ import Post from '../components/map/post'
 import Portals from '../components/map/portals'
 
 export default {
-  watch: {
-    $route(route) {
-      if (Object.keys(route.query).length === 0) {
-        this.opened = ''
-      }
-    },
-  },
   components: {
     Map,
     Postbar,
@@ -169,9 +162,11 @@ export default {
 
   watch: {
     $route(route) {
-      console.log('route update')
       if (typeof route.query.post === 'undefined') {
         this.postOpened = false
+      }
+      if (Object.keys(route.query).length === 0 && route.hash === '') {
+        this.opened = ''
       }
     },
   },

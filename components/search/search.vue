@@ -5,7 +5,7 @@
       v-if='!$vuetify.breakpoint.mdAndUp',
       icon,
       @blur='searchText = ""',
-      @click='$router.replace({ hash: "" })'
+      @click='$router.push({ hash: "" })'
     )
       v-icon fas fa-arrow-left
     v-text-field.ml-2(
@@ -138,11 +138,11 @@ export default {
           this.$store.commit('map/flyTo', this.places[index].coordinates)
         }
       }
-      this.$router.replace({ hash: '' })
+      this.$router.push({ hash: '' })
       this.searchText = ''
     },
     selectUser(user) {
-      this.$router.push({ path: '/' + user.username })
+      this.$router.replace({ path: '/' + user.username })
       this.searchText = ''
     },
   },

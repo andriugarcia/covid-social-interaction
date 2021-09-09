@@ -47,7 +47,7 @@ export default {
       accessToken: process.env.MAPBOX_TOKEN, // your access token. Needed if you using Mapbox maps
       mapStyle: 'mapbox://styles/mapbox/light-v9',
       bounds: {},
-      timer: null,
+      timer: false,
       taps: 0,
     }
   },
@@ -139,11 +139,12 @@ export default {
       this.taps += 1
 
       if (!this.timer) {
-        this.timer = setTimeout(() => {
+        this.timer = true
+        setTimeout(() => {
           if (this.taps == 1) {
             this.$emit('click', map.mapboxEvent.lngLat)
           }
-          this.timer = null
+          this.timer = false
           this.taps = 0
         }, 500)
       }
