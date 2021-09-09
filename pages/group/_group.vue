@@ -100,13 +100,19 @@
         maxlength='240',
         counter
       )
-  v-sheet#chat-info(v-else, color='white', style='height: 100vh')
-    v-layout.pa-4(justify-space-between, align-center)
+  v-sheet#chat-info(
+    v-else,
+    color='white',
+    style='height: 100vh; overflow-y: scroll'
+  )
+    v-app-bar(absolute, flat, color='primary', dark)
       v-btn(icon, @click='groupinfo = false')
         v-icon fas fa-arrow-left
+      v-toolbar-title {{ chat.title }}
+      v-spacer
       v-btn.mr-2(v-if='isAdmin', icon, small, @click='settingsOpened = true')
         v-icon fas fa-pen
-    v-layout.pb-6(column, align-center)
+    v-layout.mt-15.pt-6.pb-6(column, align-center)
       v-avatar(size='120', color='primary')
         v-img(:src='chat.cover')
       .font-weight-bold.mt-4 {{ chat.title }}
@@ -119,8 +125,8 @@
     v-tabs(
       v-model='tab',
       fixed-tabs,
-      background-color='transparent',
-      style='position: sticky; top: 0; left: 0; right: 0; z-index: 10',
+      background-color='white',
+      style='position: sticky; top: 56px; left: 0; right: 0; z-index: 10',
       next-icon='fas fa-chevron-right',
       prev-icon='fas fa-chevron-left'
     )
@@ -131,10 +137,10 @@
     v-tabs-items(v-model='tab')
       v-tab-item(key='members')
         v-list.pa-4(color='white')
-          v-list-item(v-if='isAdmin')
+          v-list-item(v-if='isAdmin', @click='newParticipantDialog = true')
             v-list-item-avatar
               v-icon fas fa-plus
-            v-list-item-title Nuevo participante
+            v-list-item-title Añadir Participantes
           v-dialog(v-if='isParticipant', v-model='leaveDialogIn')
             template(v-slot:activator='{ on }')
               v-list-item(v-on='on')
@@ -254,6 +260,12 @@
                 template(#placeholder)
                   v-row.fill-height.ma-0(align='center', justify='center')
                     v-progress-circular(indeterminate, color='grey lighten-5')
+  v-dialog(
+    v-model='newParticipantDialog',
+    :fullscreen='!$vuetify.breakpoint.mdAndUp',
+    :width='500'
+  )
+    addParticipant(@back='closeAddParticipant')
   v-bottom-sheet(v-model='shareDialog', :inset='$vuetify.breakpoint.mdAndUp')
     share(:group='chat', @back='shareDialog = false')
 </template>
@@ -275,6 +287,7 @@ export default {
     Event,
     avatarInput: () => import('@/components/avatar-input'),
     share: () => import('@/components/map/share.vue'),
+    addParticipant: () => import('@/layouts/addParticipant.vue'),
     // staticMap: () => import('@/components/map/staticMap')
   },
   beforeRouteLeave(_, __, next) {
@@ -288,7 +301,7 @@ export default {
   data() {
     return {
       shareDialog: false,
-      addParticipantDialog: false,
+      newParticipantDialog: false,
       removeParticipantDialog: false,
       addAdminDialog: false,
       removeAdminDialog: false,
@@ -367,6 +380,10 @@ export default {
     },
     openGroup() {
       this.groupinfo = true
+    },
+    closeAddParticipant() {
+      this.getChat()
+      this.newParticipantDialog = false
     },
     async addAdmin(member) {
       if (

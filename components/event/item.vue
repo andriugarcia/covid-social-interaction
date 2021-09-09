@@ -1,10 +1,6 @@
 <template lang="pug">
 #eventItem
-  v-card.rounded-lg(
-    v-if='!small',
-    outlined,
-    @click='$router.push({ path: `/events/${event.event_id}` })'
-  )
+  v-card.rounded-lg(v-if='!small', outlined, @click='goToEvent')
     v-layout
       v-sheet.px-3(:color='getColor()', style='border-radius: 8px 0 0 8px')
         v-layout(align-center, style='height: 100%')
@@ -17,8 +13,9 @@
         v-layout(align-center)
           span.mr-1 {{ event.place_description }}
           v-spacer
-          v-icon.mr-1(small) fas fa-map-marker-alt
-          span {{ haversineDistance([userPosition.lng, userPosition.lat], [event.place.lng, event.place.lat]) }}km
+          v-layout(v-if='typeof event.place !== "undefined"', justify-end)
+            span {{ haversineDistance([userPosition.lng, userPosition.lat], [event.place.lng, event.place.lat]) }}km
+            v-icon.ml-1(small) fas fa-map-marker-alt
   v-card.rounded-xl(
     v-else,
     outlined,
@@ -56,6 +53,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     userPosition() {
@@ -68,6 +69,11 @@ export default {
         (this.$store.state.event.colors[this.event.emoji] || 'gray') +
         ' lighten-3'
       )
+    },
+    goToEvent() {
+      if (!this.readonly) {
+        this.$router.push({ path: `/events/${event.event_id}` })
+      }
     },
     getCategoryName(emoji) {
       return this.$store.state.event.categories.find(

@@ -66,59 +66,61 @@ export default {
     }
   },
   methods: {
-    handleTouch() {
-      console.log('touch start')
-
-      const self = this
-
-      this.touching = true
-      this.$emit('recordstart')
+    startRecording() {
+      if (typeof window.navigator !== 'undefined') window.navigator.vibrate(50)
+      console.log('Starting recording')
       this.recording = true
+      this.$emit('recordstart')
       navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-        if (!this.touching) {
-          this.$emit('recordstop')
-          clearInterval(this.interval)
-          this.mediaRecorder.stop()
-          this.mediaRecorder.stream.getTracks().forEach((i) => i.stop())
-          return
-        }
-        window.navigator.vibrate(50)
-        this.interval = setInterval(function () {
-          self.counter += 1
+        this.interval = setInterval(() => {
+          this.counter += 1
         }, 1000)
         this.mediaRecorder = new MediaRecorder(stream)
         this.mediaRecorder.start()
 
-        this.mediaRecorder.addEventListener('stop', () => {
-          const audioBlob = new Blob(this.audioChunks, {
-            type: this.mediaRecorder.mimeType,
-          })
-
-          setTimeout(() => {
-            if (this.cancelled || this.counter < 1) this.cancelled = false
-            else this.$emit('update', audioBlob)
-
-            this.counter = 0
-          }, 200)
-          // const audio = new Audio(audioUrl);
-        })
         this.mediaRecorder.addEventListener('dataavailable', (event) => {
           this.audioChunks.push(event.data)
         })
       })
     },
-    handleEnd() {
-      this.touching = false
-      console.log('touch end')
+    stopRecording() {
+      console.log('Stop recording')
+      this.mediaRecorder.addEventListener('stop', () => {
+        const audioBlob = new Blob(this.audioChunks, {
+          type: this.mediaRecorder.mimeType,
+        })
+
+        setTimeout(() => {
+          if (this.cancelled || this.counter < 1) this.cancelled = false
+          else this.$emit('update', audioBlob)
+
+          this.counter = 0
+
+          this.mediaRecorder = null
+          this.touching = false
+        }, 200)
+        // const audio = new Audio(audioUrl);
+      })
+
       this.$emit('recordstop')
       this.recording = false
 
       clearInterval(this.interval)
       if (this.mediaRecorder) {
-        window.navigator.vibrate(50)
+        if (typeof window.navigator !== 'undefined')
+          window.navigator.vibrate(50)
         this.mediaRecorder.stop()
         this.mediaRecorder.stream.getTracks().forEach((i) => i.stop())
       }
+    },
+    handleTouch() {
+      console.log('touch start')
+      this.touching = true
+      this.startRecording()
+    },
+    handleEnd() {
+      this.touching = false
+      this.stopRecording()
     },
     cancelAudio() {
       console.log('canceled')
@@ -131,36 +133,9 @@ export default {
     },
     record() {
       if (this.recording) {
-        this.$emit('recordstop')
-        this.recording = false
-        clearInterval(this.interval)
-        this.mediaRecorder.stop()
-        this.mediaRecorder.stream.getTracks().forEach((i) => i.stop())
+        this.stopRecording()
       } else {
-        navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-          this.$emit('recordstart')
-          this.recording = true
-          const self = this
-          this.interval = setInterval(function () {
-            self.counter += 1
-          }, 1000)
-          this.mediaRecorder = new MediaRecorder(stream)
-          this.mediaRecorder.start()
-
-          this.mediaRecorder.addEventListener('stop', () => {
-            const audioBlob = new Blob(this.audioChunks, {
-              type: this.mediaRecorder.mimeType,
-            })
-
-            if (this.counter >= 1) this.$emit('update', audioBlob)
-            this.counter = 0
-            // const audio = new Audio(audioUrl);
-          })
-
-          this.mediaRecorder.addEventListener('dataavailable', (event) => {
-            this.audioChunks.push(event.data)
-          })
-        })
+        this.startRecording()
       }
     },
     // stopRecording() {

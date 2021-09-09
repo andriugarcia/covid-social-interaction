@@ -316,6 +316,11 @@ export default {
           ? chat.message_chatTomessage_channel[0].text
           : 'Chat'
         return messageStr
+      } else if (chat.message_chatTomessage_channel[0].type === 'event') {
+        messageStr += emptyMessage
+          ? chat.message_chatTomessage_channel[0].text
+          : 'Event'
+        return messageStr
       }
       messageStr += chat.message_chatTomessage_channel[0].text
       return messageStr

@@ -61,13 +61,13 @@
           size='0.9em',
           @enter='sendMessage'
         )
-        v-menu(top, offset-y)
+        v-menu(top, offset-y, rounded)
           template(v-slot:activator='{ on }')
             v-btn(icon, v-on='on')
               v-icon fas fa-paperclip
-          v-card.pa-4(outlined)
+          v-card.pa-1(outlined)
             v-layout(wrap)
-              v-sheet.pa-1.ma-1.mx-2(flat)
+              v-card.rounded-xl.pa-3.ma-1.mx-1(flat, outlined)
                 v-avatar(color='primary', dark)
                   v-icon.white--text fas fa-image
                 .mt-1 Media
@@ -77,11 +77,19 @@
                   accept='image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm',
                   style='opacity: 0; position: absolute; top: 0; bottom: 0; left: 0; right: 0'
                 )
-              v-sheet.pa-1.ma-1.mx-2(flat, @click='')
+              v-card.rounded-xl.pa-3.ma-1.mx-1(
+                flat,
+                @click='shareEvent = true',
+                outlined
+              )
                 v-avatar(color='primary', dark)
                   v-icon.white--text fas fa-flag
                 .mt-1 Evento
-              v-sheet.pa-1.ma-1.mx-2(flat, @click='shareGroup = true')
+              v-card.rounded-xl.pa-3.ma-1.mx-1(
+                flat,
+                @click='shareGroup = true',
+                outlined
+              )
                 v-avatar(color='primary', dark)
                   v-icon.white--text fas fa-user
                 .mt-1 Grupo
@@ -119,11 +127,31 @@
     v-btn(v-else, fab, depressed, color='primary', @click='sendMessage')
       v-icon fas fa-paper-plane
   v-dialog(
+    v-model='shareEvent',
+    :fullscreen='!$vuetify.breakpoint.mdAndUp',
+    :width='500'
+  )
+    v-card(style='min-height: 600px; height: 100%', color='white')
+      v-toolbar(color='primary', dark) 
+        v-btn(icon, @click='shareEvent = false')
+          v-icon fas fa-arrow-left
+        v-toolbar-title Compartir Evento
+      .pa-2(v-if='user.participation.length > 0')
+        event.mb-2(
+          v-for='(event, i) in user.participation',
+          :key='i',
+          :event='event.event',
+          readonly,
+          @click.native='sendEvent(event)'
+        )
+      v-card.ma-2.rounded-xl.pa-4(v-else, outlined) No hay eventos programados
+
+  v-dialog(
     v-model='shareGroup',
     :fullscreen='!$vuetify.breakpoint.mdAndUp',
     :width='500'
   )
-    v-card(style='min-height: 600px')
+    v-card(style='min-height: 600px; height: 100%', color='white')
       v-toolbar(color='primary', dark) 
         v-btn(icon, @click='shareGroup = false')
           v-icon fas fa-arrow-left
@@ -148,6 +176,7 @@ export default {
     audioInput,
     texteditor,
     camera: () => import('@/components/editor/camera'),
+    event: () => import('@/components/event/item'),
   },
   props: {
     // Si username existe se crea el chat
@@ -170,6 +199,9 @@ export default {
         (chat) => chat.chat.type === 'group'
       )
     },
+    user() {
+      return this.$store.state.auth.user
+    },
   },
   data() {
     return {
@@ -181,6 +213,7 @@ export default {
       recording: false,
       uploading: false,
       shareGroup: false,
+      shareEvent: false,
     }
   },
   methods: {
@@ -212,6 +245,23 @@ export default {
         chat,
       }
       await this.sendMessage()
+    },
+    async sendEvent({ event }) {
+      console.log(event.event_id, [this.chat.chat_id])
+      await this.$store.dispatch('event/share', {
+        event: event.event_id,
+        targets: [this.chat.chat_id],
+      })
+      this.$store.commit('chat/pushMessage', {
+        src: null,
+        text: '',
+        type: 'event',
+        event_ref: event.event_id,
+        event: event,
+        author: this.user.profile_id,
+        created_at: Date.now(),
+      })
+      this.shareEvent = false
     },
     async imageUpdated(ev) {
       const file = ev.target.files[0]

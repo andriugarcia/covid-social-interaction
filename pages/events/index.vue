@@ -18,7 +18,10 @@
         v-icon.mr-2(color='black') far fa-calendar-alt
         .font-weight-medium(style='font-size: 1.4em') Próximos Eventos
         v-spacer
-        v-chip.font-weight-medium(v-if='events.length !== 0', color='primary') {{ events.length }}
+        v-chip.font-weight-medium(
+          v-if='user.participation.length !== 0',
+          color='primary'
+        ) {{ user.participation.length }}
       v-alert(
         v-if='authenticated && events.length === 0',
         color='purple',
@@ -30,9 +33,9 @@
         style='overflow-x: scroll'
       )
         event.mb-2.mr-2(
-          v-for='(event, i) in events',
+          v-for='(event, i) in user.participation',
           :key='i',
-          :event='event',
+          :event='event.event',
           small
         )
       v-layout.mt-6.mb-3
@@ -41,7 +44,7 @@
       //- v-row#loadBar.my-12(justify='center', align='center')
       //-   v-progress-circular(indeterminate, color='primary')
       v-alert(
-        v-if='events.length === 0',
+        v-if='user.participation.length === 0',
         type='error',
         text,
         icon='far fa-sad-tear',

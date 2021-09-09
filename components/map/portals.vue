@@ -13,7 +13,7 @@
         v-icon.mx-2(color='white', size='32') fas fa-arrow-circle-down
         span.font-weight-bold(style='font-size: 0.7em; width: 70px;') INSTALAR OLIMAPS
     v-card.rounded-xl.pa-1.mr-2(
-      v-if='authenticated',
+      v-if='authenticated && i < 2',
       v-for='(participation, i) in user.participation',
       :key='i',
       :color='getColor(participation.event.emoji)',

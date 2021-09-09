@@ -263,6 +263,7 @@ export const actions = {
       )
 
       const { messages, ...chat } = data
+      console.log(messages)
       commit('setMessages', messages)
       commit('setChat', {
         ...chat,
@@ -346,6 +347,29 @@ export const actions = {
   async joinChat(_, chatId) {
     try {
       await axios.post(`${process.env.SERVER_URL}/groups/join/${chatId}`)
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async addParticipants({ state }, participants) {
+    console.log(state.chat.chat_id, participants)
+    try {
+      await axios.post(`${process.env.SERVER_URL}/chat/${state.chat.chat_id}/addParticipants`, {
+        participants,
+      })
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  },
+  async removeParticipant(_, { chat_id, profile_id }) {
+    try {
+      await axios.post(`${process.env.SERVER_URL}/chat/${chat_id}/removeParticipant`, {
+        profile_id,
+      })
       return true
     } catch (err) {
       console.error(err)
