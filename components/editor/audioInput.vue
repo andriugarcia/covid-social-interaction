@@ -67,7 +67,8 @@ export default {
   },
   methods: {
     startRecording() {
-      if (typeof window.navigator !== 'undefined') window.navigator.vibrate(50)
+      if (typeof window.navigator.vibrate !== 'undefined')
+        window.navigator.vibrate(50)
       console.log('Starting recording')
       this.recording = true
       this.$emit('recordstart')
@@ -107,7 +108,7 @@ export default {
 
       clearInterval(this.interval)
       if (this.mediaRecorder) {
-        if (typeof window.navigator !== 'undefined')
+        if (typeof window.navigator.vibrate !== 'undefined')
           window.navigator.vibrate(50)
         this.mediaRecorder.stop()
         this.mediaRecorder.stream.getTracks().forEach((i) => i.stop())

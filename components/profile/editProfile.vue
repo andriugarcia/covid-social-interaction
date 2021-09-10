@@ -6,7 +6,7 @@ v-card#editProfile(style='position: relative')
     dark,
     flat
   ) 
-    v-btn(icon, dark, @click='$emit("back")')
+    v-btn(icon, dark, @click='$router.go(-1)')
       v-icon fas fa-times
     span Editando Perfil
     v-spacer
@@ -150,7 +150,7 @@ export default {
         await this.$store.dispatch('user/updateProfile', updatedData)
       }
 
-      this.$emit('back')
+      this.$router.go(-1)
     },
   },
 }

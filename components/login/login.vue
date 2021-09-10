@@ -77,7 +77,7 @@ v-card#login.pa-6(color='primary', dark)
     v-layout.my-4(justify-center)
       v-btn.white--text.text-capitalize(
         text,
-        @click='$router.push({ path: "/recoverPassword" })',
+        @click='openRecover',
         style='letter-spacing: 0'
       ) Recuperar Contraseña
     .white--text O puedes acceder con:
@@ -148,6 +148,10 @@ export default {
         this.loginPhoneError = true
       }
       this.loading = false
+    },
+    openRecover() {
+      this.$router.push({ path: '/recoverPassword' })
+      this.$store.commit('setLogin', false)
     },
     openSignup() {
       this.$router.push({ path: '/signup' })

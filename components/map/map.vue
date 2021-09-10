@@ -138,9 +138,11 @@ export default {
     mapClick(map) {
       this.taps += 1
 
+      console.log(this.taps)
       if (!this.timer) {
         this.timer = true
         setTimeout(() => {
+          console.log('time finishes', this.taps)
           if (this.taps == 1) {
             this.$emit('click', map.mapboxEvent.lngLat)
           }

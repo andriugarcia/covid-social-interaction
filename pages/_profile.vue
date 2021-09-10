@@ -63,7 +63,7 @@
         depressed,
         outlined,
         color='primary',
-        @click='editingProfile = true'
+        @click='openEditProfile'
       ) Editar Perfil
     v-layout.px-4.mt-6(justify-center, wrap)
       div(v-for='(rrss, i) in user.rrss', :key='i')
@@ -228,11 +228,25 @@ export default {
       return this.$store.state.auth.user
     },
   },
+  watch: {
+    $route(route) {
+      if (route.hash === '') {
+        this.editingProfile = false
+      }
+    },
+  },
   async mounted() {
     await this.getUser()
 
     if (!this.userNotFound) {
       this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
+    }
+
+    if (
+      this.$route.hash == '#edit' &&
+      this.user.profile_id == this.me.profile_id
+    ) {
+      this.editingProfile = true
     }
   },
   beforeDestroy() {
@@ -241,6 +255,10 @@ export default {
     }
   },
   methods: {
+    openEditProfile() {
+      this.$router.push({ hash: 'edit' })
+      this.editingProfile = true
+    },
     async handleScroll() {
       if (
         !this.finished &&
