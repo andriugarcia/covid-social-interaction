@@ -40,7 +40,6 @@ export const getters = {
     state.chats.splice(index, 1)
   },
   getChatIdFromUsername: (state) => (username) => {
-    console.log(state.chats)
     const index = state.chats.findIndex(
       (chat) => {
         if (chat.chat.type !== 'chat') return false
@@ -75,6 +74,12 @@ export const mutations = {
   },
   pushMessage(state, message) {
     state.messages.push(message)
+    const index = state.chats.findIndex(
+      (chat) => chat.chat_id === message.chatId
+    )
+    if (index !== -1) {
+      state.chats[index].chat.message_chatTomessage_channel.unshift(message)
+    }
   },
   pushNearbyMessage(state, message) {
     state.nearbyMessages.push(message)
@@ -98,7 +103,10 @@ export const mutations = {
       const index = state.chats.findIndex(
         (chat) => chat.chat_id === notificationMessage.channel
       )
-      if (index !== -1) state.chats[index].unread += 1
+      if (index !== -1) {
+        state.chats[index].unread += 1
+        state.chats[index].chat.message_chatTomessage_channel.unshift(notificationMessage)
+      }
     }
   },
   readNearby(state) {
@@ -263,7 +271,6 @@ export const actions = {
       )
 
       const { messages, ...chat } = data
-      console.log(messages)
       commit('setMessages', messages)
       commit('setChat', {
         ...chat,
@@ -354,7 +361,6 @@ export const actions = {
     }
   },
   async addParticipants({ state }, participants) {
-    console.log(state.chat.chat_id, participants)
     try {
       await axios.post(`${process.env.SERVER_URL}/chat/${state.chat.chat_id}/addParticipants`, {
         participants,

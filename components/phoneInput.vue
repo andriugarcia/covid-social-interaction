@@ -49,9 +49,6 @@ export default {
         this.countrySelected.dial_code + value.replaceAll(' ', '')
       )
     },
-    countrySelected(value) {
-      console.log('Country', value)
-    },
   },
   methods: {
     customFilter(item, queryText, itemText) {

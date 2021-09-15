@@ -247,7 +247,6 @@ export default {
       await this.sendMessage()
     },
     async sendEvent({ event }) {
-      console.log(event.event_id, [this.chat.chat_id])
       await this.$store.dispatch('event/share', {
         event: event.event_id,
         targets: [this.chat.chat_id],

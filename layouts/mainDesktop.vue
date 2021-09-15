@@ -80,6 +80,8 @@
             v-img(:src='user.profile_picture')
       v-card
         v-list
+          v-list-item(@click='$router.push({ path: "/" + user.username })') Mi perfil
+          v-list-item(@click='$router.push({ path: "/saved" })') Post Guardados
           v-list-item(@click='logout') Cerrar Sesión
     v-btn(
       v-else,

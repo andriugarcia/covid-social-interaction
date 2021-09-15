@@ -57,7 +57,7 @@
           v-else-if='message.type == "post"',
           grid,
           style='width: 100%',
-          :content='{ ...message.post, profile: message.profile }'
+          :content='{ ...message.post, profile: message.post.profile }'
         )
         audio-player(v-else-if='message.type == "audio"', :src='message.src')
         div(v-else-if='message.type == "event"')

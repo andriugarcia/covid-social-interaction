@@ -72,7 +72,7 @@ export default {
     },
     goToEvent() {
       if (!this.readonly) {
-        this.$router.push({ path: `/events/${event.event_id}` })
+        this.$router.push({ path: `/events/${this.event.event_id}` })
       }
     },
     getCategoryName(emoji) {

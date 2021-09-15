@@ -7,6 +7,7 @@ v-app
         flat,
         color='primary',
         @click='openNotification',
+        v-touch='{ up: () => newNotification = false, down: () => openNotification}',
         style='position: fixed; top: 0; left: 0; right: 0; z-index: 999999; border-radius: 0 0 24px 24px'
       )
         v-list-item.py-6.px-6(nuxt, dark)

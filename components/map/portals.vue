@@ -82,9 +82,10 @@
 <script>
 import expandedPost from './expandedPost.vue'
 import date from '@/mixins/date'
+import push from '@/mixins/push'
 
 export default {
-  mixins: [date],
+  mixins: [date, push],
   data() {
     return {
       portalIndex: 0,

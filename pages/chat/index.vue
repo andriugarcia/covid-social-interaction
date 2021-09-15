@@ -103,9 +103,9 @@ v-sheet#contacts(
             //- v-list-item-avatar(color='primary')
             v-badge.mr-4(
               overlap,
-              top,
+              bottom,
               color='primary',
-              :value='chat.type == "chat" && getMember(chat).active',
+              :value='chat.chat.type == "chat" && getMember(chat).active',
               offset-x='18',
               offset-y='18'
             )
@@ -272,8 +272,10 @@ export default {
         chat.member[0].profile.profile_id !==
         this.$store.state.auth.user.profile_id
       ) {
+        console.log(chat.member[0], chat.member[0].profile.active)
         return chat.member[0].profile
       } else if (typeof chat.member[1] !== 'undefined') {
+        console.log(chat.member[1], chat.member[1].profile.active)
         return chat.member[1].profile
       } else {
         return {
