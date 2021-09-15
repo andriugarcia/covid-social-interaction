@@ -66,6 +66,12 @@ export const mutations = {
   },
   setChat(state, chat) {
     state.chat = chat
+    const index = state.chats.findIndex(
+      (chat_element) => chat_element.chat_id === chat.chat_id
+    )
+    if (index !== -1) {
+      state.chats[index].unread = 0
+    }
   },
   setMessages(state, messages) {
     state.messages = [...messages.reverse(), ...state.messages]

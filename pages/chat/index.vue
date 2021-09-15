@@ -272,10 +272,8 @@ export default {
         chat.member[0].profile.profile_id !==
         this.$store.state.auth.user.profile_id
       ) {
-        console.log(chat.member[0], chat.member[0].profile.active)
         return chat.member[0].profile
       } else if (typeof chat.member[1] !== 'undefined') {
-        console.log(chat.member[1], chat.member[1].profile.active)
         return chat.member[1].profile
       } else {
         return {
