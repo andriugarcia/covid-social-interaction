@@ -2,10 +2,20 @@
 v-card#login.pa-6(color='primary', dark)
   div(v-if='type == "signup"')
     span(style='font-size: 2em') Crear Cuenta
-    v-text-field(v-model='signupData.username', label='Username')
-    v-text-field(v-model='signupData.email', label='Email', type='email')
+    v-text-field(
+      v-model='signupData.username',
+      name='username',
+      label='Username'
+    )
+    v-text-field(
+      v-model='signupData.email',
+      name='email',
+      label='Email',
+      type='email'
+    )
     v-text-field(
       v-model='signupData.password',
+      name='password',
       label='Password',
       type='password',
       :type='showPassOnSignup ? "" : "password"',
@@ -28,6 +38,7 @@ v-card#login.pa-6(color='primary', dark)
           v-model='loginData.password',
           dark,
           label='Password',
+          name='password',
           :type='showPassOnLogin ? "" : "password"',
           @click:append='showPassOnLogin = !showPassOnLogin',
           @keydown.enter='loginPhone',
@@ -48,6 +59,7 @@ v-card#login.pa-6(color='primary', dark)
       v-tab-item(key='email')
         v-text-field(
           v-model='loginData.email',
+          name='email',
           label='Email o Nombre de Usuario',
           type='email',
           dark,
@@ -55,6 +67,7 @@ v-card#login.pa-6(color='primary', dark)
         )
         v-text-field(
           v-model='loginData.password',
+          name='password',
           label='Password',
           dark,
           :type='showPassOnLogin ? "" : "password"',
@@ -87,15 +100,15 @@ v-card#login.pa-6(color='primary', dark)
       v-btn(fab, color='white', disabled)
         v-icon(color='#ef426f') fab fa-instagram
     v-divider.my-3(color='white')
-    v-layout(align-center, justify-space-between)
-      .font-weight-bold.mr-4 No tienes Cuenta? 😱
-      v-btn.rounded-lg.text-capitalize(
-        light,
-        small,
-        depressed,
-        color='white',
-        @click='openSignup'
-      ) Crear Cuenta
+    v-card.pa-2.rounded-lg(outlined, light, color='white', @click='openSignup')
+      v-layout(align-center, justify-space-between)
+        .primary--text.font-weight-bold.mr-4 No tienes Cuenta? 😱
+        v-btn.rounded-lg.text-capitalize(
+          dark,
+          small,
+          depressed,
+          color='primary'
+        ) REGISTRATE
 </template>
 
 <script>

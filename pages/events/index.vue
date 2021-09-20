@@ -43,13 +43,15 @@
         .font-weight-medium(style='font-size: 1.4em') Eventos cerca
       //- v-row#loadBar.my-12(justify='center', align='center')
       //-   v-progress-circular(indeterminate, color='primary')
-      v-alert(
-        v-if='user.participation.length === 0',
-        type='error',
-        text,
-        icon='far fa-sad-tear',
-        prominent
-      ) No hay eventos cerca
+      v-layout(v-if='events.length === 0', column, align-center)
+        img(src='@/assets/events.png', style='height: 200px')
+        span No hay eventos cerca
+        v-btn.mt-2.text-capitalize(
+          rounded,
+          depressed,
+          @click='createEvent',
+          color='primary'
+        ) Crear mi propio evento
       event.mb-2(v-for='(event, i) in events', :key='i', :event='event')
       .text-center.py-4(v-if='loading')
         v-progress-circular(indeterminate, color='primary')

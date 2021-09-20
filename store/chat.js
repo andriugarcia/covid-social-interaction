@@ -326,14 +326,18 @@ export const actions = {
       console.error(err)
     }
   },
-  async createMessage({ rootState, commit }, message) {
+  async createMessage({ rootState, commit, dispatch }, message) {
     try {
       const { data } = await axios.post(`${process.env.SERVER_URL}/chat/send`, message)
-      commit('pushMessage', {
-        ...message,
-        author: rootState.auth.user.profile_id,
-        created_at: Date.now(),
-      })
+      if (typeof message.userId !== 'undefined') {
+        dispatch('getChats')
+      } else {
+        commit('pushMessage', {
+          ...message,
+          author: rootState.auth.user.profile_id,
+          created_at: Date.now(),
+        })
+      }
       this.app.$fire.analytics.logEvent('new_message', {
         chat_id: message.chat_ref,
         author: rootState.auth.user.profile_id,

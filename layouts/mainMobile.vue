@@ -41,13 +41,13 @@
       depressed,
       rounded,
       color='primary',
-      @click='$store.commit("setLogin", true)'
+      @click='$router.push({ path: "/signup" })'
     )
       v-icon.mr-2(small) fas fa-user
       span.text-capitalize Crear Cuenta
 
   div(style='position: fixed; bottom: 0; left: 0; right: 0')
-    portals.pl-2
+    portals.pl-2.pb-2
     v-card.mx-2.mb-2.rounded-xl(outlined, tile)
       v-layout(justify-space-around, align-center)
         v-flex.mx-2.rounded-lg.text-center(

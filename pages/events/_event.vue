@@ -10,25 +10,46 @@
     v-spacer
     v-btn(icon, @click='shareDialog = true')
       v-icon fas fa-share-alt
-  v-sheet.pt-6(color='white', style='height: 100vh; overflow-y: scroll')
-    div(style='height: 64px')
-    div(v-if='event.image')
-      img(
-        :src='event.image',
-        style='height: 240px; width: 100%; object-fit: cover; object-position: center'
-      )
-      v-btn(absolute, top, left, icon, dark, @click='$router.go(-1)')
-        v-icon fas fa-arrow-left
+  v-sheet.pt-6(
+    color='white',
+    style='height: 100vh; width: fit-content; overflow-y: scroll'
+  )
+    div(style='height: 32px')
+    img.mb-n2(
+      v-if='event.image',
+      :src='event.image',
+      style='max-height: 280px; width: 100%; object-fit: contain'
+    )
+    v-sheet.pa-4(color='primary', dark)
+      span(style='font-size: 2em; font-weight: 700; letter-spacing: -1px') {{ event.title }}
+      v-layout.mt-2
+        v-icon(small) far fa-clock
+        span.font-weight-medium.ml-2 {{ event.start_date | toDateShort }}
+      v-layout.mt-2
+        v-icon(small) fas fa-map-marker-alt
+        span.font-weight-medium.text-truncate.ml-2 {{ event.place_description }}
+      v-layout.mt-2(align-center)
+        v-icon(small) fas fa-user-friends
+        v-chip.ml-2.pl-1(color='white')
+          span.ml-1(style='font-size: 1.2em') {{ event.emoji }}
+          span.primary--text.font-weight-medium.ml-2 {{ getCategoryName(event.emoji) }}
+        span.ml-2(v-if='event.participants.length > 1') {{ event.participants.length }} Asistirán
+    v-alert(
+      v-if='!(event.joined && event.participation && event.participation.is_host) && event.joined',
+      type='success',
+      tile
+    ) 
+      v-row
+        v-col.expanded Has confirmado tu asistencia
+        v-col.shrink
+          v-btn(
+            small,
+            depressed,
+            @click='unjoinDialog = true',
+            color='success darken-1'
+          ) Cancelar
     //- category(:cat="event.category")
     .px-4
-      v-layout(align-end)
-        v-chip.pl-1(:color='getColor()')
-          v-avatar(color='white')
-            span(style='font-size: 1em') {{ event.emoji }}
-          span.font-weight-medium.ml-2 {{ getCategoryName(event.emoji) }}
-        .text-uppercase.font-weight-medium.ml-2 {{ event.start_date | toDateShort }}
-
-      span(style='font-size: 2em; font-weight: 700; letter-spacing: -1px') {{ event.title }}
       p.font-weight-light.mt-4 {{ event.description }}
       v-layout.my-4(
         align-center,
@@ -94,17 +115,18 @@
             outlined,
             @click='$router.push({ path: "/" + participant.profile.username })'
           )
-            v-layout(column, align-center)
+            v-layout.px-2(column, align-center)
               v-avatar
                 v-img(:src='participant.profile.profile_picture')
-              span.font-weight-bold {{ participant.profile.username }}
+              span.font-weight-bold.text-truncate(style='font-size: 0.8em') {{ participant.profile.username }}
       .mb-12.pb-6
     .pa-2(
       v-if='eventState() == states.PROMOTION',
       style='position: absolute; bottom: 0; left: 0; right: 0'
     )
       v-dialog(
-        v-if='event.joined && event.participation && event.participation.is_host'
+        v-if='event.joined && event.participation && event.participation.is_host',
+        :width='500'
       )
         template(v-slot:activator='{ on }')
           v-btn(
@@ -132,7 +154,7 @@
         style='z-index: 10',
         @click='joinEvent'
       ) Asistir
-      v-dialog(v-else, v-model='unjoinDialog')
+      v-dialog(v-else, :width='500', v-model='unjoinDialog')
         template(#activator)
           v-btn(
             block,
@@ -151,7 +173,7 @@
             v-btn(rounded, dark, depressed, color='red', @click='unjoinEvent') CANCELAR
   v-bottom-sheet(v-model='shareDialog', :inset='$vuetify.breakpoint.mdAndUp')
     share(:event='event', @back='shareDialog = false')
-  v-dialog(v-model='askGroupDialog')
+  v-dialog(v-model='askGroupDialog', :width='500')
     v-card.pa-4
       v-subheader Participar en el grupo
       p ¿Quieres participar también en el grupo del evento para conocer a los asistentes?
@@ -170,8 +192,8 @@ v-sheet.pa-4(v-else, color='white', style='height: 100vh')
       color='white',
       style='height: 100%'
     )
-      v-icon(color='primary', x-large) far fa-sad-cry
-      .mt-4.black--text Evento no encontrado
+      img(src='@/assets/not-found.png', style='height: 200px')
+      .black--text Evento no encontrado
       .black--text El evento que buscas no existe o ha sido cancelado
       v-btn.mt-2(
         block,

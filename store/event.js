@@ -3,24 +3,65 @@ import axios from '../axios'
 export const state = () => ({
   events: [],
   colors: {
-    '🌍': 'blue-gray',
-    '👜': 'blue-gray',
-    '🛍': 'blue-gray',
+    '🌍': 'red',
+    '👜': 'red',
+    '🛍': 'red',
     '🎨': 'brown',
     '🎥': 'brown',
     '📖': 'brown',
     '🖼': 'brown',
     '📷': 'yellow',
+    '🌙': 'yellow',
     '💻': 'yellow',
     '🎭': 'yellow',
+    '📖': 'yellow',
     '🎮': 'yellow',
     '💪🏼': 'yellow',
-    '🍻': 'purple',
-    '☕️': 'purple',
+    '🍻': 'orange',
+    '☕️': 'orange',
+    '🥪': 'orange',
+    '🍳': 'orange',
+    '👨‍🍳': 'orange',
+    '🧺': 'orange',
+    '🥐': 'orange',
+    '🍽': 'orange',
+    '🍸': 'purple',
+    '🎤': 'purple',
+    '🕺': 'purple',
     '🐶': 'purple',
+    '🗣': 'purple',
     '💬': 'purple',
-    '🥪': 'purple',
+    '🇪🇺': 'purple',
     '🍷': 'purple',
+    '⛺️': 'blue',
+    '🏔': 'blue',
+    '🏃‍♂️': 'blue',
+    '⚽️': 'green',
+    '🏀': 'green',
+    '🏈': 'green',
+    '⚾️': 'green',
+    '🎾': 'green',
+    '🏐': 'green',
+    '🎱': 'green',
+    '🏓': 'green',
+    '🪖': 'green',
+    '🏸': 'green',
+    '🏒': 'green',
+    '🥊': 'green',
+    '🛹': 'green',
+    '🛼': 'green',
+    '⛸': 'green',
+    '⛷': 'green',
+    '🏊': 'green',
+    '🧘‍♀️': 'green',
+    '🤽‍♀️': 'green',
+    '🧗‍♀️': 'green',
+    '🚴': 'green',
+    '🐎': 'green',
+    '🎯': 'green',
+    '🎳': 'green',
+    '♟': 'green',
+    '🎲': 'green',
   },
   categories: [
     {
@@ -64,6 +105,11 @@ export const state = () => ({
       category: 'leisure',
     },
     {
+      emoji: '🌙',
+      name: 'Astronomía',
+      category: 'leisure',
+    },
+    {
       emoji: '💻',
       name: 'Tecnología',
       category: 'leisure',
@@ -74,9 +120,59 @@ export const state = () => ({
       category: 'leisure',
     },
     {
+      emoji: '📖',
+      name: 'Lectura',
+      category: 'leisure',
+    },
+    {
       emoji: '🎮',
       name: 'Videojuegos',
       category: 'leisure',
+    },
+    {
+      emoji: '🃏',
+      name: 'Juegos de Mesa',
+      category: 'leisure',
+    },
+    {
+      emoji: '🍻',
+      name: 'Cervezas',
+      category: 'food',
+    },
+    {
+      emoji: '☕️',
+      name: 'Café',
+      category: 'food',
+    },
+    {
+      emoji: '🍳',
+      name: 'Cocina',
+      category: 'food',
+    },
+    {
+      emoji: '👨‍🍳',
+      name: 'Gastronomía',
+      category: 'food',
+    },
+    {
+      emoji: '🧺',
+      name: 'Picnic',
+      category: 'food',
+    },
+    {
+      emoji: '🥐',
+      name: 'Desayuno',
+      category: 'food',
+    },
+    {
+      emoji: '🥪',
+      name: 'Merienda',
+      category: 'food',
+    },
+    {
+      emoji: '🍽',
+      name: 'Cena',
+      category: 'food',
     },
     {
       emoji: '💪🏼',
@@ -84,13 +180,38 @@ export const state = () => ({
       category: 'leisure',
     },
     {
-      emoji: '🍻',
-      name: 'Cervezas',
+      emoji: '⛺️',
+      name: 'Camping',
+      category: 'outdoor',
+    },
+    {
+      emoji: '🏔',
+      name: 'Senderismo',
+      category: 'outdoor',
+    },
+    {
+      emoji: '🏃‍♂️',
+      name: 'Running',
+      category: 'outdoor',
+    },
+    {
+      emoji: '🍸',
+      name: 'Fiesta',
       category: 'social',
     },
     {
-      emoji: '☕️',
-      name: 'Café',
+      emoji: '🎤',
+      name: 'Concierto',
+      category: 'social',
+    },
+    {
+      emoji: '🕺',
+      name: 'Discoteca',
+      category: 'social',
+    },
+    {
+      emoji: '💃',
+      name: 'Baile',
       category: 'social',
     },
     {
@@ -99,19 +220,129 @@ export const state = () => ({
       category: 'social',
     },
     {
+      emoji: '🗣',
+      name: 'Charlar',
+      category: 'social',
+    },
+    {
       emoji: '💬',
       name: 'Intercambio de Idiomas',
       category: 'social',
     },
     {
-      emoji: '🥪',
-      name: 'Merienda',
+      emoji: '🇪🇺',
+      name: 'Erasmus',
       category: 'social',
     },
     {
       emoji: '🍷',
       name: 'Vino y Cócteles',
       category: 'social',
+    },
+    {
+      emoji: '⚽️',
+      name: 'Fútbol',
+      category: 'sports',
+    }, {
+      emoji: '🏀',
+      name: 'Baloncesto',
+      category: 'sports',
+    }, {
+      emoji: '🏈',
+      name: 'Rugby',
+      category: 'sports',
+    }, {
+      emoji: '⚾️',
+      name: 'Baseball',
+      category: 'sports',
+    }, {
+      emoji: '🎾',
+      name: 'Tenis',
+      category: 'sports',
+    }, {
+      emoji: '🏐',
+      name: 'Volleyball',
+      category: 'sports',
+    }, {
+      emoji: '🎱',
+      name: 'Billar',
+      category: 'sports',
+    }, {
+      emoji: '🏓',
+      name: 'Tenis de Mesa',
+      category: 'sports',
+    }, {
+      emoji: '🪖',
+      name: 'Airsoft',
+      category: 'sports',
+    }, {
+      emoji: '🏸',
+      name: 'Badminton',
+      category: 'sports',
+    }, {
+      emoji: '🏒',
+      name: 'Hockey',
+      category: 'sports',
+    }, {
+      emoji: '🥊',
+      name: 'Boxeo',
+      category: 'sports',
+    }, {
+      emoji: '🛹',
+      name: 'Skate',
+      category: 'sports',
+    }, {
+      emoji: '🛼',
+      name: 'Patinaje',
+      category: 'sports',
+    }, {
+      emoji: '⛸',
+      name: 'Patinaje sobre Hielo',
+      category: 'sports',
+    }, {
+      emoji: '⛷',
+      name: 'Esquí',
+      category: 'sports',
+    }, {
+      emoji: '🏊',
+      name: 'Natación',
+      category: 'sports',
+    }, {
+      emoji: '🧘‍♀️',
+      name: 'Yoga',
+      category: 'sports',
+    }, {
+      emoji: '🤽‍♀️',
+      name: 'Waterpolo',
+      category: 'sports',
+    }, {
+      emoji: '🧗‍♀️',
+      name: 'Escalada',
+      category: 'sports',
+    }, {
+      emoji: '🚴',
+      name: 'Ciclismo',
+      category: 'sports',
+    }, {
+      emoji: '🐎',
+      name: 'Hípica',
+      category: 'sports',
+    }, {
+      emoji: '🎯',
+      name: 'Dardos',
+      category: 'sports',
+    }, {
+      emoji: '🎳',
+      name: 'Bolos',
+      category: 'sports',
+    }, {
+      emoji: '♟',
+      name: 'Ajedrez',
+      category: 'sports',
+    }, {
+      emoji: '🎲',
+      name: 'Otros juegos',
+      category: 'sports',
     },
 
     // party: {

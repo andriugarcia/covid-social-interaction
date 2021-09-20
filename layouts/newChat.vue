@@ -21,7 +21,7 @@
       color='yellow',
       style='max-width: 60%'
     ) Escribe un mensaje
-    chat-bar(:chat='chat', :userId='user.profile_id')
+    chat-bar(:userId='user.profile_id')
 </template>
 
 <script>

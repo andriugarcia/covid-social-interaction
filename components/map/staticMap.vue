@@ -1,6 +1,6 @@
 <template lang="pug">
 #static-map
-  MglMap(
+  MglMap.pointer(
     @click='goToMaps',
     :accessToken='accessToken',
     :mapStyle='mapStyle',

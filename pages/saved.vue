@@ -10,7 +10,7 @@ v-card#saved
       v-icon fas fa-arrow-left
     v-toolbar-title Guardados
   div(ref='scrollarea', style='height: 100vh; overflow-y: scroll')
-    v-sheet.px-2.pt-15.pb-4(color='white')
+    v-sheet.px-2.pt-15.pb-4(color='white', style='height: 100%')
       masonry.pt-2(v-if='posts.length != 0', :cols='2', :gutter='10')
         post.mb-2(
           v-for='(publication, i) in posts',

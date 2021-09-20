@@ -29,8 +29,8 @@
               overlap,
               color='primary',
               style='z-index: 2',
-              :value='authenticated',
-              :content='formatNumber(3)'
+              :value='totalNotifications > 0',
+              :content='formatNumber(totalNotifications)'
             )
               v-icon.pa-1(style='display: block') fas fa-bell
               span.font-weight-bold(style='font-size: 0.7em') ACTIVIDAD
@@ -88,10 +88,15 @@
       depressed,
       rounded,
       color='primary',
-      @click='$store.commit("setLogin", true)'
+      @click='$router.push({ path: "/signup" })'
     )
       v-icon.mr-2(small) fas fa-user
       span.text-capitalize Crear Cuenta
+  v-card.rounded-xl.pa-2(
+    outlined,
+    style='position: absolute; top: 96px; right: 18px; max-width: 380px; width: 100%'
+  )
+    portals
   viewer(v-model='opened')
     v-card
       search(
@@ -145,6 +150,9 @@ export default {
   computed: {
     total() {
       return this.$store.getters['chat/total']
+    },
+    totalNotifications() {
+      return this.$store.getters['auth/totalNotifications']
     },
     user() {
       return this.$store.state.auth.user

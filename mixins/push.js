@@ -19,6 +19,7 @@ export default {
     },
 
     async enablePushNotifications() {
+      this.$emit('enabled')
       if (!this.$store.getters['auth/authenticated']) return false
 
       try {

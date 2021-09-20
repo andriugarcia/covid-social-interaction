@@ -45,7 +45,7 @@ v-card.pa-4(color='primary', dark)
     v-list-item(
       v-if='getMember(member)',
       v-for='(member, i) in peopleFiltered',
-      :key='member',
+      :key='i',
       @click='selectMember(member)'
     )
       v-list-item-avatar(color='white')

@@ -21,10 +21,14 @@ v-card.mr-2(
   flat,
   style='height: 140px; width: 100%'
 )
-  v-layout(align-center, justify-center, style='height: 100%')
+  v-layout(align-center, justify-center, style='height: 100%; width: 100%')
     v-progress-circular(v-if='loading', indeterminate, color='grey')
     v-icon(v-else-if='src.length == 0', large) far fa-image
-    v-img(v-else, :src='src', height='140px')
+    img(
+      v-else,
+      :src='src',
+      style='height: 140px; width: 100%; object-fit: contain'
+    )
   input(
     @change='selectImage',
     type='file',

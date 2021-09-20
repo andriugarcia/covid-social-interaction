@@ -9,6 +9,7 @@
     )
       v-icon fas fa-arrow-left
     v-text-field.ml-2(
+      name='search',
       solo,
       outlined,
       flat,
@@ -25,7 +26,7 @@
   v-card(
     v-if='searchText.length > 0 && places.length > 0',
     flat,
-    :style='$vuetify.breakpoint.mdAndUp ? "width: 400px; position: absolute; top: 82px; border: 1px solid #F0134D;" : ""'
+    :style='$vuetify.breakpoint.mdAndUp ? "width: 400px; position: absolute; top: 82px; border: 1px solid #F0134D; z-index: 10;" : ""'
   )
     v-list
       div(v-if='!onlyPlaces && users.length > 0')

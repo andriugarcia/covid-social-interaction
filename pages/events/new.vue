@@ -76,10 +76,50 @@
           @click='selectCategory(category)'
         )
           span {{ category.emoji }} {{ category.name }}
+      .overline.font-weight-black.mt-2 EXTERIOR
+      v-layout(wrap)
+        v-chip.mr-2.mb-2(
+          v-if='category.category == "outdoor"',
+          v-for='(category, i) in categories',
+          :key='i',
+          color='white darken-1',
+          @click='selectCategory(category)'
+        )
+          span {{ category.emoji }} {{ category.name }}
+      .overline.font-weight-black.mt-2 COMIDA
+      v-layout(wrap)
+        v-chip.mr-2.mb-2(
+          v-if='category.category == "food"',
+          v-for='(category, i) in categories',
+          :key='i',
+          color='white darken-1',
+          @click='selectCategory(category)'
+        )
+          span {{ category.emoji }} {{ category.name }}
+      .overline.font-weight-black.mt-2 OCIO
+      v-layout(wrap)
+        v-chip.mr-2.mb-2(
+          v-if='category.category == "leisure"',
+          v-for='(category, i) in categories',
+          :key='i',
+          color='white darken-1',
+          @click='selectCategory(category)'
+        )
+          span {{ category.emoji }} {{ category.name }}
       .overline.font-weight-black.mt-2 SOCIAL
       v-layout(wrap)
         v-chip.mr-2.mb-2(
           v-if='category.category == "social"',
+          v-for='(category, i) in categories',
+          :key='i',
+          color='white darken-1',
+          @click='selectCategory(category)'
+        )
+          span {{ category.emoji }} {{ category.name }}
+      .overline.font-weight-black.mt-2 DEPORTE
+      v-layout(wrap)
+        v-chip.mr-2.mb-2(
+          v-if='category.category == "sports"',
           v-for='(category, i) in categories',
           :key='i',
           color='white darken-1',
@@ -93,7 +133,12 @@
       .overline.font-weight-black.mt-2 TITULO
       v-text-field(label='Titulo', v-model='event.title')
       .overline.font-weight-black DESCRIPCION
-      v-textarea(label='Descripción', v-model='event.description')
+      v-textarea(
+        label='Descripción',
+        v-model='event.description',
+        maxlength='500',
+        counter
+      )
       //- v-combobox(v-model="event.category", :items="items", item-text="name", item-value="key", hide-selected, placeholder="Categoría", small-chips)
         template(v-slot:selection="{ attrs, item, parent, selected }")
           v-chip(v-if="item === Object(item)", dark, pill, v-bind="attrs", :color="`${item.color}`", :input-value="selected", small)
@@ -180,10 +225,12 @@
             @updated='updateLocation',
             @back='locationSelectorOpened = false'
           )
-      .overline.font-weight-black DESCRIPCION DEL SITIO (OPCIONAL)
+      .overline.font-weight-black DESCRIPCION DEL SITIO
       v-textarea(
         placeholder='En la fuente del parque',
-        v-model='event.place_description'
+        v-model='event.place_description',
+        maxlength='500',
+        counter
       )
     .px-4(v-else-if='step == 5')
       .overline.font-weight-black FECHA DE INICIO

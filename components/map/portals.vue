@@ -1,6 +1,6 @@
 <template lang="pug">
 #portals
-  .flex-nowrap.align-center.pb-2.hide-scrollbar(ref='scrollarea', style='overflow-x: scroll; display: flex;')
+  .flex-nowrap.align-center.hide-scrollbar(ref='scrollarea', style='overflow-x: scroll; display: flex;')
     v-card.rounded-xl.pa-1.mr-2(
       v-if='appNotInstalled',
       depressed,
@@ -12,13 +12,14 @@
       v-layout(style='height: 100%', align-center)
         v-icon.mx-2(color='white', size='32') fas fa-arrow-circle-down
         span.font-weight-bold(style='font-size: 0.7em; width: 70px;') INSTALAR OLIMAPS
-    v-card.rounded-xl.pa-1.mr-2(
+    v-card.rounded-xl.pa-1.pr-3.mr-2(
       v-if='authenticated && i < 2',
       v-for='(participation, i) in user.participation',
       :key='i',
       :color='getColor(participation.event.emoji)',
       @click.prevent='$router.push({ path: `/events/${participation.event.event_id}` })',
       dark,
+      flat,
       style='font-size: 0.7em; max-width: 180px;'
     )
       v-layout(align-center, style='height: 100%')

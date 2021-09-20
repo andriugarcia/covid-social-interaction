@@ -29,7 +29,7 @@ v-app
     :inset='$vuetify.breakpoint.mdAndUp'
   )
     login
-  v-dialog(:value='newContactsDialog')
+  v-dialog(:value='newContactsDialog', :width='500')
     new-contacts
   v-snackbar(
     v-model='postCreated',

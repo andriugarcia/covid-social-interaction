@@ -29,7 +29,7 @@
             template(#placeholder)
               v-row.fill-height.ma-0(align='center', justify='center')
                 v-progress-circular(indeterminate, color='grey lighten-5')
-      .ml-2.background--text.font-weight-bold(
+      .ml-2.background--text.font-weight-bold.pointer(
         @click='$router.push({ path: "/" + member.username })'
       ) {{ member.username }}
 

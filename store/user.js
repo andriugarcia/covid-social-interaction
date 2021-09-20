@@ -145,8 +145,12 @@ export const actions = {
       return false
     }
   },
-  async readNotifications(_) {
+  async readNotifications({ rootState }) {
     try {
+      rootState.auth.user.notifications = rootState.auth.user.notifications.map(notification => ({
+        ...notification,
+        read: true,
+      }))
       await axios.post(`${process.env.SERVER_URL}/user/readNotifications`)
       return true
     } catch (err) {

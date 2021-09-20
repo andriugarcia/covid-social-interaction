@@ -51,7 +51,7 @@ v-sheet#contacts(
     style='overflow-y: scroll; height: 100vh',
     :class='{ "pt-16": searchEnabled, "pt-17": !searchEnabled }'
   )
-    push-alert
+    push-alert(inline)
     v-tabs-items(
       v-model='tab',
       style='background-color: transparent; min-height: calc(100vh - 104px)'
@@ -95,6 +95,15 @@ v-sheet#contacts(
                   v-avatar(color='primary')
                     v-icon(dark, small) fas fa-street-view
                 .mt-2.font-weight-bold(style='font-size: 0.7em') Gente Cerca
+          v-layout(v-if='chats.length == 0', align-center, column)
+            img(src='@/assets/no-message.png', style='height: 200px')
+            span Hora de chatear!
+            v-btn.mt-2.text-capitalize(
+              rounded,
+              depressed,
+              @click='newChat = true',
+              color='primary'
+            ) Nuevo Chat
           v-list-item(
             v-for='(chat, i) in chats',
             :key='i',

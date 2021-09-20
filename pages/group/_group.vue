@@ -37,7 +37,11 @@
                 v-list-item-avatar
                   v-icon fas fa-bell
                 v-list-item-content Activar Notificaciones
-              v-dialog(v-if='isParticipant', v-model='leaveDialogOut')
+              v-dialog(
+                v-if='isParticipant',
+                v-model='leaveDialogOut',
+                :width='500'
+              )
                 template(v-slot:activator='{ on }')
                   v-list-item(v-on='on')
                     v-list-item-avatar
@@ -141,7 +145,7 @@
             v-list-item-avatar
               v-icon fas fa-plus
             v-list-item-title Añadir Participantes
-          v-dialog(v-if='isParticipant', v-model='leaveDialogIn')
+          v-dialog(v-if='isParticipant', v-model='leaveDialogIn', :width='500')
             template(v-slot:activator='{ on }')
               v-list-item(v-on='on')
                 v-list-item-avatar
@@ -167,7 +171,7 @@
                   v-list-item-avatar 
                     v-img(:src='member.profile.profile_picture')
                   v-list-item-content Ver perfil de {{ member.profile.username }}
-                v-dialog(v-model='addAdminDialog')
+                v-dialog(v-model='addAdminDialog', :width='500')
                   template(v-slot:activator='{ on }')
                     v-list-item(
                       v-on='on',
@@ -191,7 +195,7 @@
                         depressed,
                         @click='addAdmin(member)'
                       ) Hacer Administrador
-                v-dialog(v-model='removeAdminDialog')
+                v-dialog(v-model='removeAdminDialog', :width='500')
                   template(v-slot:activator='{ on }')
                     v-list-item(
                       v-on='on',
@@ -215,7 +219,7 @@
                         depressed,
                         @click='removeAdmin(member)'
                       ) Quitar Administrador
-                v-dialog(v-model='removeParticipantDialog')
+                v-dialog(v-model='removeParticipantDialog', :width='500')
                   template(v-slot:activator='{ on }')
                     v-list-item(
                       v-on='on',

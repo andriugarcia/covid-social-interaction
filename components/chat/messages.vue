@@ -3,14 +3,15 @@
   ref='chat',
   style='overflow-y: scroll; height: 100%; overflow-x: hidden; padding-bottom: 82px'
 )
-  v-layout(justify-center)
-    v-sheet.rounded-xl.pa-4(
+  v-layout.mt-15(justify-center)
+    v-layout.pa-4(
       v-if='messages.length == 0 && chat.type == "group"',
-      color='primary',
-      dark
+      column,
+      align-center
     ) 
+      img(src='@/assets/space-astronaut.png', style='height: 200px')
       span.mx-2 Esto está muy vacío por aquí
-      v-btn.mt-2(small, depressed, rounded, color='white', light, block) Empezar a Escribir
+      .overline Es hora de escribir
   div(v-for='(message, i) in messages', :key='i')
     v-layout.my-1(justify-center)
       v-chip.my-4.font-weight-bold(

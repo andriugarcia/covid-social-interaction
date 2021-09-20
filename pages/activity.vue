@@ -6,7 +6,10 @@
     v-toolbar-title Actividad
   .pt-15(ref='scrollarea', style='height: 100vh; overflow-y: scroll')
     v-list(color='white', style='min-height: 100%')
-      push-alert
+      push-alert(inline)
+      v-layout(v-if='notifications.length == 0', align-center, column)
+        img(src='@/assets/no-mail.png', style='height: 200px')
+        p.text-center Interactua con otros usuarios para recibir notificaciones
       div(v-for='(notification, i) in notifications', :key='i')
         v-subheader(
           v-if='i == 0 || !hasSameDay(notifications[i - 1], notification)',

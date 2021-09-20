@@ -54,7 +54,7 @@
         depressed,
         :outlined='!user.isFollowing',
         color='primary',
-        @click='follow'
+        @click.prevent='follow'
       ) {{ user.isFollowing ? "Siguiendo" : "Seguir" }}
       v-btn(
         v-else,
@@ -108,7 +108,7 @@
           @click='openWindow(rrss.name)'
         )
           span.ml-1 {{ rrss.name }}
-    .mt-4.ml-4.font-weight-black {{ user.followers }} seguidores
+    .mt-2.ml-7.font-weight-black {{ user.followers }} seguidores
     p.ma-4 {{ user.description }}
     .ma-4(v-if='user.groups.length != 0')
       .overline(v-if='user.groups.length !== 0') PARTICIPANDO EN:
@@ -132,6 +132,16 @@
       v-tab(key='events') Eventos
     v-tabs-items(v-model='tab', style='background-color: transparent')
       v-tab-item(key='posts', style='width: 100%')
+        v-layout.pa-6.text-center(
+          v-if='posts.length == 0',
+          column,
+          justify-center,
+          align-center,
+          color='white',
+          style='height: 100%'
+        )
+          img(src='../assets/space-cat.png', style='height: 200px')
+          .mt-2.font-weight-bold No hay posts publicados
         masonry.pa-2(v-if='posts.length != 0', :cols='2', :gutter='10')
           post.mb-2(
             v-for='(publication, i) in posts',
@@ -143,6 +153,17 @@
         v-layout.pt-4.pb-8(v-if='loading', justify-center)
           v-progress-circular(indeterminate, color='primary')
       v-tab-item.pa-4(key='events', style='width: 100%')
+        v-subheader Eventos donde el usuario ha asistido
+        v-layout.px-6.pb-6.text-center(
+          v-if='events.length == 0',
+          column,
+          justify-center,
+          align-center,
+          color='white',
+          style='height: 100%'
+        )
+          img(src='../assets/free-time.png', style='height: 200px')
+          .mt-2.font-weight-bold No ha asistido a ningún evento
         event.mb-2(v-for='(event, i) in events', :key='i', :event='event')
         v-layout.pt-4.pb-8(v-if='loading', justify-center)
           v-progress-circular(indeterminate, color='primary')
@@ -179,8 +200,9 @@ v-sheet#notFound.pa-4(
       color='white',
       style='height: 100%'
     )
-      v-icon(color='primary', x-large) far fa-sad-cry
-      .mt-4.black--text Usuario no encontrado
+      //- v-icon(color='primary', x-large) far fa-sad-cry
+      img(src='../assets/not-found.png', style='height: 200px')
+      .black--text Usuario no encontrado
       .black--text El usuario que buscas no existe
       v-btn.mt-2(
         block,

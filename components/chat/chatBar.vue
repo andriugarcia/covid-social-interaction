@@ -156,7 +156,7 @@
         v-btn(icon, @click='shareGroup = false')
           v-icon fas fa-arrow-left
         v-toolbar-title Compartir Grupo
-      v-list
+      v-list(color='white')
         v-list-item(
           v-for='(group, i) in groups',
           :key='i',

@@ -3,6 +3,84 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
   v-layout.pt-3(justify-center, align-center)
     //- img(src='@/assets/olimaps-logo.png', style='width: 36px; height: 36px')
     img(src='@/assets/olimaps-logo-light.png', style='height: 40px')
+  v-sheet.mt-3.pa-6(
+    v-if='step == "introduction"',
+    color='secondary',
+    style='height: 100%'
+  )
+    v-stepper.elevation-0(
+      v-model='introductionStep',
+      style='background-color: transparent',
+      flat
+    )
+      v-stepper-items
+        v-stepper-content.pa-3.rounded-lg.elevation-0(
+          step='1',
+          style='height: 100%; width: 100%; max-height: 600px'
+        )
+          v-layout(column, justify-center, align-center)
+            img(src='@/assets/spread.png', style='height: 300px')
+            .heading-6.font-weight-black.mt-8 DESCUBRE
+            p.mx-8.text-center.black--text.text--secondary Qué esta ocurriendo cerca de ti y conoce a gente con la que puedas hacer planes
+        v-stepper-content.pa-3.rounded-lg.elevation-0(
+          step='2',
+          style='height: 100%; width: 100%; max-height: 600px'
+        )
+          v-layout(column, justify-center, align-center)
+            img(src='@/assets/event.png', style='height: 300px')
+            .heading-6.font-weight-black.mt-8 PARTICIPA
+            p.mx-8.text-center.black--text.text--secondary Descubre eventos en tu ciudad y disfruta conociendo a gente nueva
+        v-stepper-content.pa-3.rounded-lg.elevation-0(
+          step='3',
+          style='height: 100%; width: 100%; max-height: 600px'
+        )
+          v-layout(column, justify-center, align-center)
+            img(src='@/assets/chat.png', style='height: 300px')
+            .heading-6.font-weight-black.mt-8 CHATEA
+            p.mx-8.text-center.black--text.text--secondary Habla con la gente que vayas conociendo
+    .pa-2(style='position: absolute; bottom: 0; left: 0; right: 0')
+      v-btn.mb-2.black--text(
+        color='secondary darken-1',
+        depressed,
+        block,
+        large,
+        @click='openLogin'
+      ) Ya Tengo Cuenta
+      v-layout.pa-2(justify-space-between)
+        v-btn(
+          fab,
+          color='#000000',
+          large,
+          dark,
+          depressed,
+          small,
+          :disabled='introductionStep <= 1',
+          @click='introductionStep -= 1'
+        )
+          v-icon(small) fas fa-chevron-left
+        v-layout(justify-center, align-center)
+          v-avatar(
+            size='8',
+            :color='introductionStep == 1 ? "#000000" : "yellow darken-3"'
+          )
+          v-avatar.mx-1(
+            size='8',
+            :color='introductionStep == 2 ? "#000000" : "yellow darken-3"'
+          )
+          v-avatar(
+            size='8',
+            :color='introductionStep == 3 ? "#000000" : "yellow darken-3"'
+          )
+        v-btn(
+          fab,
+          large,
+          color='#000000',
+          dark,
+          depressed,
+          small,
+          @click='nextIntroductionStep'
+        )
+          v-icon(small) fas fa-chevron-right
   .pa-6(v-if='step == "select"')
     .font-weight-black.overline CREAR CUENTA CON
     v-btn.rounded-lg(large, block, @click='phoneSelected')
@@ -18,7 +96,7 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
         v-icon.mr-2 fab fa-instagram
         .text-capitalize Instagram
     v-layout.pa-2(style='position: absolute; bottom: 0; left: 0; right: 0')
-      v-btn(block, outlined, large, @click='openLogin') Ya tengo cuenta
+      v-btn(block, color='primary', dark, large, @click='openLogin') Ya tengo cuenta
   .pa-6(v-if='step == "email"')
     v-tabs(v-model='tab', fixed-tabs, background-color='white')
       v-tab(key='phone') Telefono
@@ -41,6 +119,7 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
       v-tab-item(key='email', style='height: calc(100vh - 140px)')
         .font-weight-black EMAIL
         v-text-field.mt-2(
+          name='email',
           v-model='email',
           dense,
           rounded,
@@ -73,6 +152,7 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
   .pa-6(v-if='step == "phoneVerification"')
     .font-weight-black CÓDIGO DE VERIFICACION
     v-text-field.mt-2(
+      name='phone',
       v-model='phoneVerificationCode',
       dense,
       rounded,
@@ -91,6 +171,7 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
     .font-weight-black CONTRASEÑA
     span Crea una contraseña nueva
     v-text-field.mt-2(
+      name='password',
       v-model='password',
       dense,
       hide-details,
@@ -124,6 +205,7 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
         :preview='user.profile_picture'
       )
       v-text-field.mt-6(
+        name='username',
         dense,
         maxlength='30',
         counter,
@@ -170,11 +252,20 @@ v-sheet#signup(color='white', style='position: relative; height: 100vh')
       justify-space-between
     )
       v-spacer
-      v-btn(color='primary', large, @click='$router.replace({ path: "/" })') Finalizar
+      v-btn(color='primary', large, @click='checkNotifications') Siguiente
+  .pa-6(v-if='step == "notifications"')
+    push-alert(@enabled='$router.replace({ path: "/" })')
+    v-layout.pa-2(
+      style='position: absolute; bottom: 0; left: 0; right: 0',
+      justify-space-between
+    )
+      v-spacer
+      v-btn(color='primary', large, @click='$router.replace({ path: "/" })') Omitir
 </template>
 
 <script>
 import avatarInput from '@/components/avatar-input'
+import pushAlert from '@/components/pushAlert'
 
 export default {
   head: {
@@ -183,6 +274,7 @@ export default {
   data() {
     return {
       tab: 'phone',
+      introductionStep: 1,
       email: '',
       password: '',
       description: '',
@@ -190,7 +282,7 @@ export default {
       phoneVerificationCode: null,
       smsVerificationCheck: false,
       termsCheck: false,
-      step: 'select',
+      step: 'introduction',
       showPassOnLogin: false,
       checkEmail: (email) =>
         email.match(
@@ -204,6 +296,7 @@ export default {
   },
   components: {
     avatarInput,
+    pushAlert,
     'v-phone-input': () => import('@/components/phoneInput'),
   },
   computed: {
@@ -225,8 +318,22 @@ export default {
     }
   },
   methods: {
+    nextIntroductionStep() {
+      if (this.introductionStep < 3) {
+        this.introductionStep += 1
+      } else {
+        this.step = 'select'
+      }
+    },
     openLogin() {
       this.$store.commit('setLogin', true)
+    },
+    checkNotifications() {
+      if (this.$store.state.auth.pushAvailable) {
+        this.step = 'notifications'
+      } else {
+        this.$router.replace({ path: '/' })
+      }
     },
     phoneSelected() {
       this.step = 'email'
