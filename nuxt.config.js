@@ -1,6 +1,4 @@
 const fs = require('fs')
-console.log(process.env.MAPBOX_TOKEN);
-console.log(process.env.SERVER_URL);
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
