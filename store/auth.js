@@ -283,6 +283,7 @@ export const actions = {
 
   },
   async getMe({ state, commit, dispatch }) {
+    console.log(process.env.SERVER_URL);
     try {
       const { data: user } = await axios.get(
         `${process.env.SERVER_URL}/user/me`
