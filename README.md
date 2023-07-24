@@ -1,20 +1,22 @@
 # olimaps
 
-## Build Setup
+## About This Project
 
-```bash
-# install dependencies
-$ npm install
+Welcome to Olimaps, the revolutionary social network that goes beyond virtual connections. In a world where digital interactions dominate, we believe in the power of genuine physical connections. Olimaps is not just another online platform; it's a dynamic map that brings people together in the real world.
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+Imagine a social network where you can explore your city like never before. Olimaps allows you to share your experiences, adventures, and discoveries on an interactive map, making it accessible to others in your vicinity. Whether you stumble upon a hidden gem of a cafe, organize a local event, or simply want to invite others to join you in your activities, Olimaps is the place to make it happen.
 
-# build for production and launch server
-$ npm run build
-$ npm run start
+## Try the app
 
-# generate static project
-$ npm run generate
-```
+You can try the app using the following url:
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+[olimaps.com](https://olimaps.com)
+
+
+## Stack
+
+🖥️ FRONTEND: Vue.js | Vuex | MapBox | Vuetify | Google Analytics | Socket.io | EsLint | Service Workers | Web Workers
+
+🎛️ BACKEND: Node.js | Express.js | Prisma.js | Passport.js | AWS.js | Sendgrid
+
+🗂️ DATABASE: PostgresQL | PostGIS | ElasticSearch | S3
