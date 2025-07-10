@@ -1,16 +1,8 @@
-# olimaps
+# COVID Social Interaction Platform
 
 ## About This Project
 
-Welcome to Olimaps, the revolutionary social network that goes beyond virtual connections. In a world where digital interactions dominate, we believe in the power of genuine physical connections. Olimaps is not just another online platform; it's a dynamic map that brings people together in the real world.
-
-Imagine a social network where you can explore your city like never before. Olimaps allows you to share your experiences, adventures, and discoveries on an interactive map, making it accessible to others in your vicinity. Whether you stumble upon a hidden gem of a cafe, organize a local event, or simply want to invite others to join you in your activities, Olimaps is the place to make it happen.
-
-## Try the app
-
-You can try the app using the following url:
-
-[olimaps.com](https://olimaps.com)
+A virtual interaction platform developed during the COVID pandemic, enabling users to connect and engage with their local community. Conceptualized the design, architecture, and implementation to enhance user experience and foster meaningful connections.
 
 
 ## Stack
