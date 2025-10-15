@@ -268,12 +268,9 @@ export const actions = {
     // Demo mode - always succeed
     return true
   },
-  async readNotifications({ rootState }) {
-    // Demo mode - mark all notifications as read
-    rootState.auth.user.notifications = rootState.auth.user.notifications.map(notification => ({
-      ...notification,
-      read: true,
-    }))
+  async readNotifications({ commit }) {
+    // Demo mode - mark all notifications as read using proper mutation
+    commit('auth/markNotificationsAsRead', null, { root: true })
     return true
   },
   async sendNotificationToken(_, token) {

@@ -43,17 +43,19 @@ export default {
   },
   data() {
     return {
-      notifications: [],
       finished: false,
       loading: false,
       page: 1,
     }
   },
+  computed: {
+    notifications() {
+      return this.$store.state.auth.user.notifications || []
+    }
+  },
   mounted() {
     this.$store.dispatch('user/readNotifications')
-
     this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
-    this.notifications = this.$store.state.auth.user.notifications
   },
   beforeDestroy() {
     this.$refs.scrollarea.removeEventListener('scroll', this.handleScroll)
@@ -72,7 +74,8 @@ export default {
           this.page
         )
 
-        this.notifications = [...this.notifications, ...newNotifications]
+        // Add new notifications to the store using a mutation
+        this.$store.commit('auth/addNotifications', newNotifications)
         this.page++
         this.finished = true
         this.loading = false

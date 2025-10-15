@@ -212,6 +212,15 @@ export const mutations = {
     axios.defaults.headers.common.authorization = 'Bearer ' + token
     localStorage.setItem('token', token)
   },
+  markNotificationsAsRead(state) {
+    state.user.notifications = state.user.notifications.map(notification => ({
+      ...notification,
+      read: true,
+    }))
+  },
+  addNotifications(state, newNotifications) {
+    state.user.notifications = [...state.user.notifications, ...newNotifications]
+  },
 }
 
 export const getters = {
