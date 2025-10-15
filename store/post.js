@@ -6,48 +6,87 @@ export const state = () => ({
 
 export const mutations = {
   setPosts(state, posts) {
-    state.posts = posts
+    // Ensure complete replacement of the array to trigger Vue reactivity
+    state.posts = [...posts]
   },
 }
 
 export const actions = {
   async getPosts({ commit }, bbox) {
-    // Return demo posts for the map
-    const demoPosts = [
-      {
-        post_id: 'demo-post-1',
-        coordinates: { lat: 40.4168, lng: -3.7038 },
-        text: 'Hermosa vista desde el Retiro',
-        type: 'image',
-        src: 'https://picsum.photos/400/600?random=100',
-        profile_picture: 'https://picsum.photos/50/50?random=101',
-        username: 'madrid_explorer',
-        likes: 24,
-        created_at: Date.now() - 7200000
-      },
-      {
-        post_id: 'demo-post-2',
-        coordinates: { lat: 40.4200, lng: -3.7100 },
-        text: 'Día perfecto en la plaza',
-        type: 'short',
-        src: '',
-        profile_picture: 'https://picsum.photos/50/50?random=102',
-        username: 'city_lover',
-        likes: 12,
-        created_at: Date.now() - 3600000
-      },
-      {
-        post_id: 'demo-post-3',
-        coordinates: { lat: 40.4150, lng: -3.7050 },
-        text: 'Concierto increíble',
-        type: 'video',
-        src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        profile_picture: 'https://picsum.photos/50/50?random=103',
-        username: 'music_fan',
-        likes: 45,
-        created_at: Date.now() - 10800000
-      }
+    // Generate demo posts based on current bounding box
+    if (!bbox) return
+    
+    const bounds = bbox.getNorthEast ? {
+      north: bbox.getNorth(),
+      south: bbox.getSouth(),
+      east: bbox.getEast(),
+      west: bbox.getWest()
+    } : bbox
+    
+    // Generate posts within the current viewing area
+    const generateRandomCoordinate = (min, max) => {
+      return min + Math.random() * (max - min)
+    }
+    
+    const postTypes = ['image', 'short', 'video', 'audio']
+    const demoTexts = [
+      'Hermosa vista desde aquí',
+      'Día perfecto en esta zona',
+      'Gran momento en este lugar',
+      'Increíble experiencia',
+      'Lugar fantástico',
+      'Vista espectacular',
+      'Momento único',
+      'Descubrimiento increíble',
+      'Atmósfera perfecta',
+      'Lugar mágico'
     ]
+    const demoUsernames = [
+      'explorer_local', 'city_wanderer', 'nature_lover', 'urban_photographer',
+      'adventure_seeker', 'moment_capture', 'travel_soul', 'local_guide',
+      'discovery_hunter', 'place_collector'
+    ]
+    
+    // Generate 5-8 random posts within the bounding box
+    const numberOfPosts = Math.floor(Math.random() * 4) + 5
+    const demoPosts = []
+    const timestamp = Date.now()
+    
+    for (let i = 0; i < numberOfPosts; i++) {
+      const randomLat = generateRandomCoordinate(bounds.south, bounds.north)
+      const randomLng = generateRandomCoordinate(bounds.west, bounds.east)
+      const randomType = postTypes[Math.floor(Math.random() * postTypes.length)]
+      const randomText = demoTexts[Math.floor(Math.random() * demoTexts.length)]
+      const randomUsername = demoUsernames[Math.floor(Math.random() * demoUsernames.length)]
+      const randomImageId = Math.floor(Math.random() * 1000) + 100
+      const randomProfileId = Math.floor(Math.random() * 1000) + 100
+      const randomLikes = Math.floor(Math.random() * 50) + 1
+      const randomTime = Date.now() - Math.random() * 86400000 // Random time in last 24 hours
+      
+      let src = ''
+      if (randomType === 'image') {
+        src = `https://picsum.photos/400/600?random=${randomImageId}`
+      } else if (randomType === 'video') {
+        const videos = [
+          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
+        ]
+        src = videos[Math.floor(Math.random() * videos.length)]
+      }
+      
+      demoPosts.push({
+        post_id: `bbox-post-${timestamp}-${i}`,
+        coordinates: { lat: randomLat, lng: randomLng },
+        text: randomText,
+        type: randomType,
+        src,
+        profile_picture: `https://picsum.photos/50/50?random=${randomProfileId}`,
+        username: randomUsername,
+        likes: randomLikes,
+        created_at: randomTime
+      })
+    }
     
     commit('setPosts', demoPosts)
   },

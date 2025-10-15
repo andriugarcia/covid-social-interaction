@@ -16,7 +16,7 @@
   )
     MglMarker(
       v-for='(post, i) in posts',
-      :key='post.post_id || post.chat_id',
+      :key='`${markerKey}-${post.post_id}-${i}`',
       :coordinates='[post.coordinates.lng, post.coordinates.lat]',
       :offset='[0, -10]',
       anchor='bottom'
@@ -49,6 +49,8 @@ export default {
       bounds: {},
       timer: false,
       taps: 0,
+      markerKey: 0, // Force re-render key
+      moveTimeout: null, // Debounce for map moves
     }
   },
 
@@ -98,6 +100,10 @@ export default {
   watch: {
     $route(route) {
       if (this.map) this.map.resize()
+    },
+    posts(newPosts) {
+      // Force re-render of markers
+      this.markerKey += 1
     },
   },
 
@@ -170,7 +176,18 @@ export default {
       this.$store.dispatch('post/getPosts', ev.map.getBounds())
     },
     onMove(ev) {
-      this.$store.dispatch('post/getPosts', ev.map.getBounds())
+      // Don't regenerate posts if a post dialog is currently open
+      if (this.$route.query.post) {
+        return
+      }
+      
+      // Debounce the post generation to avoid too many calls during active panning
+      if (this.moveTimeout) {
+        clearTimeout(this.moveTimeout)
+      }
+      this.moveTimeout = setTimeout(() => {
+        this.$store.dispatch('post/getPosts', ev.map.getBounds())
+      }, 300) // Wait 300ms after user stops moving
     },
   },
 }
