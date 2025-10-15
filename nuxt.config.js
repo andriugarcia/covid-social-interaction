@@ -178,21 +178,21 @@ export default {
     },
     meta: {
 
-      title: "Qué está pasando a tu alrededor 🌍 | Olimaps",
+      title: "What's happening around you 🌍 | Olimaps",
       meta: [
         {
           name: "description",
           content:
-            "Descubre que está haciendo la gente cerca de ti y conocelos haciendo eventos."
+            "Discover what people near you are doing and meet them by creating events."
         },
         {
           property: "og:title",
-          content: "Qué está pasando a tu alrededor 🌍 | Olimaps"
+          content: "What's happening around you 🌍 | Olimaps"
         },
         {
           property: "og:description",
           content:
-            "Descubre que está haciendo la gente cerca de ti y conocelos haciendo eventos."
+            "Discover what people near you are doing and meet them by creating events."
         },
         { property: "og:site_name", content: "Olimaps" },
         { property: "og:type", content: "website" },
@@ -203,12 +203,12 @@ export default {
         { property: "og:url", content: "https://olimaps.com" },
         {
           name: "twitter:title",
-          content: "Qué está pasando a tu alrededor 🌍 | Olimaps"
+          content: "What's happening around you 🌍 | Olimaps"
         },
         {
           name: "twitter:description",
           content:
-            "Descubre que está haciendo la gente cerca de ti y conocelos haciendo eventos."
+            "Discover what people near you are doing and meet them by creating events."
         },
         {
           name: "twitter:image",
@@ -225,7 +225,7 @@ export default {
     manifest: {
       name: 'Olimaps',
       short_name: 'Olimaps',
-      description: 'Conoce e interactua con la gente de alrededor',
+      description: 'Meet and interact with people around you',
       start_url: 'https://olimaps.com',
       'background-color': '#F0134D',
       'theme-color': '#F0134D',

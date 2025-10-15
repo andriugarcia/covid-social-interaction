@@ -8,15 +8,15 @@
   )
     v-btn(icon, @click='$router.replace({ path: "/" })')
       v-icon fas fa-arrow-left
-    v-toolbar-title Eventos
+    v-toolbar-title Events
     v-spacer
     v-btn(color='white', rounded, depressed, dark, small, @click='createEvent')
-      .primary--text.text-capitalize Nuevo Evento
+      .primary--text.text-capitalize New Event
   div(ref='scrollarea', style='height: 100vh; overflow-y: scroll')
     v-sheet.pa-4.mt-10(color='white', style='height: 100%')
       v-layout.mt-6.mb-3(v-if='authenticated')
         v-icon.mr-2(color='black') far fa-calendar-alt
-        .font-weight-medium(style='font-size: 1.4em') Próximos Eventos
+        .font-weight-medium(style='font-size: 1.4em') Upcoming Events
         v-spacer
         v-chip.font-weight-medium(
           v-if='user.participation.length !== 0',
@@ -27,7 +27,7 @@
         color='purple',
         text,
         icon='fas fa-glass-cheers'
-      ) No tienes eventos próximamente
+      ) You have no upcoming events
       v-layout.hide-scrollbar.my-2(
         v-if='authenticated',
         style='overflow-x: scroll'
@@ -40,18 +40,18 @@
         )
       v-layout.mt-6.mb-3
         v-icon.mr-2(color='black') fas fa-map-marked-alt
-        .font-weight-medium(style='font-size: 1.4em') Eventos cerca
+        .font-weight-medium(style='font-size: 1.4em') Nearby Events
       //- v-row#loadBar.my-12(justify='center', align='center')
       //-   v-progress-circular(indeterminate, color='primary')
       v-layout(v-if='events.length === 0', column, align-center)
         img(src='@/assets/events.png', style='height: 200px')
-        span No hay eventos cerca
+        span No nearby events
         v-btn.mt-2.text-capitalize(
           rounded,
           depressed,
           @click='createEvent',
           color='primary'
-        ) Crear mi propio evento
+        ) Create my own event
       event.mb-2(v-for='(event, i) in events', :key='i', :event='event')
       .text-center.py-4(v-if='loading')
         v-progress-circular(indeterminate, color='primary')
@@ -67,7 +67,7 @@ import Event from '@/components/event/item'
 
 export default {
   head: {
-    title: 'Eventos | Olimaps',
+    title: 'Events | Olimaps',
   },
   components: {
     AvatarGroup,

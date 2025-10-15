@@ -32,11 +32,11 @@
               )
                 v-list-item-avatar
                   v-icon fas fa-volume-mute
-                v-list-item-content Silenciar Grupo
+                v-list-item-content Mute Group
               v-list-item(v-else, @click='unmuteChat')
                 v-list-item-avatar
                   v-icon fas fa-bell
-                v-list-item-content Activar Notificaciones
+                v-list-item-content Enable Notifications
               v-dialog(
                 v-if='isParticipant',
                 v-model='leaveDialogOut',
@@ -46,13 +46,13 @@
                   v-list-item(v-on='on')
                     v-list-item-avatar
                       v-icon.red--text fas fa-sign-out-alt
-                    v-list-item-title.red--text Salir del grupo
+                    v-list-item-title.red--text Leave group
                 v-card.pa-2
-                  .overline SALIR DEL GRUPO
-                  p.text-center ¿De verdad quieres salir del grupo?
+                  .overline LEAVE GROUP
+                  p.text-center Do you really want to leave the group?
                   v-layout(justify-space-between)
-                    v-btn(text, @click='leaveDialogOut = false') Cancelar
-                    v-btn(color='red', @click='leaveGroup()', dark, depressed) Salir
+                    v-btn(text, @click='leaveDialogOut = false') Cancel
+                    v-btn(color='red', @click='leaveGroup()', dark, depressed) Leave
       v-card(
         v-if='chat.event && chat.event.length != 0',
         flat,
@@ -68,12 +68,12 @@
             span.font-weight-bold.text-truncate {{ chat.event[0].title }}
             span {{ chat.event[0].start_date | toDateShort }}
           v-list-item-action
-            v-btn.text-capitalize(small, depressed, color='primary') Más Info
+            v-btn.text-capitalize(small, depressed, color='primary') More Info
     v-sheet(color='white', style='position: relative; height: 100vh')
       messages(v-if='chatLoaded')
     div(style='position: absolute; bottom: 0px; left: 0; right: 0')
       chat-bar(v-if='isParticipant', :chat='chat')
-      v-btn(v-else, block, tile, large, color='primary', @click='joinChat') UNIRME
+      v-btn(v-else, block, tile, large, color='primary', @click='joinChat') JOIN
   v-sheet#chat-settings(
     v-else-if='settingsOpened',
     color='white',
@@ -82,13 +82,13 @@
     v-toolbar(color='primary', dark, flat)
       v-btn(icon, @click='settingsOpened = false')
         v-icon fas fa-times
-      v-toolbar-title Editar Grupo
+      v-toolbar-title Edit Group
       v-spacer
       v-btn(icon, @click='updateChat()')
         v-icon fas fa-check
     .px-6.mt-6
       avatar-input(@update='updateCover', :preview='chat.cover')
-      .overline.mt-4 Nombre
+      .overline.mt-4 Name
       v-text-field(
         v-model='chat.title',
         filled,
@@ -96,7 +96,7 @@
         counter,
         maxlength='30'
       )
-      .overline Descripción
+      .overline Description
       v-textarea(
         v-model='chat.description',
         filled,
@@ -120,9 +120,9 @@
       v-avatar(size='120', color='primary')
         v-img(:src='chat.cover')
       .font-weight-bold.mt-4 {{ chat.title }}
-      .font-weight-light {{ chat.member.length }} miembros
+      .font-weight-light {{ chat.member.length }} members
     .px-4
-      .overline DESCRIPCIÓN
+      .overline DESCRIPTION
       p {{ chat.description }}
     //- .overline UBICACIÓN
     //- static-map(:coordinates="chat.coordinates")
@@ -134,8 +134,8 @@
       next-icon='fas fa-chevron-right',
       prev-icon='fas fa-chevron-left'
     )
-      v-tab(key='members') Miembros
-      v-tab(key='events') Eventos
+      v-tab(key='members') Members
+      v-tab(key='events') Events
       v-tab(key='posts') Posts
       v-tab(key='media') Media
     v-tabs-items(v-model='tab')
@@ -144,7 +144,7 @@
           v-list-item(v-if='isAdmin', @click='newParticipantDialog = true')
             v-list-item-avatar
               v-icon fas fa-plus
-            v-list-item-title Añadir Participantes
+            v-list-item-title Add Participants
           v-dialog(v-if='isParticipant', v-model='leaveDialogIn', :width='500')
             template(v-slot:activator='{ on }')
               v-list-item(v-on='on')
@@ -155,7 +155,7 @@
               .overline SALIR DEL GRUPO
               p.text-center ¿De verdad quieres salir del grupo?
               v-layout(justify-space-between)
-                v-btn(text, @click='leaveDialogIn = false') Cancelar
+                v-btn(text, @click='leaveDialogIn = false') Cancel
                 v-btn(color='red', @click='leaveGroup()', dark, depressed) Salir
           v-menu(offset-y, v-for='(member, i) in chat.member', :key='i')
             template(v-slot:activator='{ on }')
@@ -164,13 +164,13 @@
                   v-img(:src='member.profile.profile_picture')
                 v-list-item-content
                   v-list-item-title {{ member.profile.username }}
-                  v-list-item-subtitle(v-if='member.is_admin') Administrador
+                  v-list-item-subtitle(v-if='member.is_admin') Administrator
             v-card
               v-list
                 v-list-item(nuxt, :to='"/" + member.profile.username')
                   v-list-item-avatar 
                     v-img(:src='member.profile.profile_picture')
-                  v-list-item-content Ver perfil de {{ member.profile.username }}
+                  v-list-item-content View {{ member.profile.username }}'s profile
                 v-dialog(v-model='addAdminDialog', :width='500')
                   template(v-slot:activator='{ on }')
                     v-list-item(
@@ -179,22 +179,22 @@
                     )
                       v-list-item-avatar 
                         v-icon(small) fas fa-user-cog
-                      v-list-item-content Hacer Administrador
+                      v-list-item-content Make Administrator
                   v-card.pa-2
-                    .overline HACER ADMINISTRADOR
+                    .overline MAKE ADMINISTRATOR
                     v-list-item
                       v-list-item-avatar
                         v-img(:src='member.profile.profile_picture')
                       v-list-item-content {{ member.profile.username }}
-                    p.text-center ¿Quieres añadirlo como administrador?
+                    p.text-center Do you want to add them as administrator?
                     v-layout(justify-space-between)
-                      v-btn(text, @click='addAdminDialog = false') Cancelar
+                      v-btn(text, @click='addAdminDialog = false') Cancel
                       v-btn(
                         color='primary',
                         dark,
                         depressed,
                         @click='addAdmin(member)'
-                      ) Hacer Administrador
+                      ) Make Administrator
                 v-dialog(v-model='removeAdminDialog', :width='500')
                   template(v-slot:activator='{ on }')
                     v-list-item(
@@ -203,22 +203,22 @@
                     )
                       v-list-item-avatar 
                         v-icon(small) fas fa-user-cog
-                      v-list-item-content Eliminar Administrador
+                      v-list-item-content Remove Administrator
                   v-card.pa-2
-                    .overline ELIMINAR ADMINISTRADOR
+                    .overline REMOVE ADMINISTRATOR
                     v-list-item
                       v-list-item-avatar
                         v-img(:src='member.profile.profile_picture')
                       v-list-item-content {{ member.profile.username }}
-                    p.text-center ¿Quieres quitarlo como administrador?
+                    p.text-center Do you want to remove them as administrator?
                     v-layout(justify-space-between)
-                      v-btn(text, @click='removeAdminDialog = false') Cancelar
+                      v-btn(text, @click='removeAdminDialog = false') Cancel
                       v-btn(
                         color='primary',
                         dark,
                         depressed,
                         @click='removeAdmin(member)'
-                      ) Quitar Administrador
+                      ) Remove Administrator
                 v-dialog(v-model='removeParticipantDialog', :width='500')
                   template(v-slot:activator='{ on }')
                     v-list-item(
@@ -234,15 +234,15 @@
                       v-list-item-avatar
                         v-img(:src='member.profile.profile_picture')
                       v-list-item-content {{ member.profile.username }}
-                    p.text-center ¿Quieres expulsarlo del grupo?
+                    p.text-center Do you want to remove them from the group?
                     v-layout(justify-space-between)
-                      v-btn(text, @click='removeParticipantDialog = false') Cancelar
+                      v-btn(text, @click='removeParticipantDialog = false') Cancel
                       v-btn(
                         color='red',
                         dark,
                         depressed,
                         @click='removeParticipant(i)'
-                      ) Expulsar
+                      ) Remove
       v-tab-item(key='events')
         v-sheet.pa-2(color='white')
           event.mb-2(v-for='(event, i) in events', :key='i', :event='event')

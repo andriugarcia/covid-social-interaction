@@ -33,21 +33,21 @@
         v-chip.ml-2.pl-1(color='white')
           span.ml-1(style='font-size: 1.2em') {{ event.emoji }}
           span.primary--text.font-weight-medium.ml-2 {{ getCategoryName(event.emoji) }}
-        span.ml-2(v-if='event.participants.length > 1') {{ event.participants.length }} Asistirán
+        span.ml-2(v-if='event.participants.length > 1') {{ event.participants.length }} Will attend
     v-alert(
       v-if='!(event.joined && event.participation && event.participation.is_host) && event.joined',
       type='success',
       tile
     ) 
       v-row
-        v-col.expanded Has confirmado tu asistencia
+        v-col.expanded You have confirmed your attendance
         v-col.shrink
           v-btn(
             small,
             depressed,
             @click='unjoinDialog = true',
             color='success darken-1'
-          ) Cancelar
+          ) Cancel
     //- category(:cat="event.category")
     .px-4
       p.font-weight-light.mt-4 {{ event.description }}
@@ -58,7 +58,7 @@
         v-avatar(style='border: 3px solid #f0134d')
           v-img(:src='event.profile_picture')
         .ml-3
-          .font-weight-light Anfitrión
+          .font-weight-light Host
           .font-weight-bold {{ event.username }}
         v-spacer
         v-btn(
@@ -69,11 +69,11 @@
           :outlined='!event.follow',
           color='primary',
           @click='follow'
-        ) {{ event.follow ? "Siguiendo" : "Seguir" }}
-      .overline.text-uppercase.mt-2.font-weight-bold Ubicación
+        ) {{ event.follow ? "Following" : "Follow" }}
+      .overline.text-uppercase.mt-2.font-weight-bold Location
       p {{ event.place_description }}
       static-map(:coordinates='event.place')
-      .overline.text-uppercase.mt-2.font-weight-bold Horario
+      .overline.text-uppercase.mt-2.font-weight-bold Schedule
       v-timeline.pl-0(align-top, dense)
         v-timeline-item(color='blue', small)
           v-row.pt-1
@@ -101,10 +101,10 @@
             .ml-3
               .font-weight-bold {{ event.chatname }}
             v-spacer
-            v-btn.rounded-lg(small, depressed, color='primary') Ver grupo
+            v-btn.rounded-lg(small, depressed, color='primary') View group
       .overline.text-uppercase.mt-4.font-weight-bold(
         v-if='event.participants.length > 1'
-      ) {{ event.participants.length }} Participantes
+      ) {{ event.participants.length }} Participants
       v-layout(v-if='event.participants.length > 1', wrap)
         v-flex.pa-2(
           v-for='(participant, i) in event.participants',
@@ -137,13 +137,13 @@
             color='primary',
             style='z-index: 10',
             rounded
-          ) Cancelar Evento
+          ) Cancel Event
         v-card.pa-4.rounded-xl
-          .overline CANCELAR EVENTO
-          p ¿Estás seguro de querer cancelar el evento?
+          .overline CANCEL EVENT
+          p Are you sure you want to cancel the event?
           v-layout(justify-space-between)
-            v-btn(rounded, text) ATRÁS
-            v-btn(rounded, dark, depressed, color='red', @click='cancelEvent') CANCELAR
+            v-btn(rounded, text) BACK
+            v-btn(rounded, dark, depressed, color='red', @click='cancelEvent') CANCEL
       v-btn(
         v-else-if='!event.joined',
         block,
@@ -153,7 +153,7 @@
         rounded,
         style='z-index: 10',
         @click='joinEvent'
-      ) Asistir
+      ) Attend
       v-dialog(v-else, :width='500', v-model='unjoinDialog')
         template(#activator)
           v-btn(
@@ -164,22 +164,22 @@
             style='z-index: 10',
             @click='unjoinDialog = true',
             rounded
-          ) Cancelar Asistencia
+          ) Cancel Attendance
         v-card.pa-4.rounded-xl
-          .overline CANCELAR ASISTENCIA
-          p ¿Estás seguro de querer cancelar tu asistencia al evento?
+          .overline CANCEL ATTENDANCE
+          p Are you sure you want to cancel your attendance to the event?
           v-layout(justify-space-between)
-            v-btn(rounded, text, @click='unjoinDialog = false') ATRÁS
-            v-btn(rounded, dark, depressed, color='red', @click='unjoinEvent') CANCELAR
+            v-btn(rounded, text, @click='unjoinDialog = false') BACK
+            v-btn(rounded, dark, depressed, color='red', @click='unjoinEvent') CANCEL
   v-bottom-sheet(v-model='shareDialog', :inset='$vuetify.breakpoint.mdAndUp')
     share(:event='event', @back='shareDialog = false')
   v-dialog(v-model='askGroupDialog', :width='500')
     v-card.pa-4
-      v-subheader Participar en el grupo
-      p ¿Quieres participar también en el grupo del evento para conocer a los asistentes?
+      v-subheader Join the group
+      p Do you also want to participate in the event group to meet the attendees?
       v-layout(justify-space-between)
-        v-btn(text, @click='askGroupDialog = false') No quiero
-        v-btn(color='primary', @click='joinChat') Participar
+        v-btn(text, @click='askGroupDialog = false') I don't want to
+        v-btn(color='primary', @click='joinChat') Join
 v-sheet.pa-4(v-else-if='loadingEvent', color='white', style='height: 100vh')
   v-layout.mt-6(justify-center)
     v-progress-circular(size='64', indeterminate, color='primary')
@@ -193,15 +193,15 @@ v-sheet.pa-4(v-else, color='white', style='height: 100vh')
       style='height: 100%'
     )
       img(src='@/assets/not-found.png', style='height: 200px')
-      .black--text Evento no encontrado
-      .black--text El evento que buscas no existe o ha sido cancelado
+      .black--text Event not found
+      .black--text The event you are looking for does not exist or has been cancelled
       v-btn.mt-2(
         block,
         rounded,
         depressed,
         color='primary',
         @click='$router.replace({ path: "/events" })'
-      ) Ver Otros Eventos
+      ) View Other Events
 </template>
 
 <script>

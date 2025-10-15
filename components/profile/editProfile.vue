@@ -8,16 +8,16 @@ v-card#editProfile(style='position: relative')
   ) 
     v-btn(icon, dark, @click='$router.go(-1)')
       v-icon fas fa-times
-    span Editando Perfil
+    span Editing Profile
     v-spacer
-    v-btn(text, dark, @click='updateProfile', style='letter-spacing: 0') Guardar
+    v-btn(text, dark, @click='updateProfile', style='letter-spacing: 0') Save
   v-sheet.pa-4.pt-12(style='height: 100vh; overflow-y: scroll', color='white')
-    .overline.mt-6 Foto de Perfil
+    .overline.mt-6 Profile Picture
     avatar-input(
       @update='updateProfilePicture',
       :preview='user.profile_picture'
     )
-    .overline Nombre
+    .overline Name
     v-text-field(
       v-model='profile.name',
       filled,
@@ -26,7 +26,7 @@ v-card#editProfile(style='position: relative')
       maxlength='30',
       counter
     )
-    .overline Biografía
+    .overline Biography
     v-textarea(
       v-model='profile.description',
       filled,
@@ -35,7 +35,7 @@ v-card#editProfile(style='position: relative')
       :rows='4',
       value='Creador de Olimaps'
     )
-    .overline Redes Sociales
+    .overline Social Networks
     v-text-field(
       prepend-inner-icon='fab fa-twitter',
       placeholder='Twitter',
@@ -117,7 +117,7 @@ export default {
       usernameCheck: (value) =>
         value.match(
           /^[a-zA-Z0-9]+([a-zA-Z0-9](_|-| )[a-zA-Z0-9])*[a-zA-Z0-9]+$/
-        ) || 'Nombre de usuario no válido',
+        ) || 'Invalid username',
     }
   },
   methods: {

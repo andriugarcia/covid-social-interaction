@@ -56,7 +56,7 @@
         texteditor(
           v-model='message.text',
           top,
-          placeholder='Escribe tu mensaje...',
+          placeholder='Write your message...',
           style='max-height: 30vh; overflow-y: auto; margin-bottom: 8px',
           size='0.9em',
           @enter='sendMessage'
@@ -84,7 +84,7 @@
               )
                 v-avatar(color='primary', dark)
                   v-icon.white--text fas fa-flag
-                .mt-1 Evento
+                .mt-1 Event
               v-card.rounded-xl.pa-3.ma-1.mx-1(
                 flat,
                 @click='shareGroup = true',
@@ -92,7 +92,7 @@
               )
                 v-avatar(color='primary', dark)
                   v-icon.white--text fas fa-user
-                .mt-1 Grupo
+                .mt-1 Group
     //- v-text-field(v-model="message.text", solo, hide-details, rounded, outlined, @click:prepend-inner="cameraToggle = true", @keydown.enter="sendMessage", placeholder="Escribe un mensaje", color="primary", append-icon="")
       template(#prepend-inner)
         v-btn(v-if="!message.src", icon, depressed, small)
@@ -135,7 +135,7 @@
       v-toolbar(color='primary', dark) 
         v-btn(icon, @click='shareEvent = false')
           v-icon fas fa-arrow-left
-        v-toolbar-title Compartir Evento
+        v-toolbar-title Share Event
       .pa-2(v-if='user.participation.length > 0')
         event.mb-2(
           v-for='(event, i) in user.participation',
@@ -144,7 +144,7 @@
           readonly,
           @click.native='sendEvent(event)'
         )
-      v-card.ma-2.rounded-xl.pa-4(v-else, outlined) No hay eventos programados
+      v-card.ma-2.rounded-xl.pa-4(v-else, outlined) No scheduled events
 
   v-dialog(
     v-model='shareGroup',
@@ -155,7 +155,7 @@
       v-toolbar(color='primary', dark) 
         v-btn(icon, @click='shareGroup = false')
           v-icon fas fa-arrow-left
-        v-toolbar-title Compartir Grupo
+        v-toolbar-title Share Group
       v-list(color='white')
         v-list-item(
           v-for='(group, i) in groups',

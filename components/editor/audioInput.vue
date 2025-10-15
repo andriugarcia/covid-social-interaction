@@ -4,7 +4,7 @@
     v-layout(justify-space-between, align-center)
       v-chip.font-weight-bold.ml-3(v-if='recording', dark, color='red') {{ counter | getMinutes }}:{{ counter | getSeconds }}
       v-spacer
-      span.mr-2.red--text(v-if='recording') {{touching ? '<< Desliza para cancelar' : 'Pulsa para enviar >>'}}
+      span.mr-2.red--text(v-if='recording') {{touching ? '<< Slide to cancel' : 'Press to send >>'}}
       v-btn(
         depressed,
         fab,

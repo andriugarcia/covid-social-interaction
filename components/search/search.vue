@@ -30,7 +30,7 @@
   )
     v-list
       div(v-if='!onlyPlaces && users.length > 0')
-        v-subheader USUARIOS
+        v-subheader USERS
         v-list-item(
           v-for='(user, i) in users',
           :key='i',
@@ -40,7 +40,7 @@
             v-img(:src='user.profile_picture')
           v-list-item-content
             v-list-item-title {{ user.username }}
-      v-subheader(v-if='places.length != 0') SITIOS
+      v-subheader(v-if='places.length != 0') PLACES
       v-list-item(v-for='(place, i) in places', :key='i', @click='select(i)')
         v-list-item-avatar
           v-icon.black--text fas fa-map-marker-alt
@@ -52,7 +52,7 @@
     flat,
     :style='$vuetify.breakpoint.mdAndUp ? "width: 400px; position: absolute; top: 82px; border: 1px solid #F0134D;" : ""'
   )
-    .pa-4 No hemos encontrado ningún lugar con este nombre
+    .pa-4 We couldn't find any place with this name
 </template>
 
 <script>

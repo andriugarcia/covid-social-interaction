@@ -30,16 +30,16 @@ export const actions = {
     
     const postTypes = ['image', 'short', 'video', 'audio']
     const demoTexts = [
-      'Hermosa vista desde aquí',
-      'Día perfecto en esta zona',
-      'Gran momento en este lugar',
-      'Increíble experiencia',
-      'Lugar fantástico',
-      'Vista espectacular',
-      'Momento único',
-      'Descubrimiento increíble',
-      'Atmósfera perfecta',
-      'Lugar mágico'
+      'Beautiful view from here',
+      'Perfect day in this area',
+      'Great moment at this place',
+      'Incredible experience',
+      'Fantastic place',
+      'Spectacular view',
+      'Unique moment',
+      'Amazing discovery',
+      'Perfect atmosphere',
+      'Magical place'
     ]
     const demoUsernames = [
       'explorer_local', 'city_wanderer', 'nature_lover', 'urban_photographer',
@@ -95,7 +95,7 @@ export const actions = {
     // Return demo post data
     return {
       post_id: 'demo-single-post',
-      text: 'Post demo individual',
+      text: 'Individual demo post',
       type: 'image',
       src: src || 'https://picsum.photos/400/600?random=110',
       profile_picture: 'https://picsum.photos/50/50?random=111',
@@ -111,7 +111,7 @@ export const actions = {
       {
         post_id: 'point-post-1',
         coordinates,
-        text: 'Post en esta ubicación',
+        text: 'Post at this location',
         type: 'image',
         src: 'https://picsum.photos/400/600?random=120',
         profile_picture: 'https://picsum.photos/50/50?random=121',
@@ -138,7 +138,7 @@ export const actions = {
     const demoNearbyPosts = [
       {
         post_id: 'nearby-1',
-        text: 'Post cercano 1',
+        text: 'Nearby post 1',
         type: 'image',
         src: 'https://picsum.photos/400/600?random=130',
         profile_picture: 'https://picsum.photos/50/50?random=131',
@@ -149,7 +149,7 @@ export const actions = {
       },
       {
         post_id: 'nearby-2',
-        text: 'Post cercano 2',
+        text: 'Nearby post 2',
         type: 'short',
         src: '',
         profile_picture: 'https://picsum.photos/50/50?random=132',
@@ -168,7 +168,7 @@ export const actions = {
     const demoSavedPosts = [
       {
         post_id: 'saved-1',
-        text: 'Post guardado 1',
+        text: 'Saved post 1',
         type: 'image',
         src: 'https://picsum.photos/400/600?random=140',
         profile_picture: 'https://picsum.photos/50/50?random=141',
@@ -179,7 +179,7 @@ export const actions = {
       },
       {
         post_id: 'saved-2',
-        text: 'Post guardado 2',
+        text: 'Saved post 2',
         type: 'video',
         src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
         profile_picture: 'https://picsum.photos/50/50?random=142',

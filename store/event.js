@@ -66,7 +66,7 @@ export const state = () => ({
   categories: [
     {
       emoji: '🌍',
-      name: 'Explorar la zona',
+      name: 'Explore the area',
       category: 'city',
     },
     {
@@ -81,77 +81,77 @@ export const state = () => ({
     },
     {
       emoji: '🎨',
-      name: 'Arte',
+      name: 'Art',
       category: 'culture',
     },
     {
       emoji: '🎥',
-      name: 'Cine',
+      name: 'Cinema',
       category: 'culture',
     },
     {
       emoji: '📖',
-      name: 'Literatura',
+      name: 'Literature',
       category: 'culture',
     },
     {
       emoji: '🖼',
-      name: 'Museos y Galerias',
+      name: 'Museums and Galleries',
       category: 'culture',
     },
     {
       emoji: '📷',
-      name: 'Fotografía',
+      name: 'Photography',
       category: 'leisure',
     },
     {
       emoji: '🌙',
-      name: 'Astronomía',
+      name: 'Astronomy',
       category: 'leisure',
     },
     {
       emoji: '💻',
-      name: 'Tecnología',
+      name: 'Technology',
       category: 'leisure',
     },
     {
       emoji: '🎭',
-      name: 'Teatro',
+      name: 'Theatre',
       category: 'leisure',
     },
     {
       emoji: '📖',
-      name: 'Lectura',
+      name: 'Reading',
       category: 'leisure',
     },
     {
       emoji: '🎮',
-      name: 'Videojuegos',
+      name: 'Video Games',
       category: 'leisure',
     },
     {
       emoji: '🃏',
-      name: 'Juegos de Mesa',
+      name: 'Board Games',
       category: 'leisure',
     },
     {
       emoji: '🍻',
-      name: 'Cervezas',
+      name: 'Beers',
       category: 'food',
     },
     {
       emoji: '☕️',
-      name: 'Café',
+      name: 'Coffee',
       category: 'food',
     },
     {
       emoji: '🍳',
-      name: 'Cocina',
+      name: 'Cooking',
       category: 'food',
     },
     {
       emoji: '👨‍🍳',
-      name: 'Gastronomía',
+      name: 'Gastronomy',
       category: 'food',
     },
     {
@@ -161,22 +161,22 @@ export const state = () => ({
     },
     {
       emoji: '🥐',
-      name: 'Desayuno',
+      name: 'Breakfast',
       category: 'food',
     },
     {
       emoji: '🥪',
-      name: 'Merienda',
+      name: 'Snack',
       category: 'food',
     },
     {
       emoji: '🍽',
-      name: 'Cena',
+      name: 'Dinner',
       category: 'food',
     },
     {
       emoji: '💪🏼',
-      name: 'Taller',
+      name: 'Workshop',
       category: 'leisure',
     },
     {
@@ -186,7 +186,7 @@ export const state = () => ({
     },
     {
       emoji: '🏔',
-      name: 'Senderismo',
+      name: 'Hiking',
       category: 'outdoor',
     },
     {
@@ -196,37 +196,37 @@ export const state = () => ({
     },
     {
       emoji: '🍸',
-      name: 'Fiesta',
+      name: 'Party',
       category: 'social',
     },
     {
       emoji: '🎤',
-      name: 'Concierto',
+      name: 'Concert',
       category: 'social',
     },
     {
       emoji: '🕺',
-      name: 'Discoteca',
+      name: 'Nightclub',
       category: 'social',
     },
     {
       emoji: '💃',
-      name: 'Baile',
+      name: 'Dance',
       category: 'social',
     },
     {
       emoji: '🐶',
-      name: 'Animales',
+      name: 'Animals',
       category: 'social',
     },
     {
       emoji: '🗣',
-      name: 'Charlar',
+      name: 'Chat',
       category: 'social',
     },
     {
       emoji: '💬',
-      name: 'Intercambio de Idiomas',
+      name: 'Language Exchange',
       category: 'social',
     },
     {
@@ -236,16 +236,16 @@ export const state = () => ({
     },
     {
       emoji: '🍷',
-      name: 'Vino y Cócteles',
+      name: 'Wine and Cocktails',
       category: 'social',
     },
     {
       emoji: '⚽️',
-      name: 'Fútbol',
+      name: 'Soccer',
       category: 'sports',
     }, {
       emoji: '🏀',
-      name: 'Baloncesto',
+      name: 'Basketball',
       category: 'sports',
     }, {
       emoji: '🏈',
@@ -257,7 +257,7 @@ export const state = () => ({
       category: 'sports',
     }, {
       emoji: '🎾',
-      name: 'Tenis',
+      name: 'Tennis',
       category: 'sports',
     }, {
       emoji: '🏐',
@@ -265,11 +265,11 @@ export const state = () => ({
       category: 'sports',
     }, {
       emoji: '🎱',
-      name: 'Billar',
+      name: 'Billiards',
       category: 'sports',
     }, {
       emoji: '🏓',
-      name: 'Tenis de Mesa',
+      name: 'Table Tennis',
       category: 'sports',
     }, {
       emoji: '🪖',
@@ -285,7 +285,7 @@ export const state = () => ({
       category: 'sports',
     }, {
       emoji: '🥊',
-      name: 'Boxeo',
+      name: 'Boxing',
       category: 'sports',
     }, {
       emoji: '🛹',
@@ -293,19 +293,19 @@ export const state = () => ({
       category: 'sports',
     }, {
       emoji: '🛼',
-      name: 'Patinaje',
+      name: 'Skating',
       category: 'sports',
     }, {
       emoji: '⛸',
-      name: 'Patinaje sobre Hielo',
+      name: 'Ice Skating',
       category: 'sports',
     }, {
       emoji: '⛷',
-      name: 'Esquí',
+      name: 'Skiing',
       category: 'sports',
     }, {
       emoji: '🏊',
-      name: 'Natación',
+      name: 'Swimming',
       category: 'sports',
     }, {
       emoji: '🧘‍♀️',
@@ -313,35 +313,35 @@ export const state = () => ({
       category: 'sports',
     }, {
       emoji: '🤽‍♀️',
-      name: 'Waterpolo',
+      name: 'Water Polo',
       category: 'sports',
     }, {
       emoji: '🧗‍♀️',
-      name: 'Escalada',
+      name: 'Climbing',
       category: 'sports',
     }, {
       emoji: '🚴',
-      name: 'Ciclismo',
+      name: 'Cycling',
       category: 'sports',
     }, {
       emoji: '🐎',
-      name: 'Hípica',
+      name: 'Equestrian',
       category: 'sports',
     }, {
       emoji: '🎯',
-      name: 'Dardos',
+      name: 'Darts',
       category: 'sports',
     }, {
       emoji: '🎳',
-      name: 'Bolos',
+      name: 'Bowling',
       category: 'sports',
     }, {
       emoji: '♟',
-      name: 'Ajedrez',
+      name: 'Chess',
       category: 'sports',
     }, {
       emoji: '🎲',
-      name: 'Otros juegos',
+      name: 'Other Games',
       category: 'sports',
     },
 
@@ -545,9 +545,9 @@ export const actions = {
     const demoEvents = [
       {
         event_id: 'demo-event-1',
-        title: 'Encuentro en el Retiro',
+        title: 'Meetup at Retiro',
         category: '🌳',
-        description: 'Vamos a pasar una tarde relajante en el parque del Retiro. Perfecto para conocer gente nueva y disfrutar del buen tiempo.',
+        description: 'Let\'s spend a relaxing afternoon at Retiro Park. Perfect for meeting new people and enjoying good weather.',
         start_date: Date.now() + 86400000, // Tomorrow
         end_date: Date.now() + 90000000, // Tomorrow + 1 hour
         coordinates: { lat: 40.4152, lng: -3.6844 },
@@ -561,9 +561,9 @@ export const actions = {
       },
       {
         event_id: 'demo-event-2',
-        title: 'Concierto en Malasaña',
+        title: 'Concert in Malasaña',
         category: '🎵',
-        description: 'Concierto de música indie en una sala acogedora de Malasaña. ¡No te lo pierdas!',
+        description: 'Indie music concert in a cozy venue in Malasaña. Don\'t miss it!',
         start_date: Date.now() + 172800000, // Day after tomorrow
         end_date: Date.now() + 183600000, // Day after tomorrow + 3 hours
         coordinates: { lat: 40.4262, lng: -3.7006 },
@@ -577,9 +577,9 @@ export const actions = {
       },
       {
         event_id: 'demo-event-3',
-        title: 'Intercambio de idiomas',
+        title: 'Language Exchange',
         category: '💬',
-        description: 'Practicar español, inglés y otros idiomas en un ambiente relajado. Todos los niveles bienvenidos.',
+        description: 'Practice Spanish, English and other languages in a relaxed environment. All levels welcome.',
         start_date: Date.now() + 259200000, // In 3 days
         end_date: Date.now() + 266400000, // In 3 days + 2 hours
         coordinates: { lat: 40.4200, lng: -3.7038 },
@@ -599,9 +599,9 @@ export const actions = {
     // Return demo event data
     return {
       event_id: eventId,
-      title: 'Evento Demo',
+      title: 'Demo Event',
       category: '🎉',
-      description: 'Un evento demo para mostrar la funcionalidad',
+      description: 'A demo event to showcase functionality',
       start_date: Date.now() + 86400000,
       end_date: Date.now() + 90000000,
       coordinates: { lat: 40.4168, lng: -3.7038 },
@@ -612,7 +612,7 @@ export const actions = {
       max_participants: 10,
       is_joined: false,
       follow: false,
-      address: 'Madrid, España'
+      address: 'Madrid, Spain'
     }
   },
   async createEvent(_, event) {
@@ -637,9 +637,9 @@ export const actions = {
     const demoNearbyEvents = [
       {
         event_id: 'nearby-event-1',
-        title: 'Evento cerca de ti',
+        title: 'Event near you',
         category: '🍻',
-        description: 'Evento cerca de tu ubicación',
+        description: 'Event near your location',
         start_date: Date.now() + 86400000,
         end_date: Date.now() + 90000000,
         coordinates: { lat: coordinates.lat + 0.001, lng: coordinates.lng + 0.001 },
@@ -651,9 +651,9 @@ export const actions = {
       },
       {
         event_id: 'nearby-event-2',
-        title: 'Otro evento local',
+        title: 'Another local event',
         category: '☕️',
-        description: 'Café y charla en el barrio',
+        description: 'Coffee and chat in the neighborhood',
         start_date: Date.now() + 172800000,
         end_date: Date.now() + 176400000,
         coordinates: { lat: coordinates.lat - 0.002, lng: coordinates.lng + 0.002 },

@@ -148,7 +148,7 @@ export default {
     },
     enableLocation() {
       const self = this
-      console.log('Obteniendo ubicacion por primera vez')
+      console.log('Getting location for the first time')
       navigator.geolocation.getCurrentPosition(
         function (position) {
           console.log('GET CURRENT POSITION')

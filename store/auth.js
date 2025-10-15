@@ -19,7 +19,7 @@ const defaultPortal = {
   score: null,
   shared: 0,
   src: "",
-  text: "Esto es un post por defecto, cambiar por un video",
+  text: "This is a default post, change to a video",
   type: "short",
   info: true,
   url: null,
@@ -33,7 +33,7 @@ const demoUser = {
   name: 'Demo User',
   email: 'demo@olimaps.com',
   profile_picture: 'https://picsum.photos/200/200?random=1',
-  description: '¡Hola! Soy un usuario demo de Olimaps. Me encanta explorar la ciudad y conocer gente nueva.',
+  description: 'Hello! I am a demo user of Olimaps. I love exploring the city and meeting new people.',
   followers: 142,
   following: 89,
   isFollowing: false,
@@ -41,8 +41,8 @@ const demoUser = {
     {
       id: 1,
       type: 'like',
-      title: 'Nuevo me gusta',
-      text: 'A alguien le gustó tu post',
+      title: 'New like',
+      text: 'Someone liked your post',
       image: 'https://picsum.photos/50/50?random=2',
       read: false,
       created_at: Date.now() - 3600000
@@ -50,8 +50,8 @@ const demoUser = {
     {
       id: 2,
       type: 'follow',
-      title: 'Nuevo seguidor',
-      text: 'Tienes un nuevo seguidor',
+      title: 'New follower',
+      text: 'You have a new follower',
       image: 'https://picsum.photos/50/50?random=3',
       read: false,
       created_at: Date.now() - 7200000
@@ -61,7 +61,7 @@ const demoUser = {
     {
       event: {
         event_id: 'event-1',
-        title: 'Quedada en el parque',
+        title: 'Meetup at the park',
         emoji: '🌳',
         start_date: new Date(Date.now() + 86400000).toISOString(),
         end_date: new Date(Date.now() + 86400000 + 3600000).toISOString()
@@ -71,7 +71,7 @@ const demoUser = {
     {
       event: {
         event_id: 'event-2', 
-        title: 'Concierto en la plaza',
+        title: 'Concert at the square',
         emoji: '🎵',
         start_date: new Date(Date.now() + 172800000).toISOString(),
         end_date: new Date(Date.now() + 172800000 + 7200000).toISOString()
@@ -87,7 +87,7 @@ const demoUser = {
     {
       chat: {
         chat_id: 'group-1',
-        title: 'Grupo Demo',
+        title: 'Demo Group',
         cover: 'https://picsum.photos/100/100?random=4'
       }
     }
@@ -116,7 +116,7 @@ export const state = () => ({
       score: null,
       shared: 8,
       src: "https://picsum.photos/400/600?random=200",
-      text: "¡Increíble atardecer desde el Templo de Debod!",
+      text: "Amazing sunset from the Temple of Debod!",
       type: "image",
       info: false,
       url: null,
@@ -138,7 +138,7 @@ export const state = () => ({
       score: null,
       shared: 3,
       src: "",
-      text: "Probando las nuevas funciones de Olimaps. ¡Me encanta esta app!",
+      text: "Testing the new Olimaps features. I love this app!",
       type: "short",
       info: false,
       url: null,
@@ -160,7 +160,7 @@ export const state = () => ({
       score: null,
       shared: 6,
       src: "https://picsum.photos/400/300?random=201",
-      text: "Comida deliciosa en el Mercado de San Miguel",
+      text: "Delicious food at San Miguel Market",
       type: "image",
       info: false,
       url: null,
@@ -292,7 +292,7 @@ export const actions = {
         score: null,
         shared: 5,
         src: "https://picsum.photos/400/600?random=20",
-        text: "¡Qué día tan bonito en Madrid!",
+        text: "What a beautiful day in Madrid!",
         type: "image",
         info: false,
         url: null,
@@ -314,7 +314,7 @@ export const actions = {
         score: null,
         shared: 2,
         src: "",
-        text: "Probando la nueva funcionalidad de Olimaps",
+        text: "Testing the new Olimaps functionality",
         type: "short",
         info: false,
         url: null,
@@ -336,7 +336,7 @@ export const actions = {
         score: null,
         shared: 12,
         src: "https://picsum.photos/400/600?random=21",
-        text: "Arte urbano increíble en Malasaña",
+        text: "Incredible street art in Malasaña",
         type: "image",
         info: false,
         url: null,

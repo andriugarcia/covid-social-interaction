@@ -18,7 +18,7 @@ export const actions = {
       username: username,
       name: username.charAt(0).toUpperCase() + username.slice(1),
       profile_picture: 'https://picsum.photos/200/200?random=' + (username.length * 10),
-      description: 'Usuario demo de Olimaps. Me encanta explorar la ciudad y conocer gente nueva.',
+      description: 'Demo user of Olimaps. I love exploring the city and meeting new people.',
       followers: Math.floor(Math.random() * 200) + 50,
       following: Math.floor(Math.random() * 150) + 20,
       isFollowing: Math.random() > 0.5,
@@ -30,7 +30,7 @@ export const actions = {
         {
           chat: {
             chat_id: 'group-demo-' + username,
-            title: 'Grupo de ' + username,
+            title: 'Group of ' + username,
             cover: 'https://picsum.photos/100/100?random=' + (username.length * 5)
           }
         }
@@ -38,7 +38,7 @@ export const actions = {
       post: [
         {
           post_id: 'user-post-1-' + username,
-          text: 'Mi primer post demo',
+          text: 'My first demo post',
           type: 'image',
           src: 'https://picsum.photos/400/600?random=' + (username.length * 15),
           likes: Math.floor(Math.random() * 50) + 5,
@@ -46,7 +46,7 @@ export const actions = {
         },
         {
           post_id: 'user-post-2-' + username,
-          text: 'Otro post interesante',
+          text: 'Another interesting post',
           type: 'short',
           src: '',
           likes: Math.floor(Math.random() * 30) + 2,
@@ -56,7 +56,7 @@ export const actions = {
       event: [
         {
           event_id: 'user-event-1-' + username,
-          title: 'Evento organizado por ' + username,
+          title: 'Event organized by ' + username,
           category: '🎉',
           start_date: Date.now() + 86400000,
           participants: Math.floor(Math.random() * 20) + 3
@@ -72,8 +72,8 @@ export const actions = {
       {
         id: 'notif-1',
         type: 'like',
-        title: 'Nuevo me gusta',
-        text: 'A alguien le gustó tu post',
+        title: 'New like',
+        text: 'Someone liked your post',
         image: 'https://picsum.photos/50/50?random=300',
         read: false,
         created_at: Date.now() - 3600000
@@ -81,8 +81,8 @@ export const actions = {
       {
         id: 'notif-2',
         type: 'follow',
-        title: 'Nuevo seguidor',
-        text: 'Tienes un nuevo seguidor',
+        title: 'New follower',
+        text: 'You have a new follower',
         image: 'https://picsum.photos/50/50?random=301',
         read: true,
         created_at: Date.now() - 7200000
@@ -90,8 +90,8 @@ export const actions = {
       {
         id: 'notif-3',
         type: 'event',
-        title: 'Nuevo evento',
-        text: 'Hay un evento cerca de ti',
+        title: 'New event',
+        text: 'There is an event near you',
         image: 'https://picsum.photos/50/50?random=302',
         read: false,
         created_at: Date.now() - 10800000
@@ -143,7 +143,7 @@ export const actions = {
         name: 'Madrid Explorer',
         profile_picture: 'https://picsum.photos/50/50?random=320',
         followers: 128,
-        description: 'Explorador urbano de Madrid'
+        description: 'Urban explorer of Madrid'
       },
       {
         profile_id: 'person-2',
@@ -151,7 +151,7 @@ export const actions = {
         name: 'Art Lover',
         profile_picture: 'https://picsum.photos/50/50?random=321',
         followers: 95,
-        description: 'Amante del arte y la cultura'
+        description: 'Art and culture lover'
       },
       {
         profile_id: 'person-3',
@@ -159,7 +159,7 @@ export const actions = {
         name: 'Food Blogger',
         profile_picture: 'https://picsum.photos/50/50?random=322',
         followers: 203,
-        description: 'Blogger gastronómico'
+        description: 'Food blogger'
       },
       {
         profile_id: 'person-4',
@@ -167,7 +167,7 @@ export const actions = {
         name: 'Music Fan',
         profile_picture: 'https://picsum.photos/50/50?random=323',
         followers: 76,
-        description: 'Melómano y asistente a conciertos'
+        description: 'Music lover and concert attendee'
       }
     ]
     

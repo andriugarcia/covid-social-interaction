@@ -8,7 +8,7 @@
   )
     v-btn(icon, @click='$emit("back")')
       v-icon fas fa-arrow-left
-    span Nuevo Grupo
+    span New Group
   v-sheet.pt-12.pa-4(v-if='step == 1', color='white', style='height: 100%')
     v-text-field.mt-6(filled, dense, placeholder='Buscar Contactos')
     v-layout(wrap)
@@ -50,19 +50,19 @@
     v-layout.py-6(align-center)
       avatar-input(@update='updateCover')
       v-text-field(
-        placeholder='Nombre del grupo',
+        placeholder='Group name',
         autofocus,
         v-model='group.title'
       )
-    .overline DESCRIPCIÓN
+    .overline DESCRIPTION
     v-textarea(
-      placeholder='Descripción del grupo',
+      placeholder='Group description',
       autogrow,
       :rows='1',
       v-model='group.description'
     )
-    .overline UBICACIÓN (opcional)
-    p La Ubicación hará visible el grupo a las personas que estén cerca
+    .overline LOCATION (optional)
+    p The location will make the group visible to people who are nearby
     v-dialog(
       v-model='locationSelectorOpened',
       fullscreen,
@@ -71,7 +71,7 @@
     )
       template(v-slot:activator='{ on, attrs }')
         v-text-field(
-          label='Ubicación',
+          label='Location',
           :value='group.coordinates != null ? group.coordinates.lat.toFixed(4) + ". " + group.coordinates.lng.toFixed(4) : ""',
           v-on='on',
           readonly,
@@ -89,7 +89,7 @@
     //-   v-icon.mr-2 fas fa-info-circle
     //-   p Los canales permiten comunicarnos con los miembros sin que ellos puedan contestar
     v-layout(justify-space-between)
-      .overline MIEMBROS
+      .overline MEMBERS
       v-chip {{ count }}
     v-list(color='white')
       v-list-item(v-for='(participant, i) in members', :key='i')

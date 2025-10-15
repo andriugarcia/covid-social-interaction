@@ -3,13 +3,13 @@
   v-toolbar(color='primary', dark, flat, absolute, style='left: 0; right: 0')
     v-btn(icon, @click='$router.replace({ path: "/" })')
       v-icon fas fa-arrow-left
-    v-toolbar-title Actividad
+    v-toolbar-title Activity
   .pt-15(ref='scrollarea', style='height: 100vh; overflow-y: scroll')
     v-list(color='white', style='min-height: 100%')
       push-alert(inline)
       v-layout(v-if='notifications.length == 0', align-center, column)
         img(src='@/assets/no-mail.png', style='height: 200px')
-        p.text-center Interactua con otros usuarios para recibir notificaciones
+        p.text-center Interact with other users to receive notifications
       div(v-for='(notification, i) in notifications', :key='i')
         v-subheader(
           v-if='i == 0 || !hasSameDay(notifications[i - 1], notification)',
@@ -35,7 +35,7 @@ import date from '@/mixins/date'
 
 export default {
   head: {
-    title: 'Actividad | Olimaps',
+    title: 'Activity | Olimaps',
   },
   mixins: [iconNotificationMixin, date],
   components: {

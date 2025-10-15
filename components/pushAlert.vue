@@ -10,9 +10,9 @@
   ) 
     v-row(align='center')
       v-col.grow
-        span Activa las notificaciones para recibir mensajes
+        span Enable notifications to receive messages
       v-col.shrink
-        v-btn.ml-2(small, depressed, color='primary') Activar
+        v-btn.ml-2(small, depressed, color='primary') Enable
   v-card.pa-6.text-center.pointer.rounded-xl(
     v-else,
     color='primary lighten-5',
@@ -21,8 +21,8 @@
   )
     v-scale-transition
       v-icon(color='primary', size='64') fas fa-bell
-    .mt-4 Activa las notificaciones para avisarte de los mensajes
-    v-btn.ml-2.mt-4(depressed, color='primary') Activar
+    .mt-4 Enable notifications to notify you of messages
+    v-btn.ml-2.mt-4(depressed, color='primary') Enable
 </template>
 
 <script>

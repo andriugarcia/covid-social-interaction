@@ -156,7 +156,7 @@ v-sheet#contacts(
                       )
               v-list-item-content
                 v-list-item-title.font-weight-bold {{ chat.title }}
-                v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} miembros
+                v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} members
       v-tab-item(key='close', style='height: 100%; width: 100%')
         v-card.ma-2.rounded-xl(v-if='!userPosition', outlined)
           v-layout.pa-6.text-center(
@@ -190,7 +190,7 @@ v-sheet#contacts(
                     v-progress-circular(indeterminate, color='primary')
             v-list-item-content
               v-list-item-title.font-weight-bold {{ chat.title }}
-              v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} miembros
+              v-list-item-subtitle a {{ haversineDistance([userPosition.lat, userPosition.lng], [chat.coordinates.lat, chat.coordinates.lng]) }}km, {{ chat.members }} members
             v-list-item-action
               //- v-chip(v-if="chat.unread != 0", color="primary") {{ chat.unread }}
 create-group(v-else-if='newGroup', @back='newGroup = false')

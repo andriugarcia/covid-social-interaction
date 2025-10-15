@@ -130,7 +130,7 @@ export const actions = {
     // Demo mode - simulate nearby messages
     const demoNearbyMessages = [
       {
-        text: "¡Hola! ¿Alguien por aquí?",
+        text: "Hello! Anyone around here?",
         type: "text",
         created_at: Date.now() - 300000,
         profile: {
@@ -140,7 +140,7 @@ export const actions = {
         author: "nearby-user-1"
       },
       {
-        text: "Qué bonito día para salir",
+        text: "What a beautiful day to go out",
         type: "text", 
         created_at: Date.now() - 600000,
         profile: {
@@ -175,7 +175,7 @@ export const actions = {
         unread: 0,
         chat: {
           type: 'chat',
-          title: 'Chat con Ana',
+          title: 'Chat with Ana',
           cover: null,
           member: [
             {
@@ -196,7 +196,7 @@ export const actions = {
           message_chatTomessage_channel: [
             {
               message_id: 'msg-1',
-              text: '¡Hola! ¿Cómo estás?',
+              text: 'Hello! How are you?',
               type: 'text',
               created_at: Date.now() - 3600000,
               author: 'user-ana'
@@ -209,9 +209,9 @@ export const actions = {
         unread: 2,
         chat: {
           type: 'group',
-          title: 'Grupo Demo Madrid',
+          title: 'Demo Group Madrid',
           cover: 'https://picsum.photos/100/100?random=40',
-          description: 'Un grupo demo para explorar Madrid',
+          description: 'A demo group to explore Madrid',
           coordinates: { lat: 40.4168, lng: -3.7038 },
           member: [
             {
@@ -242,14 +242,14 @@ export const actions = {
           message_chatTomessage_channel: [
             {
               message_id: 'msg-group-1',
-              text: '¿Quedamos este fin de semana?',
+              text: 'Shall we meet this weekend?',
               type: 'text',
               created_at: Date.now() - 1800000,
               author: 'user-ana'
             },
             {
               message_id: 'msg-group-2',
-              text: '¡Perfecto! Yo me apunto',
+              text: 'Perfect! I\'m in',
               type: 'text',
               created_at: Date.now() - 900000,
               author: 'user-carlos'
@@ -267,16 +267,16 @@ export const actions = {
     const demoGroups = [
       {
         chat_id: 'search-group-1',
-        title: 'Explorar Madrid Centro',
+        title: 'Explore Madrid Center',
         cover: 'https://picsum.photos/100/100?random=60',
-        description: 'Grupo para explorar el centro de Madrid',
+        description: 'Group to explore Madrid center',
         member_count: 25
       },
       {
         chat_id: 'search-group-2', 
-        title: 'Fotógrafos Madrid',
+        title: 'Madrid Photographers',
         cover: 'https://picsum.photos/100/100?random=61',
-        description: 'Comunidad de fotógrafos en Madrid',
+        description: 'Community of photographers in Madrid',
         member_count: 42
       }
     ]
@@ -291,14 +291,14 @@ export const actions = {
     const demoCloseChats = [
       {
         chat_id: 'close-group-1',
-        title: 'Grupo Retiro',
+        title: 'Retiro Group',
         cover: 'https://picsum.photos/100/100?random=70',
         distance: '0.5 km',
         member_count: 15
       },
       {
         chat_id: 'close-group-2',
-        title: 'Quedadas Sol',
+        title: 'Sol Meetups',
         cover: 'https://picsum.photos/100/100?random=71', 
         distance: '1.2 km',
         member_count: 28
@@ -335,14 +335,14 @@ export const actions = {
     const demoMessages = [
       {
         message_id: 'demo-msg-1',
-        text: 'Hola, ¿cómo estás?',
+        text: 'Hello, how are you?',
         type: 'text',
         created_at: Date.now() - 3600000,
         author: 'user-other'
       },
       {
         message_id: 'demo-msg-2',
-        text: '¡Muy bien! ¿Y tú?',
+        text: 'Very well! And you?',
         type: 'text',
         created_at: Date.now() - 3000000,
         author: 'demo-user-123'
@@ -365,10 +365,10 @@ export const actions = {
     return [
       {
         event_id: 'group-event-1',
-        title: 'Evento del Grupo',
+        title: 'Group Event',
         category: '🎉',
         date: Date.now() + 86400000,
-        description: 'Un evento organizado por el grupo'
+        description: 'An event organized by the group'
       }
     ]
   },
@@ -377,7 +377,7 @@ export const actions = {
     return [
       {
         post_id: 'group-post-1',
-        text: 'Post del grupo',
+        text: 'Group post',
         type: 'text',
         created_at: Date.now() - 3600000,
         likes: 5
@@ -400,9 +400,9 @@ export const actions = {
     const demoGroup = {
       chat_id: groupId,
       type: 'group',
-      title: 'Grupo Demo',
+      title: 'Demo Group',
       cover: 'https://picsum.photos/100/100?random=40',
-      description: 'Un grupo demo',
+      description: 'A demo group',
       coordinates: { lat: 40.4168, lng: -3.7038 },
       member: [
         {
@@ -423,7 +423,7 @@ export const actions = {
     const demoMessages = [
       {
         message_id: 'group-msg-1',
-        text: 'Mensaje del grupo',
+        text: 'Group message',
         type: 'text',
         created_at: Date.now() - 3600000,
         author: 'demo-user-123'
@@ -437,7 +437,7 @@ export const actions = {
     // Return demo group for map
     return {
       chat_id: groupId,
-      title: 'Grupo Demo',
+      title: 'Demo Group',
       coordinates: { lat: 40.4168, lng: -3.7038 },
       member_count: 5
     }
@@ -476,7 +476,7 @@ export const actions = {
     const demoMessages = [
       {
         message_id: 'old-msg-1',
-        text: 'Mensaje anterior',
+        text: 'Previous message',
         type: 'text',
         created_at: Date.now() - 86400000,
         author: 'user-other'

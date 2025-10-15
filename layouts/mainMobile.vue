@@ -6,10 +6,10 @@
   )
   v-chip(v-if='authenticated && user.email && !user.verified', small, @click='sendConfirmationEmail', style='position: fixed; right: 18px; top: 84px;') 
     v-icon(x-small) fas fa-info-circle
-    span.ml-1 Email no verificado
+    span.ml-1 Email not verified
   v-chip(v-else-if='authenticated && !user.description && user.rrss.length == 0', small, @click='$router.push({path: `/${user.username}#edit`})', style='position: fixed; right: 18px; top: 84px;') 
     v-icon(x-small) fas fa-info-circle
-    span.ml-1 Completa tu cuenta
+    span.ml-1 Complete your account
   v-layout.pa-4(
     style='position: fixed; top: 0px; right: 0; left: 0',
     align-center,
@@ -33,9 +33,9 @@
             v-img(:src='user.profile_picture')
       v-card(outlined)
         v-list
-          v-list-item(@click='$router.push({ path: "/" + user.username })') Mi perfil
-          v-list-item(@click='$router.push({ path: "/saved" })') Post Guardados
-          v-list-item(@click='logout') Cerrar Sesión
+          v-list-item(@click='$router.push({ path: "/" + user.username })') My profile
+          v-list-item(@click='$router.push({ path: "/saved" })') Saved Posts
+          v-list-item(@click='logout') Sign out
     v-btn(
       v-else,
       depressed,
@@ -44,7 +44,7 @@
       @click='$router.push({ path: "/signup" })'
     )
       v-icon.mr-2(small) fas fa-user
-      span.text-capitalize Crear Cuenta
+      span.text-capitalize Create Account
 
   div(style='position: fixed; bottom: 0; left: 0; right: 0')
     portals.pl-2.pb-2
@@ -59,7 +59,7 @@
         )
           div
             v-icon.pa-1(color='black', style='display: block') fas fa-flag
-            span(style='font-size: 0.7em') EVENTOS
+            span(style='font-size: 0.7em') EVENTS
         v-flex.mx-2.rounded-lg.text-center(
           depressed,
           @click='openSearch',
@@ -69,7 +69,7 @@
         )
           div
             v-icon.pa-1(color='black', style='display: block') fas fa-search
-            span(style='font-size: 0.7em') BUSCAR
+            span(style='font-size: 0.7em') SEARCH
         v-btn(fab, depressed, color='primary', @click='openEditor')
           v-icon.white--text fas fa-plus
         v-flex.mx-2.rounded-lg.text-center(
@@ -86,7 +86,7 @@
             :content='formatNumber(totalNotifications)'
           )
             v-icon.pa-1(color='black', style='display: block') fas fa-bell
-            span(style='font-size: 0.7em') ACTIVIDAD
+            span(style='font-size: 0.7em') ACTIVITY
         v-flex.mx-2.rounded-lg.text-center(
           depressed,
           @click='openChat',
@@ -111,9 +111,9 @@
     v-model='confirmationSent'
   )
     v-card.pa-2
-      v-subheader Email enviado
-      span Te hemos envíado un email para poder confirmar tu cuenta
-      v-btn(block, color='primary', tile, @click='confirmationSent = false') Cerrar
+      v-subheader Email sent
+      span We have sent you an email to confirm your account
+      v-btn(block, color='primary', tile, @click='confirmationSent = false') Close
   v-dialog(
     v-model='placeOpened',
     fullscreen,
@@ -227,7 +227,7 @@ export default {
     },
     updatePosition(position) {
       console.log(
-        '%cActualizando posicion',
+        '%cUpdating position',
         'background-color: red; color: white'
       )
       const coordinates = {
@@ -236,7 +236,7 @@ export default {
         direction: position.heading,
       }
 
-      console.log('%cPrimera vez', 'background-color: orange; color: white')
+      console.log('%cFirst time', 'background-color: orange; color: white')
       this.$store.commit('map/setZoom', 14)
       this.$store.commit('map/setMapPosition', coordinates)
       this.$store.commit('map/jumpTo', coordinates)

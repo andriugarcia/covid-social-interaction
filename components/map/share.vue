@@ -1,6 +1,6 @@
 <template lang="pug">
 v-card.pa-4(color='primary', dark)
-  .font-weight-bold(style='font-size: 2em') Compartir
+  .font-weight-bold(style='font-size: 2em') Share
   v-layout.py-3(style='overflow-x: scroll')
     v-card.mr-2.pa-2.rounded-lg.text-center(
       flat,
@@ -26,7 +26,7 @@ v-card.pa-4(color='primary', dark)
       @click='openShare'
     )
       v-icon.mb-2(style='display: block; width: 80px') fas fa-ellipsis-h
-      span Más
+      span More
   v-text-field.mt-2(
     v-model='textFilter',
     hide-details,
