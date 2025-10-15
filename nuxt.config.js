@@ -47,7 +47,7 @@ export default {
     SOCKET_URL: process.env.SOCKET_URL || 'wss://demo-socket.olimaps.com',
     ELASTIC_URL: process.env.ELASTIC_URL || 'https://demo-elastic.olimaps.com',
     ELASTICSEARCH: process.env.ELASTICSEARCH || 'false',
-    MAPBOX_TOKEN: process.env.MAPBOX_TOKEN || 'pk.eyJ1IjoiZGVtb3VzZXIiLCJhIjoiY2tsMXExNHlrMDl4eDJ2czI2d2l3NzM4MCJ9.demo_token_placeholder',
+    MAPBOX_TOKEN: process.env.MAPBOX_TOKEN,
   },
 
   vue: {
