@@ -95,12 +95,13 @@ export default {
         proximity = `&proximity=${this.userPosition.lng},${this.userPosition.lat}`
       }
 
-      const [{ data: places }, { data: users }] = await Promise.all([
+      const [{ data: places }, users] = await Promise.all([
         axios.get(
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${this.searchText}.json?autocomplete=true&access_token=${process.env.MAPBOX_TOKEN}${proximity}`,
           { withCredentials: false }
         ),
-        axios.get(`${process.env.SERVER_URL}/users/find/${this.searchText}`),
+        // Use store action for demo users instead of direct API call
+        this.$store.dispatch('user/findUsers', this.searchText),
       ])
 
       this.users = users

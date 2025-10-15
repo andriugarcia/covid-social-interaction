@@ -1,9 +1,9 @@
 export const state = () => ({
-  userPosition: null,
+  userPosition: { lat: 40.4168, lng: -3.7038 }, // Default to Madrid for demo
   userDirection: null,
-  mapPosition: { lat: 40, lng: -5 },
-  locationEnabled: false,
-  zoom: 2,
+  mapPosition: { lat: 40.4168, lng: -3.7038 }, // Default to Madrid
+  locationEnabled: true, // Always enabled in demo mode
+  zoom: 14,
   eventActions: null,
 })
 

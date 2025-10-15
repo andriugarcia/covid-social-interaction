@@ -26,15 +26,79 @@ const defaultPortal = {
   username: "olimaps"
 }
 
+// Hardcoded demo user data
+const demoUser = {
+  profile_id: 'demo-user-123',
+  username: 'demo_user',
+  name: 'Demo User',
+  email: 'demo@olimaps.com',
+  profile_picture: 'https://picsum.photos/200/200?random=1',
+  description: '¡Hola! Soy un usuario demo de Olimaps. Me encanta explorar la ciudad y conocer gente nueva.',
+  followers: 142,
+  following: 89,
+  isFollowing: false,
+  notifications: [
+    {
+      id: 1,
+      type: 'like',
+      title: 'Nuevo me gusta',
+      text: 'A alguien le gustó tu post',
+      image: 'https://picsum.photos/50/50?random=2',
+      read: false,
+      created_at: Date.now() - 3600000
+    },
+    {
+      id: 2,
+      type: 'follow',
+      title: 'Nuevo seguidor',
+      text: 'Tienes un nuevo seguidor',
+      image: 'https://picsum.photos/50/50?random=3',
+      read: false,
+      created_at: Date.now() - 7200000
+    }
+  ],
+  participation: [
+    {
+      event_id: 'event-1',
+      title: 'Quedada en el parque',
+      category: '🌳',
+      date: Date.now() + 86400000,
+      confirmed: true
+    },
+    {
+      event_id: 'event-2', 
+      title: 'Concierto en la plaza',
+      category: '🎵',
+      date: Date.now() + 172800000,
+      confirmed: true
+    }
+  ],
+  rrss: [
+    { type: 'instagram', name: 'demo_user_ig' },
+    { type: 'twitter', name: 'demo_user_tw' }
+  ],
+  groups: [
+    {
+      chat: {
+        chat_id: 'group-1',
+        title: 'Grupo Demo',
+        cover: 'https://picsum.photos/100/100?random=4'
+      }
+    }
+  ],
+  post: [],
+  event: []
+}
+
 export const state = () => ({
-  user: {},
+  user: demoUser,
   portals: [
     defaultPortal,
   ],
   newNotification: null,
   pushEnabled: false,
   pushAvailable: false,
-  logChecked: false,
+  logChecked: true,
 })
 
 export const mutations = {
@@ -94,231 +158,107 @@ export const getters = {
 }
 
 export const actions = {
-  async checkLogged({ state, dispatch }) {
-    if (state.logChecked) return
-    const token = localStorage.getItem('token')
-    if (token) {
-      axios.defaults.headers.common.authorization = 'Bearer ' + token
-    }
-
-    try {
-      state.logChecked = true
-      return await dispatch('getMe')
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+  async checkLogged({ state }) {
+    // Always return true since we have a hardcoded user
+    return true
   },
   initAuthError({ dispatch }, router) {
-    axios.interceptors.response.use(
-      (response) => {
-        return response
-      },
-      function (error) {
-        if (error.response.status === 405) {
-          dispatch('logout')
-          router.replace({ path: '/' })
-        }
-        return Promise.reject(error)
-      }
-    )
+    // No auth errors in demo mode
   },
   logout({ commit }) {
-    delete axios.defaults.headers.common.authorization
-    localStorage.removeItem('token')
-    // localStorage.removeItem('pushToken')
-    commit('setPushEnabled', false)
-    commit('setUser', {})
-    commit('setPortals', [])
-    axios.get(`${process.env.SERVER_URL}/logout`)
-    this.app.$fire.analytics.logEvent('logout')
+    // In demo mode, just refresh the page to "logout"
+    window.location.reload()
   },
-  async login({ dispatch }, body) {
-
-    try {
-      const { data: token } = await axios.post(
-        `${process.env.SERVER_URL}/login`,
-        body
-      )
-      axios.defaults.headers.common.authorization = 'Bearer ' + token
-      localStorage.setItem('token', token)
-      this.app.$fire.analytics.logEvent('login', {
-        method: 'Email'
-      })
-      return await dispatch('getMe')
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+  async login() {
+    // Always succeed in demo mode
+    return true
   },
   async sendConfirmationEmail() {
-    try {
-      await axios.post(
-        `${process.env.SERVER_URL}/user/sendConfirmationEmail`,
-      )
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async verifyUser() {
-    try {
-      await axios.post(
-        `${process.env.SERVER_URL}/user/verify`,
-      )
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
-  async recoverPassword(_, email) {
-    try {
-      await axios.post(
-        `${process.env.SERVER_URL}/user/recoverPassword/${email}`,
-      )
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+  async recoverPassword() {
+    // Demo mode - always succeed
+    return true
   },
-  async loginPhone({ dispatch }, body) {
-
-    try {
-      const { data: token } = await axios.post(
-        `${process.env.SERVER_URL}/login/phone`,
-        body
-      )
-      axios.defaults.headers.common.authorization = 'Bearer ' + token
-      localStorage.setItem('token', token)
-      this.app.$fire.analytics.logEvent('login', {
-        method: 'Phone'
-      })
-      return await dispatch('getMe')
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+  async loginPhone() {
+    // Demo mode - always succeed
+    return true
   },
-
-  async signupByPhone({ dispatch }, body) {
-    try {
-      const { data: token } = await axios.post(
-        `${process.env.SERVER_URL}/signup/phone`,
-        body
-      )
-
-
-      axios.defaults.headers.common.authorization = 'Bearer ' + token
-      localStorage.setItem('token', token)
-      this.app.$fire.analytics.logEvent('sign_up', {
-        method: 'Phone'
-      })
-      return await dispatch('getMe')
-    } catch (err) {
-      console.error(err)
-      throw new Error(err)
-    }
+  async signupByPhone() {
+    // Demo mode - always succeed
+    return true
   },
-  async signupByEmail({ dispatch }, body) {
-    try {
-      const { data: token } = await axios.post(
-        `${process.env.SERVER_URL}/signup/email`,
-        body
-      )
-
-
-      axios.defaults.headers.common.authorization = 'Bearer ' + token
-      localStorage.setItem('token', token)
-      this.app.$fire.analytics.logEvent('sign_up', {
-        method: 'Email'
-      })
-      return await dispatch('getMe')
-    } catch (err) {
-      console.error(err)
-      throw new Error(err)
-    }
+  async signupByEmail() {
+    // Demo mode - always succeed
+    return true
   },
-  async signup({ dispatch }, body) {
-    try {
-      const { data: token } = await axios.post(
-        `${process.env.SERVER_URL}/signup`,
-        body
-      )
-
-      axios.defaults.headers.common.authorization = 'Bearer ' + token
-      localStorage.setItem('token', token)
-      this.app.$fire.analytics.logEvent('sign_up', {
-        method: 'Email'
-      })
-      return await dispatch('getMe')
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+  async signup() {
+    // Demo mode - always succeed
+    return true
   },
-  async getPortals({ commit }, page) {
-    try {
-      const { data } = await axios.get(`${process.env.SERVER_URL}/portals/${page}`)
-
-
-      commit('setPortals', data)
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+  async getPortals({ commit }) {
+    // Return hardcoded portals
+    const demoPortals = [
+      {
+        audience: 50,
+        coordinates: { lat: 40.4168, lng: -3.7038 },
+        created_at: Date.now() - 3600000,
+        event: null,
+        is_liked: false,
+        is_saved: false,
+        likes: 15,
+        opened: 120,
+        permanent: false,
+        post_id: 'post-1',
+        profile_id: 'user-2',
+        profile_picture: "https://picsum.photos/200/200?random=10",
+        score: null,
+        shared: 5,
+        src: "https://picsum.photos/400/600?random=20",
+        text: "¡Qué día tan bonito en Madrid!",
+        type: "image",
+        info: false,
+        url: null,
+        username: "madrid_lover"
+      },
+      {
+        audience: 35,
+        coordinates: { lat: 40.4200, lng: -3.7100 },
+        created_at: Date.now() - 7200000,
+        event: null,
+        is_liked: true,
+        is_saved: false,
+        likes: 8,
+        opened: 85,
+        permanent: false,
+        post_id: 'post-2',
+        profile_id: 'user-3',
+        profile_picture: "https://picsum.photos/200/200?random=11",
+        score: null,
+        shared: 2,
+        src: "",
+        text: "Probando la nueva funcionalidad de Olimaps",
+        type: "short",
+        info: false,
+        url: null,
+        username: "tech_explorer"
+      }
+    ]
+    commit('setPortals', demoPortals)
+    return true
   },
-  async updatePassword(_, password) {
-    try {
-      await axios.post(`${process.env.SERVER_URL}/user/updatePassword`, { password })
-      this.app.$fire.analytics.logEvent('updatePassword')
-      return true
-    } catch (err) {
-      console.error(err)
-      throw new Error(err)
-    }
-
+  async updatePassword() {
+    // Demo mode - always succeed
+    return true
   },
   async getMe({ state, commit, dispatch }) {
-    console.log(process.env.SERVER_URL);
-    try {
-      const { data: user } = await axios.get(
-        `${process.env.SERVER_URL}/user/me`
-      )
-      commit('setUser', user)
-
-      dispatch('chat/getChats', {}, { root: true })
-      if (state.portals.length <= 1) {
-        dispatch('getPortals')
-      }
-
-      // socket.emit('join', {
-      //   profile_id: user.profile_id,
-      // })
-
-      socket.on('chatnotification', (message) => {
-        console.log('IN APP CHAT MESSAGE', message)
-        commit('chat/chatNotification', message, { root: true })
-        commit('setNotification', {
-          type: 'chat', image: message.profile.profile_picture, title: message.profile.username, text: message.text,
-          link: '/chat/' + message.channel
-        })
-      })
-
-      socket.on('notification', (notification) => {
-        console.log('IN APP NOTIFICATION', notification)
-        commit('setNotification', notification)
-      })
-
-
-
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // User is already set in state, just trigger related actions
+    dispatch('chat/getChats', {}, { root: true })
+    return true
   },
 }

@@ -122,47 +122,44 @@ export const mutations = {
 
 export const actions = {
   async share({ commit }, shareContent) {
-    try {
-      await axios.post(`${process.env.SERVER_URL}/group/share/${shareContent.chat}`, {
-        targets: shareContent.targets,
-      })
-      commit('setShareCreated', true, { root: true })
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    commit('setShareCreated', true, { root: true })
+    return true
   },
   joinNearby({ rootState, commit }) {
-
-    socket.emit('join-nearby', {
-      user: rootState.auth.user,
-      coordinates: rootState.map.userPosition,
-    })
-
-    socket.on('message', (message) => {
-
+    // Demo mode - simulate nearby messages
+    const demoNearbyMessages = [
+      {
+        text: "¡Hola! ¿Alguien por aquí?",
+        type: "text",
+        created_at: Date.now() - 300000,
+        profile: {
+          username: "nearby_user1",
+          profile_picture: "https://picsum.photos/50/50?random=50"
+        },
+        author: "nearby-user-1"
+      },
+      {
+        text: "Qué bonito día para salir",
+        type: "text", 
+        created_at: Date.now() - 600000,
+        profile: {
+          username: "nearby_user2",
+          profile_picture: "https://picsum.photos/50/50?random=51"
+        },
+        author: "nearby-user-2"
+      }
+    ]
+    
+    demoNearbyMessages.forEach(message => {
       commit('pushNearbyMessage', message)
-    })
-    socket.on('disconnected', (message) => {
-
-      socket.disconnect()
     })
   },
   updateNearbyPosition({ rootState }) {
-    socket.emit('move', {
-      coordinates: rootState.map.userPosition,
-    })
+    // Demo mode - no action needed
   },
   createNearbyMessage({ commit, rootState }, message) {
-
-    socket.emit('send-nearby', {
-      ...message,
-      coordinates: rootState.map.userPosition,
-      created_at: Date.now(),
-      profile: rootState.auth.user,
-      author: rootState.auth.user.profile_id
-    })
+    // Add message to nearby in demo mode
     commit('pushNearbyMessage', {
       ...message,
       created_at: Date.now(),
@@ -171,281 +168,372 @@ export const actions = {
     })
   },
   async getChats({ commit }) {
-    try {
-      const { data } = await axios.get(`${process.env.SERVER_URL}/chats`)
-      commit('setChats', data)
-
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Return hardcoded demo chats
+    const demoChats = [
+      {
+        chat_id: 'chat-1',
+        unread: 0,
+        chat: {
+          type: 'chat',
+          title: 'Chat con Ana',
+          cover: null,
+          member: [
+            {
+              profile_id: 'demo-user-123',
+              profile: {
+                username: 'demo_user',
+                profile_picture: 'https://picsum.photos/200/200?random=1'
+              }
+            },
+            {
+              profile_id: 'user-ana',
+              profile: {
+                username: 'ana_madrid',
+                profile_picture: 'https://picsum.photos/200/200?random=30'
+              }
+            }
+          ],
+          message_chatTomessage_channel: [
+            {
+              message_id: 'msg-1',
+              text: '¡Hola! ¿Cómo estás?',
+              type: 'text',
+              created_at: Date.now() - 3600000,
+              author: 'user-ana'
+            }
+          ]
+        }
+      },
+      {
+        chat_id: 'group-1',
+        unread: 2,
+        chat: {
+          type: 'group',
+          title: 'Grupo Demo Madrid',
+          cover: 'https://picsum.photos/100/100?random=40',
+          description: 'Un grupo demo para explorar Madrid',
+          coordinates: { lat: 40.4168, lng: -3.7038 },
+          member: [
+            {
+              profile_id: 'demo-user-123',
+              profile: {
+                username: 'demo_user',
+                profile_picture: 'https://picsum.photos/200/200?random=1'
+              },
+              is_creator: true
+            },
+            {
+              profile_id: 'user-ana',
+              profile: {
+                username: 'ana_madrid',
+                profile_picture: 'https://picsum.photos/200/200?random=30'
+              },
+              is_creator: false
+            },
+            {
+              profile_id: 'user-carlos',
+              profile: {
+                username: 'carlos_explore',
+                profile_picture: 'https://picsum.photos/200/200?random=31'
+              },
+              is_creator: false
+            }
+          ],
+          message_chatTomessage_channel: [
+            {
+              message_id: 'msg-group-1',
+              text: '¿Quedamos este fin de semana?',
+              type: 'text',
+              created_at: Date.now() - 1800000,
+              author: 'user-ana'
+            },
+            {
+              message_id: 'msg-group-2',
+              text: '¡Perfecto! Yo me apunto',
+              type: 'text',
+              created_at: Date.now() - 900000,
+              author: 'user-carlos'
+            }
+          ]
+        }
+      }
+    ]
+    
+    commit('setChats', demoChats)
+    return true
   },
   async searchGroups({ rootState }, search) {
-    try {
-      const { data } = await axios.get(
-        `${process.env.SERVER_URL}/chats/search?search=${search}&lat=${rootState.map.userPosition.lat}&lng=${rootState.map.userPosition.lng}`
-      )
-      return data
-    } catch (err) {
-      console.error(err)
-      return []
-    }
+    // Return filtered demo groups based on search
+    const demoGroups = [
+      {
+        chat_id: 'search-group-1',
+        title: 'Explorar Madrid Centro',
+        cover: 'https://picsum.photos/100/100?random=60',
+        description: 'Grupo para explorar el centro de Madrid',
+        member_count: 25
+      },
+      {
+        chat_id: 'search-group-2', 
+        title: 'Fotógrafos Madrid',
+        cover: 'https://picsum.photos/100/100?random=61',
+        description: 'Comunidad de fotógrafos en Madrid',
+        member_count: 42
+      }
+    ]
+    
+    return demoGroups.filter(group => 
+      group.title.toLowerCase().includes(search.toLowerCase()) ||
+      group.description.toLowerCase().includes(search.toLowerCase())
+    )
   },
   async getCloseChats({ commit, rootState }) {
-    try {
-      const { data } = await axios.get(
-        `${process.env.SERVER_URL}/chats/close?lat=${rootState.map.userPosition.lat}&lng=${rootState.map.userPosition.lng}`
-      )
-      commit('setCloseChats', data)
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Return demo nearby chats
+    const demoCloseChats = [
+      {
+        chat_id: 'close-group-1',
+        title: 'Grupo Retiro',
+        cover: 'https://picsum.photos/100/100?random=70',
+        distance: '0.5 km',
+        member_count: 15
+      },
+      {
+        chat_id: 'close-group-2',
+        title: 'Quedadas Sol',
+        cover: 'https://picsum.photos/100/100?random=71', 
+        distance: '1.2 km',
+        member_count: 28
+      }
+    ]
+    
+    commit('setCloseChats', demoCloseChats)
+    return true
   },
   async getChat({ commit }, chatId) {
-    try {
-      const { data } = await axios.get(
-        `${process.env.SERVER_URL}/chat/user/${chatId}`
-      )
-
-      const { messages, chat } = data
-      commit('setMessages', messages)
-      commit('setChat', chat)
-
-    } catch (err) {
-      console.error(err)
-      throw new Error(err)
+    // Return demo chat data
+    const demoChat = {
+      chat_id: chatId,
+      type: 'chat',
+      title: 'Demo Chat',
+      member: [
+        {
+          profile_id: 'demo-user-123',
+          profile: {
+            username: 'demo_user',
+            profile_picture: 'https://picsum.photos/200/200?random=1'
+          }
+        },
+        {
+          profile_id: 'user-other',
+          profile: {
+            username: 'other_user',
+            profile_picture: 'https://picsum.photos/200/200?random=32'
+          }
+        }
+      ]
     }
+    
+    const demoMessages = [
+      {
+        message_id: 'demo-msg-1',
+        text: 'Hola, ¿cómo estás?',
+        type: 'text',
+        created_at: Date.now() - 3600000,
+        author: 'user-other'
+      },
+      {
+        message_id: 'demo-msg-2',
+        text: '¡Muy bien! ¿Y tú?',
+        type: 'text',
+        created_at: Date.now() - 3000000,
+        author: 'demo-user-123'
+      }
+    ]
+    
+    commit('setMessages', demoMessages)
+    commit('setChat', demoChat)
   },
   async muteChat({ commit }, chatId) {
-    try {
-      await axios.get(`${process.env.SERVER_URL}/chat/${chatId}/mute`)
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async unmuteChat({ commit }, chatId) {
-    try {
-      await axios.get(`${process.env.SERVER_URL}/chat/${chatId}/unmute`)
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async getGroupEvents({ commit }, groupId) {
-    try {
-      const { data } = await axios.get(
-        `${process.env.SERVER_URL}/group/${groupId}/events`
-      )
-
-      return data
-    } catch (err) {
-      console.error(err)
-    }
+    // Return demo group events
+    return [
+      {
+        event_id: 'group-event-1',
+        title: 'Evento del Grupo',
+        category: '🎉',
+        date: Date.now() + 86400000,
+        description: 'Un evento organizado por el grupo'
+      }
+    ]
   },
   async getGroupPosts({ commit }, groupId) {
-    try {
-      const { data } = await axios.get(
-        `${process.env.SERVER_URL}/group/${groupId}/posts`
-      )
-
-      return data
-    } catch (err) {
-      console.error(err)
-    }
+    // Return demo group posts
+    return [
+      {
+        post_id: 'group-post-1',
+        text: 'Post del grupo',
+        type: 'text',
+        created_at: Date.now() - 3600000,
+        likes: 5
+      }
+    ]
   },
   async getGroupMedia({ commit }, groupId) {
-    try {
-      const { data } = await axios.get(
-        `${process.env.SERVER_URL}/group/${groupId}/media`
-      )
-
-      return data
-    } catch (err) {
-      console.error(err)
-    }
+    // Return demo group media
+    return [
+      {
+        media_id: 'group-media-1',
+        type: 'image',
+        src: 'https://picsum.photos/400/300?random=80',
+        created_at: Date.now() - 7200000
+      }
+    ]
   },
   async getGroup({ commit, rootState }, groupId) {
-    try {
-      const { data } = await axios.get(
-        `${process.env.SERVER_URL}/group/${groupId}`
-      )
-
-      const { messages, ...chat } = data
-      commit('setMessages', messages)
-      commit('setChat', {
-        ...chat,
-        about: chat.member.find(
-          (member) => member.profile_id === rootState.auth.user.profile_id
-        ),
-      })
-    } catch (err) {
-      console.error(err)
+    // Return demo group data
+    const demoGroup = {
+      chat_id: groupId,
+      type: 'group',
+      title: 'Grupo Demo',
+      cover: 'https://picsum.photos/100/100?random=40',
+      description: 'Un grupo demo',
+      coordinates: { lat: 40.4168, lng: -3.7038 },
+      member: [
+        {
+          profile_id: 'demo-user-123',
+          profile: {
+            username: 'demo_user',
+            profile_picture: 'https://picsum.photos/200/200?random=1'
+          },
+          is_creator: true
+        }
+      ],
+      about: {
+        profile_id: 'demo-user-123',
+        is_creator: true
+      }
     }
+    
+    const demoMessages = [
+      {
+        message_id: 'group-msg-1',
+        text: 'Mensaje del grupo',
+        type: 'text',
+        created_at: Date.now() - 3600000,
+        author: 'demo-user-123'
+      }
+    ]
+    
+    commit('setMessages', demoMessages)
+    commit('setChat', demoGroup)
   },
   async getGroupForMap(_, groupId) {
-    try {
-      const { data } = await axios.get(
-        `${process.env.SERVER_URL}/group/${groupId}`
-      )
-      return data
-    } catch (err) {
-      console.error(err)
-      return {}
+    // Return demo group for map
+    return {
+      chat_id: groupId,
+      title: 'Grupo Demo',
+      coordinates: { lat: 40.4168, lng: -3.7038 },
+      member_count: 5
     }
   },
   async getGroups(_) {
-    try {
-      const { data } = await axios.get(`${process.env.SERVER_URL}/groups`)
-      return data
-    } catch (err) {
-      console.error(err)
-    }
+    // Return demo groups
+    return [
+      {
+        chat_id: 'group-demo-1',
+        title: 'Grupo Demo 1',
+        cover: 'https://picsum.photos/100/100?random=90',
+        member_count: 10
+      },
+      {
+        chat_id: 'group-demo-2',
+        title: 'Grupo Demo 2',
+        cover: 'https://picsum.photos/100/100?random=91',
+        member_count: 15
+      }
+    ]
   },
   async getGroupsAdmin(_) {
-    try {
-      const { data } = await axios.get(`${process.env.SERVER_URL}/groups/admin`)
-      return data
-    } catch (err) {
-      console.error(err)
-    }
+    // Return demo admin groups
+    return [
+      {
+        chat_id: 'admin-group-1',
+        title: 'Grupo Admin Demo',
+        cover: 'https://picsum.photos/100/100?random=95',
+        member_count: 8
+      }
+    ]
   },
   async getMessages({ state, commit }, { chatId }) {
     if (state.allMessagesLoaded) return
-    try {
-      const { data } = await axios.get(
-        `${process.env.SERVER_URL}/chat/messages/${chatId}?cursor=${state.messages[0].message_id}`
-      )
-      commit('setMessages', data)
-    } catch (err) {
-      console.error(err)
-    }
+    // Return demo messages for pagination
+    const demoMessages = [
+      {
+        message_id: 'old-msg-1',
+        text: 'Mensaje anterior',
+        type: 'text',
+        created_at: Date.now() - 86400000,
+        author: 'user-other'
+      }
+    ]
+    commit('setMessages', demoMessages)
   },
   async createMessage({ rootState, commit, dispatch }, message) {
-    try {
-      const { data } = await axios.post(`${process.env.SERVER_URL}/chat/send`, message)
-      if (typeof message.userId !== 'undefined') {
-        dispatch('getChats')
-      } else {
-        commit('pushMessage', {
-          ...message,
-          author: rootState.auth.user.profile_id,
-          created_at: Date.now(),
-        })
-      }
-      this.app.$fire.analytics.logEvent('new_message', {
-        chat_id: message.chat_ref,
-        author: rootState.auth.user.profile_id,
-      })
-      return data
-    } catch (err) {
-      console.error(err)
-      return false
+    // Demo mode - add message locally
+    commit('pushMessage', {
+      ...message,
+      author: rootState.auth.user.profile_id,
+      created_at: Date.now(),
+      message_id: 'new-msg-' + Date.now()
+    })
+    
+    if (typeof message.userId !== 'undefined') {
+      dispatch('getChats')
     }
+    
+    return { message_id: 'new-msg-' + Date.now() }
   },
   async createGroup(_, group) {
-    try {
-      const { data } = await axios.post(`${process.env.SERVER_URL}/group/new`, group)
-      this.app.$fire.analytics.logEvent('new_group', {
-        chat_id: data,
-        name: data.title,
-      })
-      return data
-    } catch (err) {
-      console.error(err)
-      return null
-    }
+    // Demo mode - always succeed
+    const newGroupId = 'new-group-' + Date.now()
+    return { chat_id: newGroupId, title: group.title }
   },
   async joinChat(_, chatId) {
-    try {
-      await axios.post(`${process.env.SERVER_URL}/groups/join/${chatId}`)
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async addParticipants({ state }, participants) {
-    try {
-      await axios.post(`${process.env.SERVER_URL}/chat/${state.chat.chat_id}/addParticipants`, {
-        participants,
-      })
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async removeParticipant(_, { chat_id, profile_id }) {
-    try {
-      await axios.post(`${process.env.SERVER_URL}/chat/${chat_id}/removeParticipant`, {
-        profile_id,
-      })
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async addAdmin(_, { chatId, memberId }) {
-    try {
-      await axios.post(`${process.env.SERVER_URL}/chat/${chatId}/makeAdmin`, {
-        profile_id: memberId,
-      })
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async removeAdmin(_, { chatId, memberId }) {
-    try {
-      await axios.post(`${process.env.SERVER_URL}/chat/${chatId}/removeAdmin`, {
-        profile_id: memberId,
-      }
-      )
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async leaveGroup({ commit }, chatId) {
-    try {
-      await axios.post(`${process.env.SERVER_URL}/chat/${chatId}/leave`)
-      commit('chat/removeChat', chatId)
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async updateCover(_, { chatId, cover }) {
-    try {
-      await axios.post(
-        `${process.env.SERVER_URL}/chat/${chatId}/updateCover`, { cover, }
-      )
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async updateChat(_, { chatId, chat }) {
-    try {
-      await axios.post(
-        `${process.env.SERVER_URL}/chat/${chatId}/updateChat`,
-        chat
-      )
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
 }

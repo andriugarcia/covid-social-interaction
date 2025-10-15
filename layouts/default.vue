@@ -28,7 +28,7 @@ v-app
     v-model='bottomSheetOpened',
     :inset='$vuetify.breakpoint.mdAndUp'
   )
-    login
+    //- Login component removed in demo mode
   v-dialog(:value='newContactsDialog', :width='500')
     new-contacts
   v-snackbar(
@@ -55,14 +55,15 @@ import pushNotificationMixin from '@/mixins/push'
 export default {
   mixins: [iconNotificationMixin, pushNotificationMixin],
   components: {
-    login: () => import('../components/login/login.vue'),
     mainMobile: () => import('../layouts/mainMobile.vue'),
     mainDesktop: () => import('../layouts/mainDesktop.vue'),
     newContacts: () => import('../layouts/newContacts.vue'),
+    // login component removed in demo mode
   },
   async middleware({ app, store }) {
     console.log('MIDDLEWARE')
-    await store.dispatch('auth/checkLogged')
+    // In demo mode, user is always logged in - no need to check
+    // await store.dispatch('auth/checkLogged')
   },
   data: () => ({
     centre: [0, 0],

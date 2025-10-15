@@ -1,4 +1,9 @@
-import io from 'socket.io-client'
-const socket = io(process.env.SOCKET_URL)
+// Demo mode - mock socket for portfolio app
+const mockSocket = {
+  emit: () => {},
+  on: () => {},
+  disconnect: () => {},
+  connected: false
+}
 
-export default socket
+export default mockSocket

@@ -47,8 +47,12 @@
 
 <script>
 import date from '@/mixins/date'
-import io from 'socket.io-client'
-const socket = io(process.env.SOCKET_URL)
+// Demo mode - use mock socket
+const socket = {
+  emit: () => {},
+  on: () => {},
+  disconnect: () => {}
+}
 
 export default {
   mixins: [date],

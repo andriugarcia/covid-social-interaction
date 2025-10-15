@@ -536,99 +536,135 @@ export const getters = {
 
 export const actions = {
   async share({ commit }, event) {
-    try {
-      await axios.post(`${process.env.SERVER_URL}/events/share/${event.event}`, {
-        targets: event.targets,
-      })
-      commit('setShareCreated', true, { root: true })
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - simulate sharing
+    commit('setShareCreated', true, { root: true })
+    return true
   },
   async getEvents({ commit, rootState }, page = 0) {
-    try {
-      const { data } = await axios.get(
-        `${process.env.SERVER_URL}/events?lat=${rootState.map.userPosition.lat}&lng=${rootState.map.userPosition.lng}&page=${page}`
-      )
-
-      commit('setEvents', data)
-    } catch (err) {
-      console.error(err)
-    }
+    // Return demo events
+    const demoEvents = [
+      {
+        event_id: 'demo-event-1',
+        title: 'Encuentro en el Retiro',
+        category: '🌳',
+        description: 'Vamos a pasar una tarde relajante en el parque del Retiro. Perfecto para conocer gente nueva y disfrutar del buen tiempo.',
+        start_date: Date.now() + 86400000, // Tomorrow
+        end_date: Date.now() + 90000000, // Tomorrow + 1 hour
+        coordinates: { lat: 40.4152, lng: -3.6844 },
+        username: 'park_lover',
+        profile_picture: 'https://picsum.photos/50/50?random=200',
+        profile_id: 'user-park-lover',
+        participants: 8,
+        max_participants: 15,
+        is_joined: false,
+        follow: false
+      },
+      {
+        event_id: 'demo-event-2',
+        title: 'Concierto en Malasaña',
+        category: '🎵',
+        description: 'Concierto de música indie en una sala acogedora de Malasaña. ¡No te lo pierdas!',
+        start_date: Date.now() + 172800000, // Day after tomorrow
+        end_date: Date.now() + 183600000, // Day after tomorrow + 3 hours
+        coordinates: { lat: 40.4262, lng: -3.7006 },
+        username: 'music_lover',
+        profile_picture: 'https://picsum.photos/50/50?random=201',
+        profile_id: 'user-music-lover',
+        participants: 22,
+        max_participants: 30,
+        is_joined: true,
+        follow: true
+      },
+      {
+        event_id: 'demo-event-3',
+        title: 'Intercambio de idiomas',
+        category: '💬',
+        description: 'Practicar español, inglés y otros idiomas en un ambiente relajado. Todos los niveles bienvenidos.',
+        start_date: Date.now() + 259200000, // In 3 days
+        end_date: Date.now() + 266400000, // In 3 days + 2 hours
+        coordinates: { lat: 40.4200, lng: -3.7038 },
+        username: 'polyglot_madrid',
+        profile_picture: 'https://picsum.photos/50/50?random=202',
+        profile_id: 'user-polyglot',
+        participants: 12,
+        max_participants: 20,
+        is_joined: false,
+        follow: false
+      }
+    ]
+    
+    commit('setEvents', demoEvents)
   },
   async getEvent(_, eventId) {
-    try {
-      const { data } = await axios.get(
-        `${process.env.SERVER_URL}/events/${eventId}`
-      )
-      return data
-    } catch (err) {
-      console.error(err)
-      return null
+    // Return demo event data
+    return {
+      event_id: eventId,
+      title: 'Evento Demo',
+      category: '🎉',
+      description: 'Un evento demo para mostrar la funcionalidad',
+      start_date: Date.now() + 86400000,
+      end_date: Date.now() + 90000000,
+      coordinates: { lat: 40.4168, lng: -3.7038 },
+      username: 'demo_organizer',
+      profile_picture: 'https://picsum.photos/50/50?random=210',
+      profile_id: 'user-demo-organizer',
+      participants: 5,
+      max_participants: 10,
+      is_joined: false,
+      follow: false,
+      address: 'Madrid, España'
     }
   },
   async createEvent(_, event) {
-    try {
-      const { data } = await axios.post(
-        `${process.env.SERVER_URL}/events`,
-        event
-      )
-      this.app.$fire.analytics.logEvent('add_event', {
-        event_id: data,
-      })
-      return data
-    } catch (err) {
-      console.error(err)
-      return []
-    }
+    // Demo mode - simulate event creation
+    const newEventId = 'new-event-' + Date.now()
+    return newEventId
   },
   async joinEvent(_, eventId) {
-    try {
-      await axios.post(`${process.env.SERVER_URL}/events/join/${eventId}`)
-      this.app.$fire.analytics.logEvent('join_event', {
-        event_id: eventId,
-      })
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async unjoinEvent(_, eventId) {
-    try {
-      await axios.post(`${process.env.SERVER_URL}/events/unjoin/${eventId}`)
-      this.app.$fire.analytics.logEvent('unjoin_event', {
-        event_id: eventId,
-      })
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async cancelEvent(_, eventId) {
-    try {
-      await axios.post(`${process.env.SERVER_URL}/events/cancel/${eventId}`)
-      this.app.$fire.analytics.logEvent('cancel_event', {
-        event_id: eventId,
-      })
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
-    }
+    // Demo mode - always succeed
+    return true
   },
   async getNearbyEvents(_, { coordinates, page }) {
-    try {
-      const { data } = await axios.get(
-        `${process.env.SERVER_URL}/events/nearby?lat=${coordinates.lat}&lng=${coordinates.lng}&page=${page}`
-      )
-      return data
-    } catch (err) {
-      console.error(err)
-      return []
-    }
+    // Return demo nearby events
+    const demoNearbyEvents = [
+      {
+        event_id: 'nearby-event-1',
+        title: 'Evento cerca de ti',
+        category: '🍻',
+        description: 'Evento cerca de tu ubicación',
+        start_date: Date.now() + 86400000,
+        end_date: Date.now() + 90000000,
+        coordinates: { lat: coordinates.lat + 0.001, lng: coordinates.lng + 0.001 },
+        username: 'local_organizer',
+        profile_picture: 'https://picsum.photos/50/50?random=220',
+        participants: 3,
+        max_participants: 8,
+        distance: '0.1 km'
+      },
+      {
+        event_id: 'nearby-event-2',
+        title: 'Otro evento local',
+        category: '☕️',
+        description: 'Café y charla en el barrio',
+        start_date: Date.now() + 172800000,
+        end_date: Date.now() + 176400000,
+        coordinates: { lat: coordinates.lat - 0.002, lng: coordinates.lng + 0.002 },
+        username: 'coffee_enthusiast',
+        profile_picture: 'https://picsum.photos/50/50?random=221',
+        participants: 6,
+        max_participants: 12,
+        distance: '0.3 km'
+      }
+    ]
+    
+    return demoNearbyEvents
   },
 }

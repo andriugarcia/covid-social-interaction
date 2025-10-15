@@ -1,5 +1,5 @@
 export const state = () => ({
-  loginOpened: false,
+  loginOpened: false, // Keep for compatibility but always false in demo mode
   postCreated: false,
   shareCreated: false,
 
@@ -9,7 +9,8 @@ export const state = () => ({
 
 export const mutations = {
   setLogin(state, value) {
-    state.loginOpened = value
+    // In demo mode, never open login
+    state.loginOpened = false
   },
 
   setPostCreated(state, value) {
@@ -25,14 +26,7 @@ export const mutations = {
   },
 
   downloadApp(state) {
-    this.app.$fire.analytics.logEvent('install')
-    state.deferredPrompt.prompt()
-    state.deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        state.appNotInstalled = false
-      } else {
-        state.appNotInstalled = true
-      }
-    })
+    // Demo mode - simulate app download
+    state.appNotInstalled = false
   },
 }
