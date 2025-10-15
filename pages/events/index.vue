@@ -78,7 +78,6 @@ export default {
   data() {
     return {
       categories: this.$store.state.event.categories,
-      events: [],
       page: 1,
       loading: false,
       finished: false,
@@ -94,9 +93,15 @@ export default {
     authenticated() {
       return this.$store.getters['auth/authenticated']
     },
+    events() {
+      return this.$store.state.event.events
+    },
   },
-  mounted() {
-    this.events = this.$store.state.event.events
+  async mounted() {
+    // Load demo events if none exist
+    if (this.$store.state.event.events.length === 0) {
+      await this.$store.dispatch('event/getEvents', 0)
+    }
   },
   methods: {
     createEvent() {
@@ -114,8 +119,7 @@ export default {
         !this.loading
       ) {
         this.loading = true
-        const newEvents = this.$store.dispatch('event/getEvents', this.page)
-        this.events = [...this.events, ...newEvents]
+        const newEvents = await this.$store.dispatch('event/getEvents', this.page)
         this.page++
         if (newEvents.length <= 0) this.finished = true
         this.loading = false

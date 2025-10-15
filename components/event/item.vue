@@ -76,9 +76,10 @@ export default {
       }
     },
     getCategoryName(emoji) {
-      return this.$store.state.event.categories.find(
+      const category = this.$store.state.event.categories.find(
         (category) => category.emoji === emoji
-      ).name
+      )
+      return category ? category.name : 'Unknown Category'
     },
   },
 }

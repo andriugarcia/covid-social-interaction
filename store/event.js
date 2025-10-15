@@ -520,6 +520,9 @@ export const mutations = {
   setEvents(state, events) {
     state.events = events
   },
+  appendEvents(state, events) {
+    state.events = [...state.events, ...events]
+  },
 }
 
 export const getters = {
@@ -546,11 +549,12 @@ export const actions = {
       {
         event_id: 'demo-event-1',
         title: 'Meetup at Retiro',
-        category: '🌳',
+        emoji: '🌍',
         description: 'Let\'s spend a relaxing afternoon at Retiro Park. Perfect for meeting new people and enjoying good weather.',
         start_date: Date.now() + 86400000, // Tomorrow
         end_date: Date.now() + 90000000, // Tomorrow + 1 hour
-        coordinates: { lat: 40.4152, lng: -3.6844 },
+        place: { lat: 40.4152, lng: -3.6844 },
+        place_description: 'Retiro Park, Madrid',
         username: 'park_lover',
         profile_picture: 'https://picsum.photos/50/50?random=200',
         profile_id: 'user-park-lover',
@@ -562,11 +566,12 @@ export const actions = {
       {
         event_id: 'demo-event-2',
         title: 'Concert in Malasaña',
-        category: '🎵',
+        emoji: '🎤',
         description: 'Indie music concert in a cozy venue in Malasaña. Don\'t miss it!',
         start_date: Date.now() + 172800000, // Day after tomorrow
         end_date: Date.now() + 183600000, // Day after tomorrow + 3 hours
-        coordinates: { lat: 40.4262, lng: -3.7006 },
+        place: { lat: 40.4262, lng: -3.7006 },
+        place_description: 'Malasaña, Madrid',
         username: 'music_lover',
         profile_picture: 'https://picsum.photos/50/50?random=201',
         profile_id: 'user-music-lover',
@@ -578,11 +583,12 @@ export const actions = {
       {
         event_id: 'demo-event-3',
         title: 'Language Exchange',
-        category: '💬',
+        emoji: '💬',
         description: 'Practice Spanish, English and other languages in a relaxed environment. All levels welcome.',
         start_date: Date.now() + 259200000, // In 3 days
         end_date: Date.now() + 266400000, // In 3 days + 2 hours
-        coordinates: { lat: 40.4200, lng: -3.7038 },
+        place: { lat: 40.4200, lng: -3.7038 },
+        place_description: 'Gran Vía, Madrid',
         username: 'polyglot_madrid',
         profile_picture: 'https://picsum.photos/50/50?random=202',
         profile_id: 'user-polyglot',
@@ -593,26 +599,33 @@ export const actions = {
       }
     ]
     
-    commit('setEvents', demoEvents)
+    if (page === 0) {
+      commit('setEvents', demoEvents)
+    } else {
+      // For pagination, return empty array (no more events)
+      commit('appendEvents', [])
+      return []
+    }
+    return demoEvents
   },
   async getEvent(_, eventId) {
     // Return demo event data
     return {
       event_id: eventId,
       title: 'Demo Event',
-      category: '🎉',
+      emoji: '🍸',
       description: 'A demo event to showcase functionality',
       start_date: Date.now() + 86400000,
       end_date: Date.now() + 90000000,
-      coordinates: { lat: 40.4168, lng: -3.7038 },
+      place: { lat: 40.4168, lng: -3.7038 },
+      place_description: 'Madrid, Spain',
       username: 'demo_organizer',
       profile_picture: 'https://picsum.photos/50/50?random=210',
       profile_id: 'user-demo-organizer',
       participants: 5,
       max_participants: 10,
       is_joined: false,
-      follow: false,
-      address: 'Madrid, Spain'
+      follow: false
     }
   },
   async createEvent(_, event) {
@@ -638,11 +651,12 @@ export const actions = {
       {
         event_id: 'nearby-event-1',
         title: 'Event near you',
-        category: '🍻',
+        emoji: '🍻',
         description: 'Event near your location',
         start_date: Date.now() + 86400000,
         end_date: Date.now() + 90000000,
-        coordinates: { lat: coordinates.lat + 0.001, lng: coordinates.lng + 0.001 },
+        place: { lat: coordinates.lat + 0.001, lng: coordinates.lng + 0.001 },
+        place_description: 'Near your location',
         username: 'local_organizer',
         profile_picture: 'https://picsum.photos/50/50?random=220',
         participants: 3,
@@ -652,11 +666,12 @@ export const actions = {
       {
         event_id: 'nearby-event-2',
         title: 'Another local event',
-        category: '☕️',
+        emoji: '☕️',
         description: 'Coffee and chat in the neighborhood',
         start_date: Date.now() + 172800000,
         end_date: Date.now() + 176400000,
-        coordinates: { lat: coordinates.lat - 0.002, lng: coordinates.lng + 0.002 },
+        place: { lat: coordinates.lat - 0.002, lng: coordinates.lng + 0.002 },
+        place_description: 'Local café',
         username: 'coffee_enthusiast',
         profile_picture: 'https://picsum.photos/50/50?random=221',
         participants: 6,
