@@ -104,25 +104,31 @@ export const actions = {
     // Return demo followers
     const demoFollowers = [
       {
-        profile_id: 'follower-1',
-        username: 'follower_user1',
-        name: 'Follower One',
-        profile_picture: 'https://picsum.photos/50/50?random=310',
-        isFollowing: true
+        profile: {
+          profile_id: 'follower-1',
+          username: 'follower_user1',
+          name: 'Follower One',
+          profile_picture: 'https://picsum.photos/50/50?random=310',
+          isFollowing: true
+        }
       },
       {
-        profile_id: 'follower-2',
-        username: 'follower_user2',
-        name: 'Follower Two',
-        profile_picture: 'https://picsum.photos/50/50?random=311',
-        isFollowing: false
+        profile: {
+          profile_id: 'follower-2',
+          username: 'follower_user2',
+          name: 'Follower Two',
+          profile_picture: 'https://picsum.photos/50/50?random=311',
+          isFollowing: false
+        }
       },
       {
-        profile_id: 'follower-3',
-        username: 'follower_user3',
-        name: 'Follower Three',
-        profile_picture: 'https://picsum.photos/50/50?random=312',
-        isFollowing: true
+        profile: {
+          profile_id: 'follower-3',
+          username: 'follower_user3',
+          name: 'Follower Three',
+          profile_picture: 'https://picsum.photos/50/50?random=312',
+          isFollowing: true
+        }
       }
     ]
     
