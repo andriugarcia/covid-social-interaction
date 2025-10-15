@@ -182,10 +182,14 @@ export default {
     },
   },
   mounted() {
-    this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
+    if (this.$refs.scrollarea) {
+      this.$refs.scrollarea.addEventListener('scroll', this.handleScroll)
+    }
   },
   beforeDestroy() {
-    this.$refs.scrollarea.removeEventListener('scroll', this.handleScroll)
+    if (this.$refs.scrollarea) {
+      this.$refs.scrollarea.removeEventListener('scroll', this.handleScroll)
+    }
   },
 }
 </script>
