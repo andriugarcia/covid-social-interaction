@@ -59,17 +59,23 @@ const demoUser = {
   ],
   participation: [
     {
-      event_id: 'event-1',
-      title: 'Quedada en el parque',
-      category: '🌳',
-      date: Date.now() + 86400000,
+      event: {
+        event_id: 'event-1',
+        title: 'Quedada en el parque',
+        emoji: '🌳',
+        start_date: new Date(Date.now() + 86400000).toISOString(),
+        end_date: new Date(Date.now() + 86400000 + 3600000).toISOString()
+      },
       confirmed: true
     },
     {
-      event_id: 'event-2', 
-      title: 'Concierto en la plaza',
-      category: '🎵',
-      date: Date.now() + 172800000,
+      event: {
+        event_id: 'event-2', 
+        title: 'Concierto en la plaza',
+        emoji: '🎵',
+        start_date: new Date(Date.now() + 172800000).toISOString(),
+        end_date: new Date(Date.now() + 172800000 + 7200000).toISOString()
+      },
       confirmed: true
     }
   ],
@@ -94,6 +100,72 @@ export const state = () => ({
   user: demoUser,
   portals: [
     defaultPortal,
+    {
+      audience: 75,
+      coordinates: { lat: 40.4168, lng: -3.7038 },
+      created_at: Date.now() - 1800000,
+      event: null,
+      is_liked: false,
+      is_saved: false,
+      likes: 23,
+      opened: 180,
+      permanent: false,
+      post_id: 'portal-1',
+      profile_id: 'user-portal-1',
+      profile_picture: "https://picsum.photos/200/200?random=100",
+      score: null,
+      shared: 8,
+      src: "https://picsum.photos/400/600?random=200",
+      text: "¡Increíble atardecer desde el Templo de Debod!",
+      type: "image",
+      info: false,
+      url: null,
+      username: "madrid_sunset"
+    },
+    {
+      audience: 45,
+      coordinates: { lat: 40.4200, lng: -3.7100 },
+      created_at: Date.now() - 3600000,
+      event: null,
+      is_liked: true,
+      is_saved: false,
+      likes: 12,
+      opened: 95,
+      permanent: false,
+      post_id: 'portal-2',
+      profile_id: 'user-portal-2',
+      profile_picture: "https://picsum.photos/200/200?random=101",
+      score: null,
+      shared: 3,
+      src: "",
+      text: "Probando las nuevas funciones de Olimaps. ¡Me encanta esta app!",
+      type: "short",
+      info: false,
+      url: null,
+      username: "tech_early_adopter"
+    },
+    {
+      audience: 65,
+      coordinates: { lat: 40.4150, lng: -3.7080 },
+      created_at: Date.now() - 5400000,
+      event: null,
+      is_liked: false,
+      is_saved: true,
+      likes: 18,
+      opened: 140,
+      permanent: false,
+      post_id: 'portal-3',
+      profile_id: 'user-portal-3',
+      profile_picture: "https://picsum.photos/200/200?random=102",
+      score: null,
+      shared: 6,
+      src: "https://picsum.photos/400/300?random=201",
+      text: "Comida deliciosa en el Mercado de San Miguel",
+      type: "image",
+      info: false,
+      url: null,
+      username: "foodie_madrid"
+    }
   ],
   newNotification: null,
   pushEnabled: false,
@@ -247,6 +319,28 @@ export const actions = {
         info: false,
         url: null,
         username: "tech_explorer"
+      },
+      {
+        audience: 80,
+        coordinates: { lat: 40.4190, lng: -3.7060 },
+        created_at: Date.now() - 10800000,
+        event: null,
+        is_liked: false,
+        is_saved: true,
+        likes: 32,
+        opened: 200,
+        permanent: false,
+        post_id: 'post-3',
+        profile_id: 'user-4',
+        profile_picture: "https://picsum.photos/200/200?random=12",
+        score: null,
+        shared: 12,
+        src: "https://picsum.photos/400/600?random=21",
+        text: "Arte urbano increíble en Malasaña",
+        type: "image",
+        info: false,
+        url: null,
+        username: "street_art_fan"
       }
     ]
     commit('setPortals', demoPortals)
