@@ -28,7 +28,7 @@ export const actions = {
       return min + Math.random() * (max - min)
     }
     
-    const postTypes = ['image', 'short', 'video', 'audio']
+    const postTypes = ['image', 'short', 'video']
     const demoTexts = [
       'Beautiful view from here',
       'Perfect day in this area',
