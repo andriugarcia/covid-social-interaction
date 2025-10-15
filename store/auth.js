@@ -1,30 +1,6 @@
 import axios from '../axios'
-import socket from '../socket'
 
 axios.defaults.withCredentials = true;
-
-const defaultPortal = {
-  audience: 0,
-  coordinates: null,
-  created_at: Date.now(),
-  event: null,
-  is_liked: false,
-  is_saved: false,
-  likes: 0,
-  opened: 0,
-  permanent: false,
-  post_id: null,
-  profile_id: null,
-  profile_picture: "https://olimaps.com/olimaps.gif",
-  score: null,
-  shared: 0,
-  src: "",
-  text: "This is a default post, change to a video",
-  type: "short",
-  info: true,
-  url: null,
-  username: "olimaps"
-}
 
 // Hardcoded demo user data
 const demoUser = {
@@ -33,7 +9,8 @@ const demoUser = {
   name: 'Demo User',
   email: 'demo@olimaps.com',
   profile_picture: 'https://picsum.photos/200/200?random=1',
-  description: 'Hello! I am a demo user of Olimaps. I love exploring the city and meeting new people.',
+  description:
+    'Hello! I am a demo user of Olimaps. I love exploring the city and meeting new people.',
   followers: 142,
   following: 89,
   isFollowing: false,
@@ -45,7 +22,7 @@ const demoUser = {
       text: 'Someone liked your post',
       image: 'https://picsum.photos/50/50?random=2',
       read: false,
-      created_at: Date.now() - 3600000
+      created_at: Date.now() - 3600000,
     },
     {
       id: 2,
@@ -54,52 +31,51 @@ const demoUser = {
       text: 'You have a new follower',
       image: 'https://picsum.photos/50/50?random=3',
       read: false,
-      created_at: Date.now() - 7200000
-    }
+      created_at: Date.now() - 7200000,
+    },
   ],
   participation: [
     {
       event: {
-        event_id: 'event-1',
+        event_id: 'park-meetup',
         title: 'Meetup at the park',
-        emoji: '🌳',
+        emoji: '☕️',
         start_date: new Date(Date.now() + 86400000).toISOString(),
-        end_date: new Date(Date.now() + 86400000 + 3600000).toISOString()
+        end_date: new Date(Date.now() + 86400000 + 3600000).toISOString(),
       },
-      confirmed: true
+      confirmed: true,
     },
     {
       event: {
-        event_id: 'event-2', 
+        event_id: 'concert',
         title: 'Concert at the square',
-        emoji: '🎵',
+        emoji: '🎤',
         start_date: new Date(Date.now() + 172800000).toISOString(),
-        end_date: new Date(Date.now() + 172800000 + 7200000).toISOString()
+        end_date: new Date(Date.now() + 172800000 + 7200000).toISOString(),
       },
-      confirmed: true
-    }
+      confirmed: true,
+    },
   ],
   rrss: [
     { type: 'instagram', name: 'demo_user_ig' },
-    { type: 'twitter', name: 'demo_user_tw' }
+    { type: 'twitter', name: 'demo_user_tw' },
   ],
   groups: [
     {
       chat: {
         chat_id: 'group-1',
         title: 'Demo Group',
-        cover: 'https://picsum.photos/100/100?random=4'
-      }
-    }
+        cover: 'https://picsum.photos/100/100?random=4',
+      },
+    },
   ],
   post: [],
-  event: []
+  event: [],
 }
 
 export const state = () => ({
   user: demoUser,
   portals: [
-    defaultPortal,
     {
       audience: 75,
       coordinates: { lat: 40.4168, lng: -3.7038 },

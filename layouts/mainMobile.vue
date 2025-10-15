@@ -4,12 +4,6 @@
     @click='morePosts',
     style='position: fixed; top: 0; left: 0; right: 0; bottom: 0'
   )
-  v-chip(v-if='authenticated && user.email && !user.verified', small, @click='sendConfirmationEmail', style='position: fixed; right: 18px; top: 84px;') 
-    v-icon(x-small) fas fa-info-circle
-    span.ml-1 Email not verified
-  v-chip(v-else-if='authenticated && !user.description && user.rrss.length == 0', small, @click='$router.push({path: `/${user.username}#edit`})', style='position: fixed; right: 18px; top: 84px;') 
-    v-icon(x-small) fas fa-info-circle
-    span.ml-1 Complete your account
   v-layout.pa-4(
     style='position: fixed; top: 0px; right: 0; left: 0',
     align-center,

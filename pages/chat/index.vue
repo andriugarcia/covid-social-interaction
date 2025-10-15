@@ -8,29 +8,28 @@ v-sheet#contacts(
     v-if='!searchEnabled',
     color='primary',
     absolute,
-    extended,
     flat,
     dark,
     style='left: 0; right: 0'
   )
     v-btn(icon, small, @click='$router.replace({ path: "/" })')
       v-icon fas fa-arrow-left
-    v-toolbar-title Mensajes
+    v-toolbar-title Messages
     v-spacer
     v-btn(icon, @click='enableSearch')
       v-icon fas fa-search
-    template(#extension)
-      v-tabs(v-model='tab', fixed-tabs, background-color='transparent')
-        v-tab(key='chats') 
-          div Chats
-          v-chip.primary--text.ml-2(v-show='total != 0', small, color='white') {{ total }}
-        v-tab(key='close') 
-          div Cerca
-          v-chip.primary--text.ml-2(
-            v-show='totalClose != 0',
-            small,
-            color='white'
-          ) {{ totalClose }}
+    //- template(#extension)
+    //-   v-tabs(v-model='tab', fixed-tabs, background-color='transparent')
+    //-     v-tab(key='chats') 
+    //-       div Chats
+    //-       v-chip.primary--text.ml-2(v-show='total != 0', small, color='white') {{ total }}
+    //-     //- v-tab(key='close') 
+    //-     //-   div Near You
+    //-     //-   v-chip.primary--text.ml-2(
+    //-     //-     v-show='totalClose != 0',
+    //-     //-     small,
+    //-     //-     color='white'
+    //-     //-   ) {{ totalClose }}
   v-toolbar(
     v-else,
     color='primary',
@@ -49,7 +48,7 @@ v-sheet#contacts(
   v-sheet(
     color='white',
     style='overflow-y: scroll; height: 100vh',
-    :class='{ "pt-16": searchEnabled, "pt-17": !searchEnabled }'
+    class='pt-14'
   )
     push-alert(inline)
     v-tabs-items(
@@ -79,31 +78,15 @@ v-sheet#contacts(
                 v-avatar(color='primary')
                   v-icon(dark, small) fas fa-user
                 .mt-2.font-weight-bold(style='font-size: 0.7em') Nuevo Chat
-            v-card(
-              v-if='userPosition',
-              width='120px',
-              outlined,
-              color='white',
-              @click='$router.push({ path: "/nearby" })'
-            )
-              v-layout(column, align-center)
-                v-badge(
-                  overlap,
-                  :value='nearbyTotal > 0',
-                  :content='nearbyTotal'
-                )
-                  v-avatar(color='primary')
-                    v-icon(dark, small) fas fa-street-view
-                .mt-2.font-weight-bold(style='font-size: 0.7em') Gente Cerca
           v-layout(v-if='chats.length == 0', align-center, column)
             img(src='@/assets/no-message.png', style='height: 200px')
-            span Hora de chatear!
+            span No opened chats yet!
             v-btn.mt-2.text-capitalize(
               rounded,
               depressed,
               @click='newChat = true',
               color='primary'
-            ) Nuevo Chat
+            ) New Chat
           v-list-item(
             v-for='(chat, i) in chats',
             :key='i',
@@ -171,13 +154,6 @@ v-sheet#contacts(
             .mt-4.black--text La geolocalización está desactivada
             .black--text Activa la geolocalización para poder ver los grupos cerca
         v-list(v-else, color='white')
-          v-list-item(@click='$router.push({ path: "/nearby" })')
-            v-list-item-avatar
-              v-icon(color='primary') fas fa-street-view
-            v-list-item-content
-              v-list-item-title.font-weight-bold Cerca de ti
-            v-list-item-action
-              v-chip(color='primary') {{ nearbyTotal }}
           v-list-item(
             v-for='(chat, i) in closeChats',
             :key='i',

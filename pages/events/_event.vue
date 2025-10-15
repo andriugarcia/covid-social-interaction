@@ -1,9 +1,9 @@
 <template lang="pug">
 #event(
   v-if='event && !loadingEvent',
-  style='position: relative; inset: 0; width: 100%'
+  style='position: relative; inset: 0; width: 100%; max-width: 100%'
 )
-  v-toolbar(absolute, color='primary', dark, flat, style='left: 0; right: 0')
+  v-toolbar(absolute, color='primary', dark, flat, style='left: 0; right: 0; width: 100%')
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left
     span.text-truncate {{ event.title }}
@@ -12,13 +12,13 @@
       v-icon fas fa-share-alt
   v-sheet.pt-6(
     color='white',
-    style='height: 100vh; width: fit-content; overflow-y: scroll'
+    style='height: 100vh; width: 100%; overflow-y: scroll; overflow-x: hidden; box-sizing: border-box'
   )
     div(style='height: 32px')
     img.mb-n2(
       v-if='event.image',
       :src='event.image',
-      style='max-height: 280px; width: 100%; object-fit: contain'
+      style='max-height: 280px; width: 100%; max-width: 100%; object-fit: cover'
     )
     v-sheet.pa-4(color='primary', dark)
       span(style='font-size: 2em; font-weight: 700; letter-spacing: -1px') {{ event.title }}
@@ -49,7 +49,7 @@
             color='success darken-1'
           ) Cancel
     //- category(:cat="event.category")
-    .px-4
+    .px-4(style='box-sizing: border-box; width: 100%')
       p.font-weight-light.mt-4 {{ event.description }}
       v-layout.my-4(
         align-center,
@@ -78,14 +78,14 @@
         v-timeline-item(color='blue', small)
           v-row.pt-1
             v-col(cols='3')
-              strong Inicio
+              strong Start
             v-col
               strong {{ event.start_date | toDate }}
               div {{ event.start_date | toHour }}
         v-timeline-item(color='primary', small)
           v-row.pt-1
             v-col(cols='3')
-              strong Fin
+              strong End
             v-col
               strong {{ event.end_date | toDate }}
               div {{ event.end_date | toHour }}
@@ -122,7 +122,7 @@
       .mb-12.pb-6
     .pa-2(
       v-if='eventState() == states.PROMOTION',
-      style='position: absolute; bottom: 0; left: 0; right: 0'
+      style='position: absolute; bottom: 0; left: 0; right: 0; width: 100%'
     )
       v-dialog(
         v-if='event.joined && event.participation && event.participation.is_host',
@@ -321,3 +321,19 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+#event {
+  box-sizing: border-box;
+}
+
+#event * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+#event img {
+  box-sizing: border-box;
+  max-width: 100% !important;
+}
+</style>

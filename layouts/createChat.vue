@@ -8,13 +8,13 @@
   )
     v-btn(icon, @click='$emit("back")')
       v-icon fas fa-arrow-left
-    span Nuevo Chat
+    span New Chat
   v-sheet.pt-12.pa-4(color='white', style='height: 100vh; overflow-y: scroll')
     v-text-field.mt-6(
       v-model='textFilter',
       filled,
       dense,
-      placeholder='Buscar Contactos'
+      placeholder='Search Contacts'
     )
     v-list(color='white')
       v-list-item(

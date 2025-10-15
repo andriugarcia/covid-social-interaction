@@ -8,7 +8,7 @@
   )
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left
-    v-toolbar-title Nuevo Evento
+    v-toolbar-title New Event
   v-sheet(
     flat,
     color='white',
@@ -27,7 +27,7 @@
             style='width: 120px'
           )
             .font-weight-black(style='display: block') 1
-            .font-weight-bold QUE
+            .font-weight-bold PLAN
         v-flex(xs3)
           v-card.py-2.mx-1.text-center.rounded-xl(
             :color='step == 3 ? "primary" : "white"',
@@ -36,7 +36,7 @@
             style='width: 120px'
           )
             .font-weight-black(style='display: block') 2
-            .font-weight-bold QUIEN
+            .font-weight-bold INVITES
         v-flex(xs3)
           v-card.py-2.mx-1.text-center.rounded-xl(
             :color='step == 4 ? "primary" : "white"',
@@ -45,7 +45,7 @@
             style='width: 120px'
           )
             .font-weight-black(style='display: block') 3
-            .font-weight-bold DONDE
+            .font-weight-bold WHERE
         v-flex(xs3)
           v-card.py-2.mx-1.text-center.rounded-xl(
             :color='step == 5 ? "primary" : "white"',
@@ -54,9 +54,9 @@
             style='width: 120px'
           )
             .font-weight-black(style='display: block') 4
-            .font-weight-bold CUANDO
+            .font-weight-bold WHEN
     .px-4(v-if='step == 1')
-      .overline.font-weight-black.mt-2 CIUDAD
+      .overline.font-weight-black.mt-2 CITY
       v-layout(wrap)
         v-chip.mr-2.mb-2(
           v-if='category.category == "city"',
@@ -66,7 +66,7 @@
           @click='selectCategory(category)'
         )
           span {{ category.emoji }} {{ category.name }}
-      .overline.font-weight-black.mt-2 CULTURA
+      .overline.font-weight-black.mt-2 CULTURE
       v-layout(wrap)
         v-chip.mr-2.mb-2(
           v-if='category.category == "culture"',
@@ -86,7 +86,7 @@
           @click='selectCategory(category)'
         )
           span {{ category.emoji }} {{ category.name }}
-      .overline.font-weight-black.mt-2 COMIDA
+      .overline.font-weight-black.mt-2 FOOD
       v-layout(wrap)
         v-chip.mr-2.mb-2(
           v-if='category.category == "food"',
@@ -96,7 +96,7 @@
           @click='selectCategory(category)'
         )
           span {{ category.emoji }} {{ category.name }}
-      .overline.font-weight-black.mt-2 OCIO
+      .overline.font-weight-black.mt-2 LEISURE
       v-layout(wrap)
         v-chip.mr-2.mb-2(
           v-if='category.category == "leisure"',
@@ -116,7 +116,7 @@
           @click='selectCategory(category)'
         )
           span {{ category.emoji }} {{ category.name }}
-      .overline.font-weight-black.mt-2 DEPORTE
+      .overline.font-weight-black.mt-2 SPORTS
       v-layout(wrap)
         v-chip.mr-2.mb-2(
           v-if='category.category == "sports"',
@@ -128,13 +128,13 @@
           span {{ category.emoji }} {{ category.name }}
 
     .px-4(v-if='step == 2')
-      .overline.font-weight-black.mt-2 IMAGEN (OPCIONAL)
+      .overline.font-weight-black.mt-2 IMAGE (OPTIONAL)
       avatar-input(large, @update='updateCover')
-      .overline.font-weight-black.mt-2 TITULO
-      v-text-field(label='Titulo', v-model='event.title')
-      .overline.font-weight-black DESCRIPCION
+      .overline.font-weight-black.mt-2 TITLE
+      v-text-field(label='Title', v-model='event.title')
+      .overline.font-weight-black DESCRIPTION
       v-textarea(
-        label='Descripción',
+        label='Description',
         v-model='event.description',
         maxlength='500',
         counter
@@ -149,7 +149,7 @@
             v-icon(small) {{ item.icon }}
             span.ml-1.font-weight-bold {{ item.name }}
     .px-4(v-if='step == 3')
-      .overline.font-weight-black ASIGNAR GRUPO
+      .overline.font-weight-black ASSIGN GROUP
       v-layout.my-2(v-if='group', align-center)
         v-avatar(color='primary')
           v-img(:src='group.chat.cover')
@@ -160,25 +160,25 @@
           depressed,
           color='white darken-1',
           @click='selectGroupDialog = true'
-        ) CAMBIAR
+        ) UPDATE
       v-btn.my-2(
         v-else,
         color='grey lighten-4',
         @click='selectGroupDialog = true',
         depressed,
         block
-      ) Añadir Grupo
+      ) Add Group
       viewer(v-model='selectGroupDialog')
         group-select(
           @back='selectGroupDialog = false',
           @selected='updateGroup'
         )
-      v-alert.mb-6(text, color='primary') Los asistentes podrán entrar al grupo para mantener el contacto.
-      .overline.font-weight-black INVITAR USUARIOS
+      v-alert.mb-6(text, color='primary') Attendees will be able to join the group to stay in touch.
+      .overline.font-weight-black INVITE USERS
       v-text-field.rounded-lg(
         dense,
         filled,
-        placeholder='Buscar',
+        placeholder='Search',
         v-model='textFilter',
         prepend-inner-icon='fas fa-search'
       )
@@ -204,9 +204,9 @@
       //- v-textarea(auto-grow, :rows="1", label="Descripción")
       //- v-file-input(accept="image/png, image/jpeg, image/bmp", placeholder="Imagen de Portada", prepend-icon="", append-icon="fas fa-image")
     .px-4(v-else-if='step == 4')
-      .overline.font-weight-black UBICACIÓN
+      .overline.font-weight-black LOCATION
       v-text-field(
-        label='Ubicación',
+        label='Location',
         @click='openLocationSelect',
         :value='event.coordinates != null ? event.coordinates.lat.toFixed(4) + ". " + event.coordinates.lng.toFixed(4) : ""',
         v-on='on',
@@ -225,16 +225,16 @@
             @updated='updateLocation',
             @back='locationSelectorOpened = false'
           )
-      .overline.font-weight-black DESCRIPCION DEL SITIO
+      .overline.font-weight-black PLACE DESCRIPTION
       v-textarea(
-        placeholder='En la fuente del parque',
+        placeholder='At the park fountain',
         v-model='event.place_description',
         maxlength='500',
         counter
       )
     .px-4(v-else-if='step == 5')
-      .overline.font-weight-black FECHA DE INICIO
-      v-alert(text, color='primary') A qué hora empieza el evento
+      .overline.font-weight-black START DATE
+      v-alert(text, color='primary') What time does the event start?
       v-menu(
         ref='menuDate',
         v-model='menuDay',
@@ -247,7 +247,7 @@
         template(v-slot:activator='{ on, attrs }')
           v-text-field(
             :value='date',
-            label='Fecha',
+            label='Date',
             v-on='on',
             v-bind='attrs',
             append-icon='far fa-calendar'
@@ -272,7 +272,7 @@
         template(v-slot:activator='{ on, attrs }')
           v-text-field(
             v-model='time',
-            label='Hora',
+            label='Time',
             append-icon='far fa-clock',
             readonly,
             v-bind='attrs',
@@ -285,8 +285,8 @@
           @click:minute='$refs.menuTime.save(time)',
           :allowed-minutes='allowedStep'
         )
-      .overline.font-weight-black FECHA DE FINALIZACIÓN
-      v-alert(text, color='primary') A qué hora acaba el evento
+      .overline.font-weight-black END DATE
+      v-alert(text, color='primary') At what time does the event finish?
       v-menu(
         ref='menuDateEnd',
         v-model='menuDayEnd',
@@ -299,7 +299,7 @@
         template(v-slot:activator='{ on, attrs }')
           v-text-field(
             :value='dateEnd',
-            label='Fecha',
+            label='Date',
             v-on='on',
             v-bind='attrs',
             append-icon='far fa-calendar'
@@ -324,7 +324,7 @@
         template(v-slot:activator='{ on, attrs }')
           v-text-field(
             v-model='timeEnd',
-            label='Hora',
+            label='Time',
             append-icon='far fa-clock',
             readonly,
             v-bind='attrs',
@@ -337,9 +337,9 @@
           @click:minute='$refs.menuTimeEnd.save(time)',
           :allowed-minutes='allowedStep'
         )
-      v-alert(v-if='badDayOrder', text, type='error') La hora de finalización no puede ocurrir antes que la de inicio
-      v-alert(v-else-if='hasPassed', text, type='error') No se puede crear un evento en el pasado
-      v-alert(v-else-if='tooEarly', text, type='error') No se puede crear un evento 2 horas antes de que comience
+      v-alert(v-if='badDayOrder', text, type='error') The end time cannot be before the start time
+      v-alert(v-else-if='hasPassed', text, type='error') You cannot create an event that has already passed
+      v-alert(v-else-if='tooEarly', text, type='error') You cannot create an event 2 hours before it starts
     v-btn(
       v-if='step > 1',
       fab,
@@ -371,7 +371,7 @@ import AvatarGroup from '@/components/avatar-group'
 import AvatarInput from '@/components/avatar-input'
 export default {
   head: {
-    title: 'Nuevo Evento | Olimaps',
+    title: 'New Event | Olimaps',
   },
   components: {
     locationSelect: () => import('@/components/map/locationSelect'),

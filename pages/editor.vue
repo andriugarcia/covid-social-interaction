@@ -3,10 +3,10 @@ v-sheet#editor(style='position: relative; inset: 0; width: 100%', color='white')
   v-toolbar(color='primary', dark, flat, absolute, style='left: 0; right: 0')
     v-btn(icon, @click='$router.go(-1)')
       v-icon fas fa-arrow-left
-    v-toolbar-title Nuevo Post
+    v-toolbar-title New Post
     v-spacer
     //- v-btn.text-capitalize(rounded, depressed, small, dark, color="text", @click="permanentOpened = true") 
-      span Hacer permanente
+      span Make permanent
       v-icon.ml-2(small) far fa-snowflake
   .content.pt-15(style='height: 100vh; overflow-y: scroll')
     v-layout.px-4
@@ -16,11 +16,11 @@ v-sheet#editor(style='position: relative; inset: 0; width: 100%', color='white')
         texteditor.mt-6.pb-2(
           v-model='post.text',
           style='max-height: 30vh; overflow-y: auto',
-          placeholder='Cuentale a tu alrededor...'
+          placeholder='Tell your surroundings...'
         )
         v-divider(color='grey')
         v-layout(justify-space-between, align-center)
-          span.red--text(v-if='removeHTML(post.text).length > limit') Límite excedido
+          span.red--text(v-if='removeHTML(post.text).length > limit') Limit exceeded
           v-spacer
           span.pt-2(
             :class='{ "red--text": removeHTML(post.text).length > limit }'
@@ -130,7 +130,7 @@ v-sheet#editor(style='position: relative; inset: 0; width: 100%', color='white')
         @click='publish'
       )
         v-icon(small) fas fa-plus
-        .ml-2.text-capitalize Publicar
+        .ml-2.text-capitalize Publish
   v-dialog(
     v-model='locationSelectorOpened',
     fullscreen,
@@ -153,8 +153,8 @@ v-sheet#editor(style='position: relative; inset: 0; width: 100%', color='white')
   )
   v-bottom-sheet(v-model='permanentOpened')
     v-card.pa-4.rounded-lg
-      v-subheader POST PERMANENTE
-      p.mt-2 El post no desaparecerá del mapa siendo visible mientras permanezca activo
+      v-subheader PERMANENT POST
+      p.mt-2 The post will not disappear from the map and will remain visible while it stays active
       v-text-field(
         type='number',
         suffix='€/mes',
@@ -162,7 +162,7 @@ v-sheet#editor(style='position: relative; inset: 0; width: 100%', color='white')
         v-model='bidValue'
       )
       span Audiencia mensual estimada: <b>1000 visualizaciones</b>
-      v-btn.mt-4(block, color='primary', rounded) ACTIVAR
+      v-btn.mt-4(block, color='primary', rounded) ACTIVATE
 </template>
 
 <script>
@@ -174,7 +174,7 @@ import texteditor from '@/components/editor/textarea'
 
 export default {
   head: {
-    title: 'Nuevo Post | Olimaps',
+    title: 'New Post | Olimaps',
   },
   watch: {
     $route(route) {
@@ -235,9 +235,9 @@ export default {
     },
     locationMessage() {
       if (this.currentPosition && !this.initialPosition) {
-        return 'Seleccionar Ubicación'
+        return 'Select Location'
       } else if (this.currentPosition) {
-        return 'Tu ubicación actual'
+        return 'Your current location'
       } else {
         return `${this.post.coordinates.lng.toFixed(
           6

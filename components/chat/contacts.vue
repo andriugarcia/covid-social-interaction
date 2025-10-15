@@ -13,16 +13,9 @@
             div Chats
             v-chip.ml-2(small) 15
         v-tab.text-capitalize 
-          span Cerca de ti
+          span 
           v-chip.ml-2(small) 15
     v-list
-      v-list-item
-        v-list-item-avatar
-          v-icon(color="primary") fas fa-street-view
-        v-list-item-content
-          v-list-item-title.font-weight-bold Cerca de ti
-        v-list-item-action
-          v-chip(color="primary") 15
       v-list-item(v-for="i in 5", :key="i", @click="")
         v-list-item-avatar
           v-img(src="https://picsum.photos/200")

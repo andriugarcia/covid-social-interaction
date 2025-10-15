@@ -3,9 +3,9 @@ v-card(style='min-height: 600px; height: 100%', color='white')
   v-toolbar(color='primary', dark)
     v-btn(icon, @click='$emit("back")')
       v-icon fas fa-arrow-left
-    v-toolbar-title Nuevo Participante
+    v-toolbar-title New Member
     v-spacer
-    v-btn(text, :disabled='count == 0', @click='addParticipants') Añadir
+    v-btn(text, :disabled='count == 0', @click='addParticipants') Add
   v-list(color='white')
     v-list-item(
       v-for='(participant, i) in people',
@@ -16,7 +16,7 @@ v-card(style='min-height: 600px; height: 100%', color='white')
         v-img(:src='participant.profile_picture')
       v-list-item-content
         v-list-item-title {{ participant.username }}
-        v-list-item-subtitle(v-if='participant.added') Ya en el grupo
+        v-list-item-subtitle(v-if='participant.added') Already in the group
       v-list-item-action
         v-avatar(
           v-if='participant.added || !!participant.selected',
