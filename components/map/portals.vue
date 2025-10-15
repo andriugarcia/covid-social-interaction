@@ -9,9 +9,9 @@
       @click='downloadApp',
       style='height: 56px'
     )
-      v-layout(style='height: 100%', align-center)
+      v-layout(align-center, style='height: 100%')
         v-icon.mx-2(color='white', size='32') fas fa-arrow-circle-down
-        span.font-weight-bold(style='font-size: 0.7em; width: 70px;') INSTALAR OLIMAPS
+        span.font-weight-bold(style='font-size: 0.7em; width: 70px;') INSTALL OLIMAPS
     v-card.rounded-xl.pa-1.pr-3.mr-2(
       v-if='authenticated && i < 2',
       v-for='(participation, i) in user.participation',
@@ -147,7 +147,6 @@ export default {
       return this.$store.state.event.colors[emoji] || 'primary'
     },
     async handleScroll() {
-      const length = this.portals.length
       if (
         !this.loading &&
         !this.finished &&
@@ -159,9 +158,16 @@ export default {
     },
     async getFollowingPortals() {
       this.loading = true
+      const lengthBefore = this.portals.length
 
-      await this.$store.dispatch('auth/getPortals', this.page)
-      this.finished = length == this.portals.length
+      const newPortals = await this.$store.dispatch('auth/getPortals', this.page)
+      
+      // Check if we got new portals
+      if (!newPortals || newPortals.length === 0) {
+        this.finished = true
+      } else {
+        this.finished = lengthBefore === this.portals.length
+      }
 
       this.page++
       this.loading = false

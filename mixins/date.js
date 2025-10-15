@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import('dayjs/locale/es')
+import('dayjs/locale/en')
 
 export default {
   filters: {
@@ -13,10 +13,10 @@ export default {
       )
     },
     toDate(value) {
-      return dayjs(value).locale('es').format('dddd D MMMM')
+      return dayjs(value).locale('en').format('dddd D MMMM')
     },
     toDateShort(value) {
-      return dayjs(value).locale('es').format('ddd D HH:mm')
+      return dayjs(value).locale('en').format('ddd D HH:mm')
     },
     toRelativeDate(value) {
       const date = new Date(value)
@@ -36,9 +36,9 @@ export default {
         date.getDate() - 1 === now.getDate() &&
         date.getMonth() === now.getMonth() &&
         date.getFullYear() === now.getFullYear()) {
-        return 'Ayer'
+        return 'Yesterday'
       } else {
-        return dayjs(value).locale('es').format('DD/MM/YYYY')
+        return dayjs(value).locale('en').format('DD/MM/YYYY')
       }
     },
   },

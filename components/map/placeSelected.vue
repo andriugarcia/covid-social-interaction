@@ -9,7 +9,7 @@ v-card(:style='!$vuetify.breakpoint.mdAndUp ? "border-radius: 24px 24px 0 0" : "
   )
     v-btn(icon, @click='$emit("back")')
       v-icon fas fa-chevron-down
-    v-toolbar-title.font-weight-black En esta zona
+    v-toolbar-title.font-weight-black In this area
     template(#extension)
       v-tabs(v-model='tab', fixed-tabs)
         v-tab(key='posts')
@@ -17,7 +17,7 @@ v-card(:style='!$vuetify.breakpoint.mdAndUp ? "border-radius: 24px 24px 0 0" : "
           div Posts
         v-tab(key='events')
           v-icon.mr-1(small) fas fa-flag
-          div Eventos
+          div Events
   .px-2(ref="scrollarea",
       style='padding-top: 116px; overflow-y: scroll;',
       :style='$vuetify.breakpoint.mdAndUp ? "height: 90vh" : "height: 100vh"')
@@ -27,7 +27,7 @@ v-card(:style='!$vuetify.breakpoint.mdAndUp ? "border-radius: 24px 24px 0 0" : "
       v-tab-item(key='posts')
         v-btn(rounded, color='primary', block, depressed, @click='openEditor')
           v-icon.mr-2(small) fas fa-plus
-          span.text-capitalize Publicar Aquí
+          span.text-capitalize Post Here
         .masonry.mt-4(v-if='nearbyPosts.length !== 0')
           post.mb-2(
             v-for='(post, i) in nearbyPosts',
@@ -45,7 +45,7 @@ v-card(:style='!$vuetify.breakpoint.mdAndUp ? "border-radius: 24px 24px 0 0" : "
             style='height: 100%'
           )
             v-icon(color='primary', x-large) far fa-sad-cry
-            .mt-4.black--text No hay posts en esta zona
+            .mt-4.black--text No posts found in this area
         .text-center.pt-2(v-if='loading')
           v-progress-circular(indeterminate, color='primary')
       v-tab-item(key='events')
@@ -55,7 +55,7 @@ v-card(:style='!$vuetify.breakpoint.mdAndUp ? "border-radius: 24px 24px 0 0" : "
           text,
           icon='far fa-sad-tear',
           prominent
-        ) No hay eventos cerca
+        ) No events found nearby
         event.mb-2(v-for='(event, i) in nearbyEvents', :key='i', :event='event')
         .text-center.pt-2(v-if='loading')
           v-progress-circular(indeterminate, color='primary')

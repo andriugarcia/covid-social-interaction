@@ -16,8 +16,8 @@
             @click='$router.push({ path: "/events" })',
             style='border-radius: 8px 0 0 8px; width: 100%'
           )
-            v-icon.pa-1(style='display: block') fas fa-flag
-            span.font-weight-bold(style='font-size: 0.7em') EVENTOS
+            v-icon.pa-1(style='display: block; margin: 0 auto;') fas fa-flag
+            span.font-weight-bold(style='font-size: 0.7em') EVENTS
           v-card.py-1.my-2.text-center(
             flat,
             :dark='$route.name != "activity"',
@@ -32,8 +32,8 @@
               :value='totalNotifications > 0',
               :content='formatNumber(totalNotifications)'
             )
-              v-icon.pa-1(style='display: block') fas fa-bell
-              span.font-weight-bold(style='font-size: 0.7em') ACTIVIDAD
+              v-icon.pa-1(style='display: block; margin: 0 auto;') fas fa-bell
+              span.font-weight-bold(style='font-size: 0.7em') ACTIVITY
           v-card.py-1.my-2.text-center(
             flat,
             :dark='!$route.name.startsWith("chat") && !$route.name.startsWith("group")',
@@ -48,7 +48,7 @@
               :value='authenticated && total',
               :content='formatNumber(total)'
             )
-              v-icon.pa-1(style='display: block') fas fa-comment-dots
+              v-icon.pa-1(style='display: block; margin: 0 auto;') fas fa-comment-dots
               span.font-weight-bold(style='font-size: 0.7em') CHAT
         v-btn.mb-2.rounded-xl(
           v-if='appNotInstalled',

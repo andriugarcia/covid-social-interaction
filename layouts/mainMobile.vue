@@ -58,7 +58,7 @@
           xs2
         )
           div
-            v-icon.pa-1(color='black', style='display: block') fas fa-flag
+            v-icon.pa-1(color='black', style='display: block; margin: 0 auto;') fas fa-flag
             span(style='font-size: 0.7em') EVENTS
         v-flex.mx-2.rounded-lg.text-center(
           depressed,
@@ -68,7 +68,7 @@
           xs2
         )
           div
-            v-icon.pa-1(color='black', style='display: block') fas fa-search
+            v-icon.pa-1(color='black', style='display: block; margin: 0 auto;') fas fa-search
             span(style='font-size: 0.7em') SEARCH
         v-btn(fab, depressed, color='primary', @click='openEditor')
           v-icon.white--text fas fa-plus
@@ -85,7 +85,7 @@
             :value='totalNotifications > 0',
             :content='formatNumber(totalNotifications)'
           )
-            v-icon.pa-1(color='black', style='display: block') fas fa-bell
+            v-icon.pa-1(color='black', style='display: block; margin: 0 auto;') fas fa-bell
             span(style='font-size: 0.7em') ACTIVITY
         v-flex.mx-2.rounded-lg.text-center(
           depressed,
@@ -100,7 +100,7 @@
             :value='authenticated && total',
             :content='formatNumber(total)'
           )
-            v-icon.pa-1(color='black', style='display: block') fas fa-comment-dots
+            v-icon.pa-1(color='black', style='display: block; margin: 0 auto;') fas fa-comment-dots
             span(style='font-size: 0.7em') CHAT
   //- viewer(v-model='opened')
   v-card(v-if='opened == "search"', style='position: fixed; inset: 0; width: 100%; height: 100%')

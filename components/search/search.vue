@@ -19,7 +19,7 @@
       v-model='searchText',
       @keydown.enter='select(0)',
       append-icon='fas fa-search',
-      placeholder='Buscar sitio',
+      placeholder='Search place',
       hide-details,
       autofocus
     )

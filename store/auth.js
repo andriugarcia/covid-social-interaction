@@ -273,9 +273,9 @@ export const actions = {
     // Demo mode - always succeed
     return true
   },
-  async getPortals({ commit }) {
-    // Return hardcoded portals
-    const demoPortals = [
+  async getPortals({ commit, state }, page = 0) {
+    // Return hardcoded portals with pagination
+    const allDemoPortals = [
       {
         audience: 50,
         coordinates: { lat: 40.4168, lng: -3.7038 },
@@ -343,8 +343,17 @@ export const actions = {
         username: "street_art_fan"
       }
     ]
-    commit('setPortals', demoPortals)
-    return true
+    
+    if (page === 0) {
+      // First page - replace all portals
+      commit('setPortals', allDemoPortals)
+    } else {
+      // Additional pages - for demo, just return empty array to end pagination
+      // In real implementation, this would fetch more data
+      return []
+    }
+    
+    return allDemoPortals
   },
   async updatePassword() {
     // Demo mode - always succeed
